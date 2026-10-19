@@ -3,64 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เกมจับคู่ตัวเลข - อนุบาล 5 ขวบ</title>
-    <!-- ใช้ Tailwind CSS สำหรับตกแต่งหน้าเว็บให้สวยงาม -->
+    <title>สวนสัตว์พาเพลิน: เกมจับคู่ตัวเลขแสนสนุก</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Prompt', sans-serif; }
+    </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen bg-sky-100 p-6 font-sans">
+<body class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-amber-100 to-sky-200 p-4">
 
-    <!-- ส่วนหัวข้อเกม -->
-    <header class="mb-6 text-center">
-        <h1 class="text-3xl font-bold text-purple-700">
-            สวนสัตว์พาเพลิน: จับคู่ภาพกับตัวเลข
+    <!-- หัวข้อเกม -->
+    <header class="mb-4 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-pink-600 drop-shadow-sm">
+            🌟 สวนสัตว์พาเพลิน: นับเลขกันเถอะ! 🐻
         </h1>
-        <p class="text-gray-600 mt-2">หน่วย: แรกรับประทับใจ (อนุบาล 5 ขวบ)</p>
+        <p class="text-gray-600 font-medium mt-1">หน่วย: แรกรับประทับใจ (อนุบาล 5 ขวบ)</p>
     </header>
 
-    <!-- พื้นที่เล่นเกมหลัก -->
-    <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-lg text-center border-4 border-yellow-300">
-        <!-- แสดงภาพสิ่งของที่ให้เด็กนับ -->
-        <div id="item-display" class="text-7xl mb-6 p-4 bg-yellow-50 rounded-2xl inline-block">
+    <!-- กล่องเกมหลัก -->
+    <div class="bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-md text-center border-4 border-yellow-300">
+        
+        <!-- แถบบอกด่าน -->
+        <div class="flex justify-between items-center mb-4 text-sm font-semibold text-purple-600 bg-purple-50 px-4 py-2 rounded-full">
+            <span id="level-indicator">ข้อที่ 1 จาก 3</span>
+            <span>⭐ ดาวสะสม: <span id="score">0</span> ดวง</span>
+        </div>
+
+        <!-- พื้นแสดงภาพสิ่งของ -->
+        <div id="item-display" class="text-6xl md:text-7xl mb-6 p-6 bg-yellow-50 rounded-3xl inline-block shadow-inner border-2 border-dashed border-yellow-200">
             ✏️✏️✏️
         </div>
         
-        <p class="text-xl font-medium text-gray-700 mb-6">
-            ช่วยนับและเลือกตัวเลขที่ถูกต้องกันเถอะค่ะ!
+        <p id="question-text" class="text-xl font-semibold text-gray-700 mb-6">
+            ช่วยนับซิคะว่ามีดินสอกี่แท่งเอ่ย?
         </p>
 
         <!-- ปุ่มตัวเลือกคำตอบ -->
-        <div class="grid grid-cols-2 gap-4">
-            <button onclick="checkAnswer(2)" class="bg-pink-400 hover:bg-pink-500 text-white text-3xl font-bold py-5 rounded-2xl shadow-md transition-transform transform hover:scale-105 active:scale-95">2</button>
-            <button onclick="checkAnswer(3)" class="bg-pink-400 hover:bg-pink-500 text-white text-3xl font-bold py-5 rounded-2xl shadow-md transition-transform transform hover:scale-105 active:scale-95">3</button>
-            <button onclick="checkAnswer('๓')" class="bg-pink-400 hover:bg-pink-500 text-white text-3xl font-bold py-5 rounded-2xl shadow-md transition-transform transform hover:scale-105 active:scale-95">๓</button>
-            <button onclick="checkAnswer(5)" class="bg-pink-400 hover:bg-pink-500 text-white text-3xl font-bold py-5 rounded-2xl shadow-md transition-transform transform hover:scale-105 active:scale-95">5</button>
+        <div id="choices-container" class="grid grid-cols-2 gap-4">
+            <!-- ปุ่มจะถูกสร้างด้วย JavaScript ด้านล่าง -->
         </div>
 
-        <!-- ส่วนแสดงผลการตอบ (Feedback) -->
-        <div id="feedback" class="mt-6 text-2xl font-semibold text-green-600 h-10"></div>
+        <!-- ข้อความแสดงผล (Feedback) -->
+        <div id="feedback" class="mt-5 text-xl font-bold h-10 flex items-center justify-center"></div>
     </div>
 
-    <!-- แถบแสดงคะแนนดาวสะสม -->
-    <footer class="mt-6 text-xl font-bold text-orange-500 bg-white px-6 py-2 rounded-full shadow-md">
-        ⭐ คะแนนดาวสะสม: <span id="score">0</span> ดวง
-    </footer>
-
     <script>
+        // ข้อมูลคำถามหลายๆ ข้อ
+        const questions = [
+            { items: "✏️✏️✏️", count: 3, text: "ช่วยนับซิคะว่ามีดินสอกี่แท่งเอ่ย?", choices: [2, 3, "๓", 5], correct: 3 },
+            { items: "🍎🍎🍎🍎", count: 4, text: "ว้าว! แอปเปิ้ลสีแดงกี่ผลกันนะ?", choices: [1, 4, "๔", 5], correct: 4 },
+            { items: "🐶🐶", count: 2, text: "น้องหมาตัวน้อยมีกี่ตัวเอ่ย?", choices: [2, "๒", 3, 5], correct: 2 }
+        ];
+
+        let currentLevel = 0;
         let score = 0;
-        function checkAnswer(selected) {
+
+        function loadQuestion() {
+            const q = questions[currentLevel];
+            document.getElementById('level-indicator').innerText = `ข้อที่ ${currentLevel + 1} จาก ${questions.length}`;
+            document.getElementById('item-display').innerText = q.items;
+            document.getElementById('question-text').innerText = q.text;
+            document.getElementById('feedback').innerText = "";
+
+            const choicesContainer = document.getElementById('choices-container');
+            choicesContainer.innerHTML = "";
+
+            q.choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.innerText = choice;
+                btn.className = "bg-pink-400 hover:bg-pink-500 active:scale-95 text-white text-3xl font-bold py-4 rounded-2xl shadow-lg transition-transform transform hover:scale-105";
+                btn.onclick = () => checkAnswer(choice, q.correct);
+                choicesContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected, correct) {
             const feedbackEl = document.getElementById('feedback');
             const scoreEl = document.getElementById('score');
             
-            if (selected === 3 || selected === '๓') {
-                feedbackEl.innerText = '🎉 เก่งมากค่ะ! ถูกต้องนะคะ';
-                feedbackEl.className = 'mt-6 text-2xl font-semibold text-green-600 animate-bounce';
+            // เปรียบเทียบแบบแปลงค่าให้รองรับทั้งเลขอารบิกและเลขไทย
+            if (String(selected) === String(correct)) {
+                feedbackEl.innerText = '🎉 เย้! ถูกต้อง เก่งมากๆ เลยค่ะ';
+                feedbackEl.className = 'mt-5 text-xl font-bold text-green-600 animate-bounce h-10 flex items-center justify-center';
                 score += 1;
                 scoreEl.innerText = score;
+
+                // ไปข้อถัดไปอัตโนมัติหลังจาก 1.5 วินาที
+                setTimeout(() => {
+                    currentLevel++;
+                    if (currentLevel < questions.length) {
+                        loadQuestion();
+                    } else {
+                        document.getElementById('item-display').innerText = "🏆";
+                        document.getElementById('question-text').innerText = "เก่งมากๆ เลยค่ะ! เล่นครบทุกข้อแล้วจ้า";
+                        document.getElementById('choices-container').innerHTML = `<button onclick="restartGame()" class="col-span-2 bg-green-500 text-white text-xl font-bold py-3 rounded-2xl shadow-md">เล่นใหม่อีกรอบ 🔄</button>`;
+                        feedbackEl.innerText = `🌟 คะแนนรวมทั้งหมด: ${score} ดวง`;
+                    }
+                }, 1500);
+
             } else {
-                feedbackEl.innerText = '💡 อุ๊ย! ลองนับใหม่อีกรอบนะจ๊ะ';
-                feedbackEl.className = 'mt-6 text-2xl font-semibold text-red-500';
+                feedbackEl.innerText = '💡 อุ๊ย! ลองนับใหม่อีกรอบนะจ๊ะ สู้ๆ!';
+                feedbackEl.className = 'mt-5 text-xl font-bold text-red-500 h-10 flex items-center justify-center';
             }
         }
+
+        function restartGame() {
+            currentLevel = 0;
+            score = 0;
+            document.getElementById('score').innerText = score;
+            loadQuestion();
+        }
+
+        // เริ่มต้นรันเกมข้อแรก
+        loadQuestion();
     </script>
 </body>
 </html>
