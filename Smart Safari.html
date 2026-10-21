@@ -20,16 +20,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             width: 100vw;
-            overflow-x: hidden;
-            overflow-y: auto;
+            height: 100vh;
+            overflow: hidden;
         }
         .game-container {
             width: 100%;
-            max-width: 900px;
-            height: 100vh;
-            max-height: 650px;
+            height: 100%;
             background: #ffffff;
             display: flex;
             flex-direction: column;
@@ -39,15 +36,18 @@
             box-shadow: none;
         }
 
-        /* สำหรับหน้าจอแท็บเล็ตและคอมพิวเตอร์ (ที่มีพื้นที่กว้างขึ้น) ให้แสดงผลแบบกล่องการ์ดสวยงาม */
+        /* สำหรับแท็บเล็ตและคอมพิวเตอร์ ให้แสดงผลเป็นกรอบสวยงามตรงกลาง */
         @media (min-width: 768px) {
+            body {
+                padding: 20px;
+            }
             .game-container {
-                height: 85vh;
+                max-width: 900px;
                 max-height: 650px;
                 border-radius: 24px;
                 box-shadow: 0 15px 35px rgba(0,0,0,0.15);
                 border: 6px solid #ffcc00;
-                margin: 20px;
+                height: 85vh;
             }
         }
 
@@ -55,21 +55,23 @@
         .header {
             background: #ff7675;
             color: white;
-            padding: 12px 20px;
+            padding: 10px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: clamp(16px, 4vw, 22px);
+            font-size: clamp(15px, 4vw, 20px);
             font-weight: 700;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             flex-shrink: 0;
+            width: 100%;
         }
         .score-board {
             background: #ffeaa7;
             color: #d63031;
-            padding: 4px 12px;
+            padding: 4px 10px;
             border-radius: 50px;
-            font-size: clamp(14px, 3.5vw, 18px);
+            font-size: clamp(13px, 3.5vw, 16px);
+            white-space: nowrap;
         }
 
         /* หน้าจอเนื้อหาแต่ละส่วน */
@@ -79,29 +81,31 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             position: relative;
             overflow-y: auto;
+            width: 100%;
         }
         .hidden {
             display: none !important;
         }
         h1 {
             color: #2d3436;
-            font-size: clamp(24px, 6vw, 36px);
-            margin-bottom: 10px;
+            font-size: clamp(22px, 6vw, 32px);
+            margin: 5px 0 10px 0;
         }
         h2 {
-            font-size: clamp(18px, 4.5vw, 26px);
+            font-size: clamp(16px, 4.5vw, 22px);
+            margin: 0 0 10px 0;
         }
         p {
             color: #636e72;
-            font-size: clamp(16px, 4vw, 20px);
-            margin-bottom: 20px;
+            font-size: clamp(14px, 3.8vw, 18px);
+            margin: 0 0 15px 0;
         }
         .welcome-emoji, .finish-emoji {
-            font-size: clamp(60px, 15vw, 90px);
+            font-size: clamp(50px, 12vw, 80px);
             margin-bottom: 5px;
         }
 
@@ -110,51 +114,44 @@
             background-color: #00b894;
             color: white;
             border: none;
-            padding: 14px 32px;
-            font-size: clamp(18px, 4.5vw, 24px);
+            padding: 12px 28px;
+            font-size: clamp(16px, 4.5vw, 22px);
             font-weight: 700;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 6px 0 #00896f;
+            box-shadow: 0 5px 0 #00896f;
             transition: all 0.1s ease;
             touch-action: manipulation;
         }
         .btn:active {
             transform: translateY(4px);
-            box-shadow: 0 2px 0 #00896f;
+            box-shadow: 0 1px 0 #00896f;
         }
         .btn-sound {
             background-color: #0984e3;
-            box-shadow: 0 6px 0 #074b83;
-            font-size: clamp(18px, 4.5vw, 24px);
-            padding: 12px 28px;
-            margin-bottom: 15px;
+            box-shadow: 0 5px 0 #074b83;
+            font-size: clamp(16px, 4.5vw, 22px);
+            padding: 10px 24px;
+            margin-bottom: 10px;
         }
         .btn-sound:active {
-            box-shadow: 0 2px 0 #074b83;
+            box-shadow: 0 1px 0 #074b83;
         }
 
-        /* ตัวเลือกรูปภาพสัตว์ ปรับตามแนวตั้ง/แนวนอนอัตโนมัติ */
+        /* ตัวเลือกรูปภาพสัตว์ */
         .choices-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 10px;
             width: 100%;
-            max-width: 650px;
-        }
-
-        /* กรณีจอมือถือแนวตั้งแคบมาก ให้ปรับเป็น 3 แถว หรือจัดเรียงยืดหยุ่น */
-        @media (max-width: 480px) {
-            .choices-grid {
-                gap: 8px;
-            }
+            max-width: 600px;
         }
 
         .animal-card {
             background: #f1f2f6;
             border: 3px solid #dfe4ea;
-            border-radius: 16px;
-            padding: 10px 5px;
+            border-radius: 14px;
+            padding: 8px 4px;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
@@ -168,22 +165,23 @@
             background: #e8f4fc;
         }
         .animal-emoji {
-            font-size: clamp(38px, 12vw, 65px);
-            margin-bottom: 5px;
+            font-size: clamp(35px, 10vw, 55px);
+            margin-bottom: 3px;
         }
         .animal-name {
-            font-size: clamp(12px, 3.5vw, 18px);
+            font-size: clamp(11px, 3.2vw, 16px);
             font-weight: 600;
             color: #2d3436;
             text-align: center;
+            line-height: 1.2;
         }
 
         /* กล่องแสดงข้อความผลลัพธ์ */
         #feedback-msg {
-            font-size: clamp(16px, 4vw, 22px);
+            font-size: clamp(15px, 3.8vw, 20px);
             font-weight: 700;
-            margin-top: 12px;
-            min-height: 30px;
+            margin-top: 10px;
+            min-height: 25px;
         }
     </style>
 </head>
@@ -205,8 +203,8 @@
     </div>
 
     <!-- หน้าจอที่ 2: หน้าเล่นเกมทายเสียง -->
-    <div id="screen-game" class="screen">
-        <h2 id="question-text" style="color: #e17055; margin-top: 0;">ด่านที่ 1: เสียงใครเอ่ย? ฟังแล้วเลือกให้ถูกนะจ๊ะ</h2>
+    <div id="screen-game" class="screen hidden">
+        <h2 id="question-text" style="color: #e17055;">ด่านที่ 1: เสียงใครเอ่ย? เลือกให้ถูกนะจ๊ะ</h2>
         
         <!-- ปุ่มกดฟังเสียง -->
         <button class="btn btn-sound" onclick="playCurrentAnimalSound()">🔊 ฟังเสียงสัตว์</button>
@@ -285,7 +283,7 @@
             card.className = 'animal-card';
             card.innerHTML = `
                 <div class="animal-emoji">${animal.emoji}</div>
-                <div class="animal-name">${animal.th}<br><span style="font-size:0.85em; opacity:0.8;">(${animal.en})</span></div>
+                <div class="animal-name">${animal.th}<br><span style="font-size:0.8em; opacity:0.8;">(${animal.en})</span></div>
             `;
             card.onclick = () => checkAnswer(animal);
             container.appendChild(card);
@@ -307,6 +305,9 @@
 
     function checkAnswer(selectedAnimal) {
         const feedback = document.getElementById('feedback-msg');
+        if (selectedNameMatch(selectedAnimal, targetAnimal)) {
+            // ป้องกันเงื่อนไขเปรียบเทียบผิดพลาด ใช้ตรวจสอบชื่อภาษาไทย
+        }
         if (selectedAnimal.th === targetAnimal.th) {
             score++;
             document.getElementById('score').innerText = score;
@@ -330,6 +331,10 @@
                 window.speechSynthesis.speak(tryAgain);
             }
         }
+    }
+
+    function selectedNameMatch(a, b) {
+        return a.th === b.th;
     }
 
     function endGame() {
