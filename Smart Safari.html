@@ -122,6 +122,7 @@
             box-shadow: 0 5px 0 #00896f;
             transition: all 0.1s ease;
             touch-action: manipulation;
+            margin: 5px;
         }
         .btn:active {
             transform: translateY(4px);
@@ -136,6 +137,13 @@
         }
         .btn-sound:active {
             box-shadow: 0 1px 0 #074b83;
+        }
+        .btn-home {
+            background-color: #e17055;
+            box-shadow: 0 5px 0 #c0392b;
+        }
+        .btn-home:active {
+            box-shadow: 0 1px 0 #c0392b;
         }
 
         /* ตัวเลือกรูปภาพสัตว์ */
@@ -222,7 +230,10 @@
         <div class="finish-emoji">🏆🎉</div>
         <h1>ยอดเยี่ยมมากเลยค่ะ!</h1>
         <p>หนูทำภารกิจเสียงสัตว์สำเร็จแล้ว ได้ดาวทั้งหมด <span id="final-score" style="color: #d63031; font-weight: 700;">0</span> ดวง!</p>
-        <button class="btn" onclick="restartGame()">เล่นใหม่อีกครั้ง</button>
+        <div>
+            <button class="btn" onclick="restartGame()">เล่นใหม่อีกครั้ง</button>
+            <button class="btn btn-home" onclick="goToHome()">🏠 กลับหน้าหลัก</button>
+        </div>
     </div>
 </div>
 
@@ -237,7 +248,7 @@
         { th: "เป็ด", en: "Duck", emoji: "🦆", audio: "sounds/duck.mp3" }
     ];
 
-    // ไฟล์เสียงเอฟเฟกต์เพิ่มเติม (สามารถนำไฟล์ mp3 มาใส่เพิ่มในโฟลเดอร์ sounds ได้เลยค่ะ)
+    // ไฟล์เสียงเอฟเฟกต์เพิ่มเติม
     const sfx = {
         correct: "sounds/correct.mp3",
         wrong: "sounds/wrong.mp3"
@@ -260,6 +271,13 @@
 
     function restartGame() {
         startGame();
+    }
+
+    // ฟังก์ชันกลับสู่หน้าหลัก
+    function goToHome() {
+        document.getElementById('screen-finish').classList.add('hidden');
+        document.getElementById('screen-game').classList.add('hidden');
+        document.getElementById('screen-welcome').classList.remove('hidden');
     }
 
     function nextRound() {
@@ -299,7 +317,6 @@
         setTimeout(playCurrentAnimalSound, 400);
     }
 
-    // ฟังก์ชันเล่นไฟล์เสียงสัตว์ .mp3
     function playCurrentAnimalSound() {
         if (!targetAnimal) return;
         let soundEffect = new Audio(targetAnimal.audio);
@@ -316,7 +333,6 @@
             feedback.style.color = '#00b894';
             feedback.innerText = "🎉 ถูกต้องเก่งมากค่ะ!";
 
-            // เล่นเสียงเอฟเฟกต์ตอบถูก (ถ้ามีไฟล์ correct.mp3 ในโฟลเดอร์ sounds)
             let correctSound = new Audio(sfx.correct);
             correctSound.play().catch(() => {});
 
@@ -325,7 +341,6 @@
             feedback.style.color = '#d63031';
             feedback.innerText = "❌ เกือบถูกแล้ว ลองใหม่อีกทีนะจ๊ะ";
 
-            // เล่นเสียงเอฟเฟกต์ตอบผิด (ถ้ามีไฟล์ wrong.mp3 ในโฟลเดอร์ sounds)
             let wrongSound = new Audio(sfx.wrong);
             wrongSound.play().catch(() => {});
         }
