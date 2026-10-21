@@ -109,7 +109,7 @@
             margin-bottom: 5px;
         }
 
-        /* ปุ่มกดสไตล์น่ารักสำหรับเด็ก */
+        /* ปุ่มกดและปุ่มลิงก์สไตล์น่ารักสำหรับเด็ก */
         .btn {
             background-color: #00b894;
             color: white;
@@ -123,6 +123,8 @@
             transition: all 0.1s ease;
             touch-action: manipulation;
             margin: 5px;
+            text-decoration: none;
+            display: inline-block;
         }
         .btn:active {
             transform: translateY(4px);
@@ -232,9 +234,9 @@
         <p>หนูทำภารกิจเสียงสัตว์สำเร็จแล้ว ได้ดาวทั้งหมด <span id="final-score" style="color: #d63031; font-weight: 700;">0</span> ดวง!</p>
         <div>
             <button class="btn" onclick="restartGame()">เล่นใหม่อีกครั้ง</button>
-            <!-- ลิงก์เชื่อมกลับไปยังหน้า Index ของเว็บไซต์ -->
             <a href="index.html" class="btn btn-home">🏠 กลับหน้าหลัก</a>
         </div>
+    </div>
 </div>
 
 <script>
@@ -258,10 +260,12 @@
     let currentRound = 0;
     const maxRounds = 5;
     let targetAnimal = null;
+    let isAnswerLocked = false; // ตัวแปรป้องกันการกดซ้ำซ้อนขณะเสียงกำลังเล่น
 
     function startGame() {
         score = 0;
         currentRound = 0;
+        isAnswerLocked = false;
         document.getElementById('score').innerText = score;
         document.getElementById('screen-welcome').classList.add('hidden');
         document.getElementById('screen-finish').classList.add('hidden');
@@ -273,14 +277,8 @@
         startGame();
     }
 
-    // ฟังก์ชันกลับสู่หน้าหลัก
-    function goToHome() {
-        document.getElementById('screen-finish').classList.add('hidden');
-        document.getElementById('screen-game').classList.add('hidden');
-        document.getElementById('screen-welcome').classList.remove('hidden');
-    }
-
     function nextRound() {
+        isAnswerLocked = false; //ปลดล็อกให้กดเลือกคำตอบได้ใหม่
         currentRound++;
         if (currentRound > maxRounds) {
             endGame();
@@ -326,17 +324,28 @@
     }
 
     function checkAnswer(selectedAnimal) {
+        if (isAnswerLocked) return; // ถ้าตอบถูกไปแล้วและเสียงกำลังเล่นอยู่ ห้ามกดซ้ำ
+
         const feedback = document.getElementById('feedback-msg');
+        
         if (selectedAnimal.th === targetAnimal.th) {
+            isAnswerLocked = true; // ล็อกการคลิกทันที เพื่อรอฟังเสียงดีใจจนจบ
             score++;
             document.getElementById('score').innerText = score;
             feedback.style.color = '#00b894';
             feedback.innerText = "🎉 ถูกต้องเก่งมากค่ะ!";
 
+            // เล่นเสียงเอฟเฟกต์ตอบถูก
             let correctSound = new Audio(sfx.correct);
-            correctSound.play().catch(() => {});
+            correctSound.play().catch(() => {
+                nextRound(); // เผื่อไฟล์เสียงมีปัญหา ให้ข้ามไปข้อต่อไปทันที
+            });
 
-            setTimeout(nextRound, 1200);
+            // 🎵 รอดูจนกว่าเสียงดีใจ (correct.mp3) จะเล่นจบ แล้วค่อยไปข้อต่อไป
+            correctSound.onended = () => {
+                nextRound();
+            };
+
         } else {
             feedback.style.color = '#d63031';
             feedback.innerText = "❌ เกือบถูกแล้ว ลองใหม่อีกทีนะจ๊ะ";
