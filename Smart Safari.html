@@ -227,14 +227,21 @@
 </div>
 
 <script>
+    // ฐานข้อมูลสัตว์ พร้อมระบุ path ไฟล์เสียง .mp3
     const animals = [
-        { th: "สิงโต", en: "Lion", emoji: "🦁", soundText: "ฮ่อมน่ากลัวจัง ฉันคือสิงโต Lion" },
-        { th: "ช้าง", en: "Elephant", emoji: "🐘", soundText: "แป๋น แป๋น ฉันคือช้าง Elephant" },
-        { th: "ลิง", en: "Monkey", emoji: "🐵", soundText: "เจี๊ยก เจี๊ยก ฉันคือลิง Monkey" },
-        { th: "กระต่าย", en: "Rabbit", emoji: "🐰", soundText: "ฟุดฟิด ฉันคือกระต่าย Rabbit" },
-        { th: "สุนัข", en: "Dog", emoji: "🐶", soundText: "โฮ่ง โฮ่ง ฉันคือสุนัข Dog" },
-        { th: "เป็ด", en: "Duck", emoji: "🦆", soundText: "กั๊บ กั๊บ ฉันคือเป็ด Duck" }
+        { th: "สิงโต", en: "Lion", emoji: "🦁", audio: "sounds/lion.mp3" },
+        { th: "ช้าง", en: "Elephant", emoji: "🐘", audio: "sounds/elephant.mp3" },
+        { th: "ลิง", en: "Monkey", emoji: "🐵", audio: "sounds/monkey.mp3" },
+        { th: "กระต่าย", en: "Rabbit", emoji: "🐰", audio: "sounds/rabbit.mp3" },
+        { th: "สุนัข", en: "Dog", emoji: "🐶", audio: "sounds/dog.mp3" },
+        { th: "เป็ด", en: "Duck", emoji: "🦆", audio: "sounds/duck.mp3" }
     ];
+
+    // ไฟล์เสียงเอฟเฟกต์เพิ่มเติม (สามารถนำไฟล์ mp3 มาใส่เพิ่มในโฟลเดอร์ sounds ได้เลยค่ะ)
+    const sfx = {
+        correct: "sounds/correct.mp3",
+        wrong: "sounds/wrong.mp3"
+    };
 
     let score = 0;
     let currentRound = 0;
@@ -292,49 +299,36 @@
         setTimeout(playCurrentAnimalSound, 400);
     }
 
+    // ฟังก์ชันเล่นไฟล์เสียงสัตว์ .mp3
     function playCurrentAnimalSound() {
         if (!targetAnimal) return;
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            let utterance = new SpeechSynthesisUtterance(targetAnimal.soundText);
-            utterance.lang = 'th-TH';
-            utterance.rate = 0.9;
-            window.speechSynthesis.speak(utterance);
-        }
+        let soundEffect = new Audio(targetAnimal.audio);
+        soundEffect.play().catch(error => {
+            console.log("ไม่สามารถเล่นเสียงอัตโนมัติได้", error);
+        });
     }
 
     function checkAnswer(selectedAnimal) {
         const feedback = document.getElementById('feedback-msg');
-        if (selectedNameMatch(selectedAnimal, targetAnimal)) {
-            // ป้องกันเงื่อนไขเปรียบเทียบผิดพลาด ใช้ตรวจสอบชื่อภาษาไทย
-        }
         if (selectedAnimal.th === targetAnimal.th) {
             score++;
             document.getElementById('score').innerText = score;
             feedback.style.color = '#00b894';
             feedback.innerText = "🎉 ถูกต้องเก่งมากค่ะ!";
-            
-            if ('speechSynthesis' in window) {
-                let praise = new SpeechSynthesisUtterance("ถูกต้องเก่งมากค่ะ");
-                praise.lang = 'th-TH';
-                window.speechSynthesis.speak(praise);
-            }
+
+            // เล่นเสียงเอฟเฟกต์ตอบถูก (ถ้ามีไฟล์ correct.mp3 ในโฟลเดอร์ sounds)
+            let correctSound = new Audio(sfx.correct);
+            correctSound.play().catch(() => {});
 
             setTimeout(nextRound, 1200);
         } else {
             feedback.style.color = '#d63031';
             feedback.innerText = "❌ เกือบถูกแล้ว ลองใหม่อีกทีนะจ๊ะ";
-            
-            if ('speechSynthesis' in window) {
-                let tryAgain = new SpeechSynthesisUtterance("ลองใหม่อีกครั้งนะคะ");
-                tryAgain.lang = 'th-TH';
-                window.speechSynthesis.speak(tryAgain);
-            }
-        }
-    }
 
-    function selectedNameMatch(a, b) {
-        return a.th === b.th;
+            // เล่นเสียงเอฟเฟกต์ตอบผิด (ถ้ามีไฟล์ wrong.mp3 ในโฟลเดอร์ sounds)
+            let wrongSound = new Audio(sfx.wrong);
+            wrongSound.play().catch(() => {});
+        }
     }
 
     function endGame() {
