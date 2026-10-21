@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Safari: ผจญภัยเสียงสัตว์มหาสนุก</title>
+    <!-- เรียกใช้งาน Google Font (Prompt) เพื่อความน่ารัก อ่านง่าย -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Prompt', sans-serif;
+            user-select: none;
+        }
+        body {
+            background: linear-gradient(135deg, #a8ede0 0%, #fed6e3 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .game-container {
+            width: 900px;
+            max-width: 95vw;
+            height: 600px;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            border: 6px solid #ffcc00;
+        }
+        /* ส่วนหัวเกม */
+        .header {
+            background: #ff7675;
+            color: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .score-board {
+            background: #ffeaa7;
+            color: #d63031;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 20px;
+        }
+        /* หน้าจอเนื้อหาแต่ละส่วน */
+        .screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        .hidden {
+            display: none !important;
+        }
+        h1 {
+            color: #2d3436;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #636e72;
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+        /* ปุ่มกดสไตล์น่ารักสำหรับเด็ก */
+        .btn {
+            background-color: #00b894;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 24px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #00896f;
+            transition: all 0.1s ease;
+        }
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #00896f;
+        }
+        .btn-sound {
+            background-color: #0984e3;
+            box-shadow: 0 6px 0 #074b83;
+            font-size: 28px;
+            padding: 20px 40px;
+            margin-bottom: 20px;
+        }
+        .btn-sound:active {
+            box-shadow: 0 2px 0 #074b83;
+        }
+        /* ตัวเลือกรูปภาพสัตว์ */
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 700px;
+        }
+        .animal-card {
+            background: #f1f2f6;
+            border: 4px solid #dfe4ea;
+            border-radius: 20px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .animal-card:hover {
+            transform: scale(1.05);
+            border-color: #74b9ff;
+            background: #e8f4fc;
+        }
+        .animal-emoji {
+            font-size: 70px;
+            margin-bottom: 10px;
+        }
+        .animal-name {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2d3436;
+        }
+        /* กล่องแสดงข้อความผลลัพธ์ */
+        #feedback-msg {
+            font-size: 26px;
+            font-weight: 700;
+            margin-top: 20px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <!-- แถบด้านบน -->
+    <div class="header">
+        <span>🦁 Smart Safari (อนุบาล 3)</span>
+        <div class="score-board">⭐ ดาวสะสม: <span id="score">0</span> ดวง</div>
+    </div>
+
+    <!-- หน้าจอที่ 1: หน้าแรกยินดีต้อนรับ -->
+    <div id="screen-welcome" class="screen">
+        <div style="font-size: 90px; margin-bottom: 10px;">🐯🐵🐰</div>
+        <h1>ผจญภัยเสียงสัตว์มหาสนุก</h1>
+        <p>มาร่วมฟังเสียงสัตว์และทายชื่อกับพี่ ๆ กันเถอะเด็ก ๆ!</p>
+        <button class="btn" onclick="startGame()">เริ่มเล่นเกมกันเลย!</button>
+    </div>
+
+    <!-- หน้าจอที่ 2: หน้าเล่นเกมทายเสียง -->
+    <div id="screen-game" class="screen hidden">
+        <h2 id="question-text" style="color: #e17055; margin-top: 0;">ด่านที่ 1: เสียงใครเอ่ย? ฟังแล้วเลือกให้ถูกนะจ๊ะ</h2>
+        
+        <!-- ปุ่มกดฟังเสียง -->
+        <button class="btn btn-sound" onclick="playCurrentAnimalSound()">🔊 ฟังเสียงสัตว์</button>
+        
+        <!-- ตัวเลือกสัตว์ -->
+        <div class="choices-grid" id="choices-container">
+            <!-- สร้างผ่าน JavaScript -->
+        </div>
+
+        <div id="feedback-msg"></div>
+    </div>
+
+    <!-- หน้าจอที่ 3: หน้าสรุปผลคะแนน -->
+    <div id="screen-finish" class="screen hidden">
+        <div style="font-size: 90px; margin-bottom: 10px;">🏆🎉</div>
+        <h1>ยอดเยี่ยมมากเลยค่ะ!</h1>
+        <p>หนูทำภารกิจเสียงสัตว์สำเร็จแล้ว ได้ดาวทั้งหมด <span id="final-score" style="color: #d63031; font-weight: 700;">0</span> ดวง!</p>
+        <button class="btn" onclick="restartGame()">เล่นใหม่อีกครั้ง</button>
+    </div>
+</div>
+
+<script>
+    // ฐานข้อมูลสัตว์ (ชื่อไทย, ภาษาอังกฤษ, Emoji, เสียงจำลองผ่าน Speech Synthesis)
+    const animals = [
+        { th: "สิงโต", en: "Lion", emoji: "🦁", soundText: "ฮ่อมน่ากลัวจัง ฉันคือสิงโต Lion" },
+        { th: "ช้าง", en: "Elephant", emoji: "🐘", soundText: "แป๋น แป๋น ฉันคือช้าง Elephant" },
+        { th: "ลิง", en: "Monkey", emoji: "🐵", soundText: "เจี๊ยก เจี๊ยก ฉันคือลิง Monkey" },
+        { th: "กระต่าย", en: "Rabbit", emoji: "🐰", soundText: "ฟุดฟิด ฉันคือกระต่าย Rabbit" },
+        { th: "สุนัข", en: "Dog", emoji: "🐶", soundText: "โฮ่ง โฮ่ง ฉันคือสุนัข Dog" },
+        { th: "เป็ด", en: "Duck", emoji: "🦆", soundText: "กั๊บ กั๊บ ฉันคือเป็ด Duck" }
+    ];
+
+    let score = 0;
+    let currentRound = 0;
+    const maxRounds = 5; // เล่นทั้งหมด 5 ข้อ
+    let targetAnimal = null;
+
+    function startGame() {
+        score = 0;
+        currentRound = 0;
+        document.getElementById('score').innerText = score;
+        document.getElementById('screen-welcome').classList.add('hidden');
+        document.getElementById('screen-finish').classList.add('hidden');
+        document.getElementById('screen-game').classList.remove('hidden');
+        nextRound();
+    }
+
+    function nextRound() {
+        currentRound++;
+        if (currentRound > maxRounds) {
+            endGame();
+            return;
+        }
+
+        document.getElementById('feedback-msg').innerText = "";
+        
+        // สุ่มสัตว์เป้าหมาย
+        targetAnimal = animals[Math.floor(Math.random() * animals.length)];
+
+        // สุ่มตัวเลือกมาอีก 2 ตัวที่ไม่ซ้ำกับเป้าหมาย
+        let choices = [targetAnimal];
+        while (choices.length < 3) {
+            let randomAnimal = animals[Math.floor(Math.random() * animals.length)];
+            if (!choices.includes(randomAnimal)) {
+                choices.push(randomAnimal);
+            }
+        }
+
+        // สลับตำแหน่งตัวเลือก (Shuffle)
+        choices.sort(() => Math.random() - 0.5);
+
+        // แสดงผลตัวเลือกบนหน้าจอ
+        const container = document.getElementById('choices-container');
+        container.innerHTML = "";
+        choices.forEach(animal => {
+            const card = document.createElement('div');
+            card.className = 'animal-card';
+            card.innerHTML = `
+                <div class="animal-emoji">${animal.emoji}</div>
+                <div class="animal-name">${animal.th} (${animal.en})</div>
+            `;
+            card.onclick = () => checkAnswer(animal);
+            container.appendChild(card);
+        });
+
+        // เล่นเสียงโจทย์อัตโนมัติรอบแรก
+        setTimeout(playCurrentAnimalSound, 500);
+    }
+
+    // ฟังก์ชันใช้เสียงพูดสังเคราะห์ของเว็บเบราว์เซอร์ (Speech Synthesis)
+    function playCurrentAnimalSound() {
+        if (!targetAnimal) return;
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); // หยุดเสียงเก่าที่ค้างอยู่
+            let utterance = new SpeechSynthesisUtterance(targetAnimal.soundText);
+            utterance.lang = 'th-TH'; // กำหนดเสียงภาษาไทย
+            utterance.rate = 0.9; // ความเร็วช้าลงเล็กน้อยเพื่อให้เด็กฟังทัน
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function checkAnswer(selectedAnimal) {
+        const feedback = document.getElementById('feedback-msg');
+        if (selectedAnimal.th === targetAnimal.th) {
+            score++;
+            document.getElementById('score').innerText = score;
+            feedback.style.color = '#00b894';
+            feedback.innerText = "🎉 ถูกต้องเก่งมากค่ะ! ไปข้อถัดไปกันเลย";
+            
+            // พูดชมเชย
+            if ('speechSynthesis' in window) {
+                let praise = new SpeechSynthesisUtterance("ถูกต้องเก่งมากค่ะ");
+                praise.lang = 'th-TH';
+                window.speechSynthesis.speak(praise);
+            }
+
+            setTimeout(nextRound, 1500);
+        } else {
+            feedback.style.color = '#d63031';
+            feedback.innerText = "❌ เกือบถูกแล้ว ลองฟังเสียงแล้วเลือกใหม่อีกทีนะจ๊ะ";
+            
+            if ('speechSynthesis' in window) {
+                let tryAgain = new SpeechSynthesisUtterance("ลองใหม่อีกครั้งนะคะ");
+                tryAgain.lang = 'th-TH';
+                window.speechSynthesis.speak(tryAgain);
+            }
+        }
+    }
+
+    function endGame() {
+        document.getElementById('screen-game').classList.add('hidden');
+        document.getElementById('screen-finish').classList.remove('hidden');
+        document.getElementById('final-score').innerText = score;
+    }
+</script>
+
+</body>
+</html>
