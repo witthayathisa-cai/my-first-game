@@ -119,12 +119,13 @@
                     nextRoundOrFinish(); // เผื่อไฟล์เสียงเล่นไม่ได้ ให้ไปต่อทันที
                 });
 
-                // 🎵 รอจนกว่าเสียง `correct.mp3` จะเล่นจบแบบสมบูรณ์ ค่อยไปข้อถัดไป
+                // 🎵 รอจนกว่าเสียง `correct.mp3` จะเล่นจบแบบสมบูรณ์ ค่อยเปลี่ยนไปข้อถัดไป
                 correctSound.onended = () => {
                     nextRoundOrFinish();
                 };
 
             } else {
+                isAnswerLocked = true; // ล็อกปุ่มชั่วคราวตอนตอบผิด เพื่อรอให้เด็กตั้งตัวใหม่
                 feedbackEl.innerText = '💡 อุ๊ย! ลองนับใหม่อีกรอบนะจ๊ะ สู้ๆ!';
                 feedbackEl.className = 'mt-5 text-xl font-bold text-red-500 h-10 flex items-center justify-center';
 
@@ -132,7 +133,13 @@
                 let wrongSound = new Audio(sfx.wrong);
                 wrongSound.play().catch(error => {
                     console.log("ไม่สามารถเล่นไฟล์เสียงตอบผิดได้", error);
+                    isAnswerLocked = false;
                 });
+
+                // 🎵 รอให้เสียงตอบผิดเล่นจบ แล้วค่อยปลดล็อกให้เด็กกดเลือกใหม่ได้
+                wrongSound.onended = () => {
+                    isAnswerLocked = false;
+                };
             }
         }
 
