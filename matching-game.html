@@ -20,10 +20,11 @@
         <p class="text-gray-600 font-medium mt-1">หน่วย: แรกรับประทับใจ (อนุบาล 5 ขวบ)</p>
     </header>
 
- <!-- ปุ่มกดเพื่อกลับหน้าหลัก -->
-    <a href="index.html" class="bg-gray-400 text-white px-4 py-2 rounded-lg font-bold">
+    <!-- ปุ่มกดเพื่อกลับหน้าหลัก -->
+    <a href="index.html" class="bg-gray-400 text-white px-4 py-2 rounded-lg font-bold" style="margin-bottom: 15px; display: inline-block;">
         🏠 กลับหน้าหลัก
     </a>
+
     <!-- กล่องเกมหลัก -->
     <div class="bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-md text-center border-4 border-yellow-300">
         
@@ -52,12 +53,18 @@
     </div>
 
     <script>
-        // ข้อมูลคำถามหลายๆ ข้อ
+        // ข้อมูลคำถามหลายๆ ข้อ พร้อมระบุไฟล์เสียง .mp3 อ่านโจทย์
         const questions = [
-            { items: "✏️✏️✏️", count: 3, text: "ช่วยนับซิคะว่ามีดินสอกี่แท่งเอ่ย?", choices: [2, 3, 4, 5], correct: 3 },
-            { items: "🍎🍎🍎🍎", count: 4, text: "ว้าว! แอปเปิ้ลสีแดงกี่ผลกันนะ?", choices: [1, 4, 3, 5], correct: 4 },
-            { items: "🐶🐶", count: 2, text: "น้องหมาตัวน้อยมีกี่ตัวเอ่ย?", choices: [2, 1, 3, 5], correct: 2 }
+            { items: "🦁🦁🦁", count: 3, text: "ช่วยนับซิคะว่ามีสิงโตตัวน้อยกี่ตัวเอ่ย?", audio: "sounds/q1.mp3", choices: [2, 3, 4, 5], correct: 3 },
+            { items: "🐘🐘🐘🐘", count: 4, text: "ว้าว! มีช้างกี่ตัวเอ่ย มาช่วยกันนับหน่อยจ้า", audio: "sounds/q2.mp3", choices: [1, 4, 3, 5], correct: 4 },
+            { items: "🐵🐵", count: 2, text: "น้องลิงซุกซนมีกี่ตัวเอ่ย?", audio: "sounds/q3.mp3", choices: [2, 1, 3, 5], correct: 2 }
         ];
+
+        // ไฟล์เสียงเอฟเฟกต์ .mp3 สำหรับผลลัพธ์
+        const sfx = {
+            correct: "sounds/correct-1.mp3",
+            wrong: "sounds/wrong-1.mp3"
+        };
 
         let currentLevel = 0;
         let score = 0;
@@ -68,6 +75,14 @@
             document.getElementById('item-display').innerText = q.items;
             document.getElementById('question-text').innerText = q.text;
             document.getElementById('feedback').innerText = "";
+
+            // 🔊 เล่นไฟล์เสียง .mp3 อ่านโจทย์อัตโนมัติเมื่อขึ้นข้อใหม่
+            if (q.audio) {
+                let questionAudio = new Audio(q.audio);
+                questionAudio.play().catch(error => {
+                    console.log("เบราว์เซอร์บล็อกการเล่นเสียงอัตโนมัติ", error);
+                });
+            }
 
             const choicesContainer = document.getElementById('choices-container');
             choicesContainer.innerHTML = "";
@@ -84,13 +99,19 @@
         function checkAnswer(selected, correct) {
             const feedbackEl = document.getElementById('feedback');
             const scoreEl = document.getElementById('score');
-            
-            // เปรียบเทียบแบบแปลงค่าให้รองรับทั้งเลขอารบิกและเลขไทย
+
+            // เปรียบเทียบคำตอบ
             if (String(selected) === String(correct)) {
                 feedbackEl.innerText = '🎉 เย้! ถูกต้อง เก่งมากๆ เลยค่ะ';
                 feedbackEl.className = 'mt-5 text-xl font-bold text-green-600 animate-bounce h-10 flex items-center justify-center';
                 score += 1;
                 scoreEl.innerText = score;
+
+                // 🔊 เล่นไฟล์เสียง .mp3 แสดงความยินดีตอนตอบถูก
+                let correctSound = new Audio(sfx.correct);
+                correctSound.play().catch(error => {
+                    console.log("ไม่สามารถเล่นไฟล์เสียงตอบถูกได้", error);
+                });
 
                 // ไปข้อถัดไปอัตโนมัติหลังจาก 1.5 วินาที
                 setTimeout(() => {
@@ -100,7 +121,7 @@
                     } else {
                         document.getElementById('item-display').innerText = "🏆";
                         document.getElementById('question-text').innerText = "เก่งมากๆ เลยค่ะ! เล่นครบทุกข้อแล้วจ้า";
-                        document.getElementById('choices-container').innerHTML = `<button onclick="restartGame()" class="col-span-2 bg-green-500 text-white text-xl font-bold py-3 rounded-2xl shadow-md">เล่นใหม่อีกรอบ 🔄</button>`;
+                        document.getElementById('choices-container').innerHTML = `<button onclick="restartGame()" class="bg-pink-500 text-white text-2xl font-bold py-4 px-6 rounded-2xl col-span-2 shadow-lg">เล่นใหม่อีกครั้ง</button>`;
                         feedbackEl.innerText = `🌟 คะแนนรวมทั้งหมด: ${score} ดวง`;
                     }
                 }, 1500);
@@ -108,6 +129,12 @@
             } else {
                 feedbackEl.innerText = '💡 อุ๊ย! ลองนับใหม่อีกรอบนะจ๊ะ สู้ๆ!';
                 feedbackEl.className = 'mt-5 text-xl font-bold text-red-500 h-10 flex items-center justify-center';
+
+                // 🔊 เล่นไฟล์เสียง .mp3 ตอนตอบผิด
+                let wrongSound = new Audio(sfx.wrong);
+                wrongSound.play().catch(error => {
+                    console.log("ไม่สามารถเล่นไฟล์เสียงตอบผิดได้", error);
+                });
             }
         }
 
@@ -120,7 +147,6 @@
 
         // เริ่มต้นรันเกมข้อแรก
         loadQuestion();
-       
     </script>
 </body>
 </html>
