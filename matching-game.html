@@ -62,14 +62,16 @@
 
         // ไฟล์เสียงเอฟเฟกต์ .mp3 สำหรับผลลัพธ์
         const sfx = {
-            correct: "sounds/correct-1.mp3",
-            wrong: "sounds/wrong-1.mp3"
+            correct: "sounds/correct.mp3",
+            wrong: "sounds/wrong.mp3"
         };
 
         let currentLevel = 0;
         let score = 0;
+        let isAnswerLocked = false; // ตัวแปรล็อกปุ่มกันกดซ้ำซ้อนขณะเสียงกำลังเล่น
 
         function loadQuestion() {
+            isAnswerLocked = false; // ปลดล็อกให้เด็กกดเลือกคำตอบได้
             const q = questions[currentLevel];
             document.getElementById('level-indicator').innerText = `ข้อที่ ${currentLevel + 1} จาก ${questions.length}`;
             document.getElementById('item-display').innerText = q.items;
@@ -97,11 +99,14 @@
         }
 
         function checkAnswer(selected, correct) {
+            if (isAnswerLocked) return; // ถ้าตอบไปแล้วและเสียงกำลังเล่นอยู่ ห้ามกดซ้ำ
+
             const feedbackEl = document.getElementById('feedback');
             const scoreEl = document.getElementById('score');
 
             // เปรียบเทียบคำตอบ
             if (String(selected) === String(correct)) {
+                isAnswerLocked = true; // ล็อกปุ่มทันที
                 feedbackEl.innerText = '🎉 เย้! ถูกต้อง เก่งมากๆ เลยค่ะ';
                 feedbackEl.className = 'mt-5 text-xl font-bold text-green-600 animate-bounce h-10 flex items-center justify-center';
                 score += 1;
@@ -111,20 +116,13 @@
                 let correctSound = new Audio(sfx.correct);
                 correctSound.play().catch(error => {
                     console.log("ไม่สามารถเล่นไฟล์เสียงตอบถูกได้", error);
+                    nextRoundOrFinish(); // เผื่อไฟล์เสียงเล่นไม่ได้ ให้ไปต่อทันที
                 });
 
-                // ไปข้อถัดไปอัตโนมัติหลังจาก 1.5 วินาที
-                setTimeout(() => {
-                    currentLevel++;
-                    if (currentLevel < questions.length) {
-                        loadQuestion();
-                    } else {
-                        document.getElementById('item-display').innerText = "🏆";
-                        document.getElementById('question-text').innerText = "เก่งมากๆ เลยค่ะ! เล่นครบทุกข้อแล้วจ้า";
-                        document.getElementById('choices-container').innerHTML = `<button onclick="restartGame()" class="bg-pink-500 text-white text-2xl font-bold py-4 px-6 rounded-2xl col-span-2 shadow-lg">เล่นใหม่อีกครั้ง</button>`;
-                        feedbackEl.innerText = `🌟 คะแนนรวมทั้งหมด: ${score} ดวง`;
-                    }
-                }, 1500);
+                // 🎵 รอจนกว่าเสียง `correct.mp3` จะเล่นจบแบบสมบูรณ์ ค่อยไปข้อถัดไป
+                correctSound.onended = () => {
+                    nextRoundOrFinish();
+                };
 
             } else {
                 feedbackEl.innerText = '💡 อุ๊ย! ลองนับใหม่อีกรอบนะจ๊ะ สู้ๆ!';
@@ -138,9 +136,22 @@
             }
         }
 
+        function nextRoundOrFinish() {
+            currentLevel++;
+            if (currentLevel < questions.length) {
+                loadQuestion();
+            } else {
+                document.getElementById('item-display').innerText = "🏆";
+                document.getElementById('question-text').innerText = "เก่งมากๆ เลยค่ะ! เล่นครบทุกข้อแล้วจ้า";
+                document.getElementById('choices-container').innerHTML = `<button onclick="restartGame()" class="bg-pink-500 text-white text-2xl font-bold py-4 px-6 rounded-2xl col-span-2 shadow-lg">เล่นใหม่อีกครั้ง</button>`;
+                document.getElementById('feedback').innerText = `🌟 คะแนนรวมทั้งหมด: ${score} ดวง`;
+            }
+        }
+
         function restartGame() {
             currentLevel = 0;
             score = 0;
+            isAnswerLocked = false;
             document.getElementById('score').innerText = score;
             loadQuestion();
         }
