@@ -19,8 +19,8 @@
     <div class="relative w-full max-w-5xl aspect-[4/3] rounded-3xl shadow-2xl overflow-hidden border-4 border-amber-200/50 flex flex-col justify-between p-4 md:p-6"
          style="background-image: url('Game1BG.png'); background-size: cover; background-position: center;">
 
-        <!-- ส่วนหัว: ป้ายชื่อเกม และ ปุ่มเริ่มสืบ (ปรับลดระดับลงมาตามเส้นสีแดง) -->
-        <header class="flex items-center justify-between gap-4 z-10 w-full px-2 pt-6 md:pt-8">
+        <!-- ส่วนหัว: ป้ายชื่อเกม และ ปุ่มเริ่มสืบ (ปรับลดระดับลงมาอยู่ในตำแหน่งวงกลมแดงด้านบน) -->
+        <header class="flex items-center justify-between gap-4 z-10 w-full px-2 pt-12 md:pt-16">
             
             <!-- ป้ายชื่อเกม (Icon2.png) -->
             <div class="w-56 md:w-72 drop-shadow-xl transform hover:scale-105 transition duration-300">
@@ -34,12 +34,12 @@
 
         </header>
 
-        <!-- ส่วนกลาง: ภาพคุณครู (เปลี่ยนเป็น teacher-1.png ตามที่ระบุ) -->
+        <!-- ส่วนกลาง: ภาพคุณครู (ใช้ teacher-1.png ตามที่ระบุ) -->
         <div class="absolute inset-x-0 bottom-36 md:bottom-40 flex justify-center items-end pointer-events-none z-10">
             <img src="teacher-1.png" alt="คุณครูนักสืบ" class="h-52 md:h-76 object-contain drop-shadow-2xl">
         </div>
 
-        <!-- ส่วนล่าง: รวมเมนูไอคอนและข้อความเครดิต -->
+        <!-- ส่วนล่าง: รวมเมนูไอคอนทั้ง 4 ด่าน (ให้อยู่ในตำแหน่งวงกลมแดงด้านล่าง) และข้อความเครดิต -->
         <div class="mt-auto z-20 flex flex-col gap-2 w-full">
             
             <!-- เมนูไอคอนทั้ง 4 ด่าน -->
