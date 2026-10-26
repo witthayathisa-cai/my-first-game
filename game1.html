@@ -13,64 +13,64 @@
         }
     </style>
 </head>
-<body class="bg-gray-900 min-h-screen flex items-center justify-center p-2 md:p-4">
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-0 md:p-4">
 
-    <!-- กรอบหน้าจอหลักของเกม (ควบคุมสัดส่วนให้สวยงามทุกหน้าจอ) -->
-    <div class="relative w-full max-w-5xl aspect-[4/3] rounded-3xl shadow-2xl overflow-hidden border-4 border-amber-200/50 flex flex-col justify-between p-4 md:p-6"
+    <!-- กรอบหน้าจอหลัก: ปรับให้ยืดหยุ่นเต็มจอในมือถือแนวตั้ง และจัดทรงสวยงามในแนวนอน/คอมพิวเตอร์ -->
+    <div class="relative w-full min-h-screen md:min-h-0 md:max-w-5xl md:aspect-[4/3] md:rounded-3xl shadow-2xl overflow-hidden border-0 md:border-4 border-amber-200/50 flex flex-col justify-between p-4 md:p-6"
          style="background-image: url('Game1BG.png'); background-size: cover; background-position: center;">
 
         <!-- ส่วนหัว: ป้ายชื่อเกม และ ปุ่มเริ่มสืบ -->
-        <header class="flex items-center justify-between gap-4 z-10 w-full px-2 pt-12 md:pt-16">
+        <header class="flex flex-col md:flex-row items-center justify-between gap-3 z-10 w-full px-2 pt-2 md:pt-4">
             
             <!-- ป้ายชื่อเกม (Icon2.png) -->
-            <div class="w-56 md:w-72 drop-shadow-xl transform hover:scale-105 transition duration-300">
+            <div class="w-48 md:w-72 drop-shadow-xl transform hover:scale-105 transition duration-300">
                 <img src="Icon2.png" alt="นักสืบสัตว์น้อย ตามหาเจ้าของเสียง" class="w-full h-auto object-contain">
             </div>
 
-            <!-- ปุ่มเริ่มสืบ (Icon3.png) พร้อมเอฟเฟกต์เด้งดุ๊กดิ๊ก -->
-            <a href="#menu-section" class="w-48 md:w-60 drop-shadow-lg animate-bounce hover:scale-105 transition duration-300 cursor-pointer">
+            <!-- ปุ่มเริ่มสืบ (Icon3.png) -->
+            <a href="#menu-section" class="w-36 md:w-60 drop-shadow-lg animate-bounce hover:scale-105 transition duration-300 cursor-pointer">
                 <img src="Icon3.png" alt="เริ่มสืบกันเลย!" class="w-full h-auto object-contain">
             </a>
 
         </header>
 
-        <!-- ส่วนกลาง: ภาพคุณครู (ใช้ teacher-1.png) -->
-        <div class="absolute inset-x-0 bottom-44 md:bottom-52 flex justify-center items-end pointer-events-none z-10">
-            <img src="teacher-1.png" alt="คุณครูนักสืบ" class="h-48 md:h-72 object-contain drop-shadow-2xl">
+        <!-- ส่วนกลาง: ภาพคุณครู (teacher-1.png) -->
+        <div class="flex justify-center items-center my-auto z-10 py-2">
+            <img src="teacher-1.png" alt="คุณครูนักสืบ" class="h-40 sm:h-52 md:h-72 object-contain drop-shadow-2xl">
         </div>
 
-        <!-- ส่วนล่าง: เมนูไอคอนทั้ง 4 ด่าน (ขยับขึ้นมาในระดับเส้นสีแดง) และข้อความเครดิต -->
-        <div class="absolute inset-x-0 bottom-12 md:bottom-16 z-20 flex flex-col gap-2 w-full px-4">
+        <!-- ส่วนล่าง: เมนูไอคอนทั้ง 4 ด่าน และข้อความเครดิต -->
+        <div class="z-20 flex flex-col gap-3 w-full pb-2">
             
-            <!-- เมนูไอคอนทั้ง 4 ด่าน -->
-            <nav id="menu-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 w-full max-w-4xl mx-auto">
+            <!-- เมนูไอคอนทั้ง 4 ด่าน (ปรับให้แสดงผล 2 คอลัมน์บนมือถือ และ 4 คอลัมน์บนจอใหญ่) -->
+            <nav id="menu-section" class="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4 w-full max-w-4xl mx-auto px-2">
                 
                 <!-- ด่านที่ 1: ฟังเสียง -->
-                <a href="stage1.html" class="transform hover:scale-110 hover:-rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                <a href="stage1.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
                     <img src="Icon4.png" alt="ด่าน 1 ฟังเสียง" class="w-full h-auto object-contain">
                 </a>
 
                 <!-- ด่านที่ 2: ตามหาสัตว์ -->
-                <a href="stage2.html" class="transform hover:scale-110 hover:rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                <a href="stage2.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
                     <img src="Icon5.png" alt="ด่าน 2 ตามหาสัตว์" class="w-full h-auto object-contain">
                 </a>
 
                 <!-- ด่านที่ 3: รู้จักคำศัพท์ -->
-                <a href="stage3.html" class="transform hover:scale-110 hover:-rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                <a href="stage3.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
                     <img src="Icon6.png" alt="ด่าน 3 รู้จักคำศัพท์" class="w-full h-auto object-contain">
                 </a>
 
                 <!-- ด่านที่ 4: ไขรหัส -->
-                <a href="stage4.html" class="transform hover:scale-110 hover:rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                <a href="stage4.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
                     <img src="Icon7.png" alt="ด่าน 4 ไขรหัส" class="w-full h-auto object-contain">
                 </a>
 
             </nav>
 
             <!-- ส่วนท้าย: ข้อความเครดิตผู้จัดทำ -->
-            <footer class="w-full text-center mt-1">
-                <div class="inline-block bg-white/80 backdrop-blur-sm border-2 border-amber-300/80 px-4 py-1.5 rounded-full shadow-md">
-                    <p class="text-xs md:text-sm font-bold text-amber-900 drop-shadow-sm">
+            <footer class="w-full text-center">
+                <div class="inline-block bg-white/85 backdrop-blur-sm border-2 border-amber-300/80 px-3 py-1 rounded-full shadow-md">
+                    <p class="text-[10px] sm:text-xs md:text-sm font-bold text-amber-900 drop-shadow-sm">
                         จัดทำโดย นางวรรณวิมล สงวนพันธุ์ ตำแหน่ง ครู วิทยฐานะ ครูชำนาญการพิเศษ
                     </p>
                 </div>
