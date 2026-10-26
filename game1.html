@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>นักสืบสัตว์น้อย - ตามหาเจ้าของเสียง</title>
+    <!-- โหลด Tailwind CSS จาก CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Prompt', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-2 md:p-4">
+
+    <!-- กรอบหน้าจอหลักของเกม -->
+    <div class="relative w-full max-w-5xl aspect-[4/3] rounded-3xl shadow-2xl overflow-hidden border-4 border-amber-200/50 flex flex-col justify-between p-4 md:p-6"
+         style="background-image: url('Game1BG.png'); background-size: cover; background-position: center;">
+
+        <!-- ส่วนหัว: ป้ายชื่อเกม (ซ้าย) และ ปุ่มเริ่มสืบ (ขวา) -->
+        <header class="flex items-center justify-between gap-4 z-10 w-full px-2">
+            
+            <!-- ป้ายชื่อเกม (Icon2.png) -->
+            <div class="w-56 md:w-72 drop-shadow-xl transform hover:scale-105 transition duration-300">
+                <img src="Icon2.png" alt="นักสืบสัตว์น้อย ตามหาเจ้าของเสียง" class="w-full h-auto object-contain">
+            </div>
+
+            <!-- ปุ่มเริ่มสืบ (Icon3.png) -->
+            <a href="#menu-section" class="w-48 md:w-60 drop-shadow-lg transform hover:scale-105 active:scale-95 transition duration-300 cursor-pointer">
+                <img src="Icon3.png" alt="เริ่มสืบกันเลย!" class="w-full h-auto object-contain">
+            </a>
+
+        </header>
+
+        <!-- ส่วนกลาง: นำภาพคุณครูมาวางยืนเด่นสง่าอยู่ตรงกลางฉาก -->
+        <div class="absolute inset-x-0 bottom-24 flex justify-center items-end pointer-events-none z-10">
+            <img src="teacher-1.png" alt="คุณครูนักสืบ" class="h-64 md:h-96 object-contain drop-shadow-2xl animate-pulse">
+        </div>
+
+        <!-- ส่วนท้าย: เมนูไอคอนทั้ง 4 ด่าน (วางเรียงด้านล่าง) -->
+        <nav id="menu-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 z-20 w-full max-w-4xl mx-auto mt-auto">
+            
+            <!-- ด่านที่ 1: ฟังเสียง -->
+            <a href="stage1.html" class="transform hover:-translate-y-2 hover:scale-105 transition duration-300 drop-shadow-xl cursor-pointer">
+                <img src="Icon4.png" alt="ด่าน 1 ฟังเสียง" class="w-full h-auto object-contain">
+            </a>
+
+            <!-- ด่านที่ 2: ตามหาสัตว์ -->
+            <a href="stage2.html" class="transform hover:-translate-y-2 hover:scale-105 transition duration-300 drop-shadow-xl cursor-pointer">
+                <img src="Icon5.png" alt="ด่าน 2 ตามหาสัตว์" class="w-full h-auto object-contain">
+            </a>
+
+            <!-- ด่านที่ 3: รู้จักคำศัพท์ -->
+            <a href="stage3.html" class="transform hover:-translate-y-2 hover:scale-105 transition duration-300 drop-shadow-xl cursor-pointer">
+                <img src="Icon6.png" alt="ด่าน 3 รู้จักคำศัพท์" class="w-full h-auto object-contain">
+            </a>
+
+            <!-- ด่านที่ 4: ไขรหัส (สะกดคำ) -->
+            <a href="stage4.html" class="transform hover:-translate-y-2 hover:scale-105 transition duration-300 drop-shadow-xl cursor-pointer">
+                <img src="Icon7.png" alt="ด่าน 4 ไขรหัส" class="w-full h-auto object-contain">
+            </a>
+
+        </nav>
+
+    </div>
+
+</body>
+</html>
