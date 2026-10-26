@@ -15,7 +15,7 @@
 </head>
 <body class="bg-gray-900 min-h-screen flex items-center justify-center p-2 md:p-4">
 
-    <!-- กรอบหน้าจอหลักของเกม -->
+    <!-- กรอบหน้าจอหลักของเกม (ควบคุมสัดส่วนไม่ให้ล้นหน้าจอ) -->
     <div class="relative w-full max-w-5xl aspect-[4/3] rounded-3xl shadow-2xl overflow-hidden border-4 border-amber-200/50 flex flex-col justify-between p-4 md:p-6"
          style="background-image: url('Game1BG.png'); background-size: cover; background-position: center;">
 
@@ -34,13 +34,13 @@
 
         </header>
 
-        <!-- ส่วนกลาง: นำภาพคุณครูมาวางยืนเด่นสง่าอยู่ตรงกลางฉาก -->
-        <div class="absolute inset-x-0 bottom-24 flex justify-center items-end pointer-events-none z-10">
-            <img src="teacher-1.png" alt="คุณครูนักสืบ" class="h-64 md:h-96 object-contain drop-shadow-2xl animate-pulse">
+        <!-- ส่วนกลาง: ภาพคุณครู (ขยับตำแหน่งขึ้นมาตรงกลางตามที่ท่านต้องการ) -->
+        <div class="absolute inset-x-0 bottom-32 md:bottom-36 flex justify-center items-end pointer-events-none z-10">
+            <img src="teacher.png" alt="คุณครูนักสืบ" class="h-52 md:h-80 object-contain drop-shadow-2xl">
         </div>
 
-        <!-- ส่วนท้าย: เมนูไอคอนทั้ง 4 ด่าน (วางเรียงด้านล่าง) -->
-        <nav id="menu-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 z-20 w-full max-w-4xl mx-auto mt-auto">
+        <!-- ส่วนท้าย: เมนูไอคอนทั้ง 4 ด่าน (ขยับตำแหน่งลอยขึ้นมาด้านบนเพื่อให้เห็นครบถ้วน) -->
+        <nav id="menu-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 z-20 w-full max-w-4xl mx-auto mb-2">
             
             <!-- ด่านที่ 1: ฟังเสียง -->
             <a href="stage1.html" class="transform hover:-translate-y-2 hover:scale-105 transition duration-300 drop-shadow-xl cursor-pointer">
@@ -57,7 +57,7 @@
                 <img src="Icon6.png" alt="ด่าน 3 รู้จักคำศัพท์" class="w-full h-auto object-contain">
             </a>
 
-            <!-- ด่านที่ 4: ไขรหัส (สะกดคำ) -->
+            <!-- ด่านที่ 4: ไขรหัส -->
             <a href="stage4.html" class="transform hover:-translate-y-2 hover:scale-105 transition duration-300 drop-shadow-xl cursor-pointer">
                 <img src="Icon7.png" alt="ด่าน 4 ไขรหัส" class="w-full h-auto object-contain">
             </a>
