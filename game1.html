@@ -35,43 +35,48 @@
         </header>
 
         <!-- ส่วนกลาง: ภาพคุณครู (teacher.png) ยืนต้อนรับตรงกลางฉาก -->
-        <div class="absolute inset-x-0 bottom-28 md:bottom-32 flex justify-center items-end pointer-events-none z-10">
-            <img src="teacher-1.png" alt="คุณครูนักสืบ" class="h-56 md:h-84 object-contain drop-shadow-2xl">
+        <div class="absolute inset-x-0 bottom-36 md:bottom-40 flex justify-center items-end pointer-events-none z-10">
+            <img src="teacher-1.png" alt="คุณครูนักสืบ" class="h-52 md:h-76 object-contain drop-shadow-2xl">
         </div>
 
-        <!-- ส่วนล่าง: เมนูไอคอนทั้ง 4 ด่าน -->
-        <nav id="menu-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 z-20 w-full max-w-4xl mx-auto">
+        <!-- ส่วนล่าง: รวมเมนูไอคอนและข้อความเครดิตไว้ด้วยกันเพื่อดึงตำแหน่งลงมาตามเส้นสีแดง -->
+        <div class="mt-auto z-20 flex flex-col gap-2 w-full">
             
-            <!-- ด่านที่ 1: ฟังเสียง -->
-            <a href="stage1.html" class="transform hover:scale-110 hover:-rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
-                <img src="Icon4.png" alt="ด่าน 1 ฟังเสียง" class="w-full h-auto object-contain">
-            </a>
+            <!-- เมนูไอคอนทั้ง 4 ด่าน (ดึงลงมาตำแหน่งเส้นสีแดง) -->
+            <nav id="menu-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 w-full max-w-4xl mx-auto">
+                
+                <!-- ด่านที่ 1: ฟังเสียง -->
+                <a href="stage1.html" class="transform hover:scale-110 hover:-rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                    <img src="Icon4.png" alt="ด่าน 1 ฟังเสียง" class="w-full h-auto object-contain">
+                </a>
 
-            <!-- ด่านที่ 2: ตามหาสัตว์ -->
-            <a href="stage2.html" class="transform hover:scale-110 hover:rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
-                <img src="Icon5.png" alt="ด่าน 2 ตามหาสัตว์" class="w-full h-auto object-contain">
-            </a>
+                <!-- ด่านที่ 2: ตามหาสัตว์ -->
+                <a href="stage2.html" class="transform hover:scale-110 hover:rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                    <img src="Icon5.png" alt="ด่าน 2 ตามหาสัตว์" class="w-full h-auto object-contain">
+                </a>
 
-            <!-- ด่านที่ 3: รู้จักคำศัพท์ -->
-            <a href="stage3.html" class="transform hover:scale-110 hover:-rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
-                <img src="Icon6.png" alt="ด่าน 3 รู้จักคำศัพท์" class="w-full h-auto object-contain">
-            </a>
+                <!-- ด่านที่ 3: รู้จักคำศัพท์ -->
+                <a href="stage3.html" class="transform hover:scale-110 hover:-rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                    <img src="Icon6.png" alt="ด่าน 3 รู้จักคำศัพท์" class="w-full h-auto object-contain">
+                </a>
 
-            <!-- ด่านที่ 4: ไขรหัส -->
-            <a href="stage4.html" class="transform hover:scale-110 hover:rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
-                <img src="Icon7.png" alt="ด่าน 4 ไขรหัส" class="w-full h-auto object-contain">
-            </a>
+                <!-- ด่านที่ 4: ไขรหัส -->
+                <a href="stage4.html" class="transform hover:scale-110 hover:rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                    <img src="Icon7.png" alt="ด่าน 4 ไขรหัส" class="w-full h-auto object-contain">
+                </a>
 
-        </nav>
+            </nav>
 
-        <!-- ส่วนท้าย: ข้อความเครดิตผู้จัดทำ (วางบนพื้นทรายบริเวณวงกลมสีแดง) -->
-        <footer class="w-full text-center z-20 pb-1">
-            <div class="inline-block bg-white/80 backdrop-blur-sm border-2 border-amber-300/80 px-4 py-1.5 rounded-full shadow-md">
-                <p class="text-xs md:text-sm font-bold text-amber-900 drop-shadow-sm">
-                    จัดทำโดย นางวรรณวิมล สงวนพันธุ์ ตำแหน่ง ครู วิทยฐานะ ครูชำนาญการพิเศษ
-                </p>
-            </div>
-        </footer>
+            <!-- ส่วนท้าย: ข้อความเครดิตผู้จัดทำ -->
+            <footer class="w-full text-center pb-1">
+                <div class="inline-block bg-white/80 backdrop-blur-sm border-2 border-amber-300/80 px-4 py-1.5 rounded-full shadow-md">
+                    <p class="text-xs md:text-sm font-bold text-amber-900 drop-shadow-sm">
+                        จัดทำโดย นางวรรณวิมล สงวนพันธุ์ ตำแหน่ง ครู วิทยฐานะ ครูชำนาญการพิเศษ
+                    </p>
+                </div>
+            </footer>
+
+        </div>
 
     </div>
 
