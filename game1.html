@@ -15,12 +15,12 @@
 </head>
 <body class="bg-gray-900 min-h-screen flex items-center justify-center p-0 md:p-4">
 
-    <!-- กรอบหน้าจอหลัก: ยืดหยุ่นสวยงามทั้งมือถือแนวตั้งและคอมพิวเตอร์ -->
+    <!-- กรอบหน้าจอหลัก: ยืดหยุ่นเต็มจอในมือถือแนวตั้ง และคงสัดส่วนสวยงามบนแท็บเล็ต/คอมพิวเตอร์ -->
     <div class="relative w-full min-h-screen md:min-h-0 md:max-w-5xl md:aspect-[4/3] md:rounded-3xl shadow-2xl overflow-hidden border-0 md:border-4 border-amber-200/50 flex flex-col justify-between p-3 md:p-6"
          style="background-image: url('Game1BG.png'); background-size: cover; background-position: center;">
 
-        <!-- ส่วนหัว: ป้ายชื่อเกม และ ปุ่มเริ่มสืบ (จัดกลุ่มด้านบนให้กระชับ) -->
-        <header class="flex flex-row items-center justify-between gap-2 z-10 w-full px-1 pt-2 md:pt-4">
+        <!-- ส่วนหัว: ป้ายชื่อเกม และ ปุ่มเริ่มสืบ -->
+        <header class="flex flex-row items-center justify-between gap-2 z-10 w-full px-2 pt-3 md:pt-4">
             
             <!-- ป้ายชื่อเกม (Icon2.png) -->
             <div class="w-44 sm:w-56 md:w-72 drop-shadow-xl transform hover:scale-105 transition duration-300">
@@ -34,35 +34,35 @@
 
         </header>
 
-        <!-- ส่วนกลาง: ขยายภาพคุณครู (teacher-1.png) ให้ใหญ่ขึ้นโดดเด่นสะดุดตา -->
-        <div class="flex justify-center items-center my-auto z-10 py-1">
-            <img src="teacher-1.png" alt="คุณครูนักสืบ" class="h-56 sm:h-68 md:h-84 object-contain drop-shadow-2xl">
+        <!-- ส่วนกลาง: ขยายขนาดรูปคุณครู (teacher-1.png) ให้ใหญ่ขึ้นในมือถือแนวตั้ง (h-72 ขึ้นไป) และรักษาขนาดปกติบนจอใหญ่ (md:h-80) -->
+        <div class="flex justify-center items-center my-auto z-10 py-2">
+            <img src="teacher-1.png" alt="คุณครูนักสืบ" class="h-72 sm:h-80 md:h-80 object-contain drop-shadow-2xl">
         </div>
 
-        <!-- ส่วนล่าง: ลดขนาดไอคอนทั้ง 4 ให้เล็กลง และจัดระเบียบให้สวยงาม -->
+        <!-- ส่วนล่าง: จัดเรียงไอคอนทั้ง 4 ด่าน และข้อความเครดิต -->
         <div class="z-20 flex flex-col gap-2 w-full pb-2">
             
-            <!-- เมนูไอคอนทั้ง 4 ด่าน (ปรับขนาดให้เล็กลงและพอดีกับหน้าจอ) -->
-            <nav id="menu-section" class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 w-full max-w-3xl mx-auto px-4">
+            <!-- เมนูไอคอนทั้ง 4 ด่าน (จัดเรียง 2x2 ขนาดกะทัดรัดสวยงาม) -->
+            <nav id="menu-section" class="grid grid-cols-2 gap-2.5 md:gap-4 w-full max-w-sm md:max-w-3xl mx-auto px-4">
                 
                 <!-- ด่านที่ 1: ฟังเสียง -->
                 <a href="stage1.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
-                    <img src="Icon4.png" alt="ด่าน 1 ฟังเสียง" class="w-28 sm:w-36 md:w-full mx-auto h-auto object-contain">
+                    <img src="Icon4.png" alt="ด่าน 1 ฟังเสียง" class="w-24 sm:w-32 md:w-full mx-auto h-auto object-contain">
                 </a>
 
                 <!-- ด่านที่ 2: ตามหาสัตว์ -->
                 <a href="stage2.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
-                    <img src="Icon5.png" alt="ด่าน 2 ตามหาสัตว์" class="w-28 sm:w-36 md:w-full mx-auto h-auto object-contain">
+                    <img src="Icon5.png" alt="ด่าน 2 ตามหาสัตว์" class="w-24 sm:w-32 md:w-full mx-auto h-auto object-contain">
                 </a>
 
                 <!-- ด่านที่ 3: รู้จักคำศัพท์ -->
                 <a href="stage3.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
-                    <img src="Icon6.png" alt="ด่าน 3 รู้จักคำศัพท์" class="w-28 sm:w-36 md:w-full mx-auto h-auto object-contain">
+                    <img src="Icon6.png" alt="ด่าน 3 รู้จักคำศัพท์" class="w-24 sm:w-32 md:w-full mx-auto h-auto object-contain">
                 </a>
 
                 <!-- ด่านที่ 4: ไขรหัส -->
                 <a href="stage4.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
-                    <img src="Icon7.png" alt="ด่าน 4 ไขรหัส" class="w-28 sm:w-36 md:w-full mx-auto h-auto object-contain">
+                    <img src="Icon7.png" alt="ด่าน 4 ไขรหัส" class="w-24 sm:w-32 md:w-full mx-auto h-auto object-contain">
                 </a>
 
             </nav>
