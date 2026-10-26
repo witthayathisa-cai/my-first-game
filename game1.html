@@ -19,7 +19,7 @@
     <div class="relative w-full max-w-5xl aspect-[4/3] rounded-3xl shadow-2xl overflow-hidden border-4 border-amber-200/50 flex flex-col justify-between p-4 md:p-6"
          style="background-image: url('Game1BG.png'); background-size: cover; background-position: center;">
 
-        <!-- ส่วนหัว: ป้ายชื่อเกม และ ปุ่มเริ่มสืบ (ปรับลดระดับลงมาอยู่ในตำแหน่งวงกลมแดงด้านบน) -->
+        <!-- ส่วนหัว: ป้ายชื่อเกม และ ปุ่มเริ่มสืบ -->
         <header class="flex items-center justify-between gap-4 z-10 w-full px-2 pt-12 md:pt-16">
             
             <!-- ป้ายชื่อเกม (Icon2.png) -->
@@ -34,13 +34,13 @@
 
         </header>
 
-        <!-- ส่วนกลาง: ภาพคุณครู (ใช้ teacher-1.png ตามที่ระบุ) -->
-        <div class="absolute inset-x-0 bottom-36 md:bottom-40 flex justify-center items-end pointer-events-none z-10">
-            <img src="teacher-1.png" alt="คุณครูนักสืบ" class="h-52 md:h-76 object-contain drop-shadow-2xl">
+        <!-- ส่วนกลาง: ภาพคุณครู (ใช้ teacher-1.png) -->
+        <div class="absolute inset-x-0 bottom-44 md:bottom-52 flex justify-center items-end pointer-events-none z-10">
+            <img src="teacher-1.png" alt="คุณครูนักสืบ" class="h-48 md:h-72 object-contain drop-shadow-2xl">
         </div>
 
-        <!-- ส่วนล่าง: รวมเมนูไอคอนทั้ง 4 ด่าน (ให้อยู่ในตำแหน่งวงกลมแดงด้านล่าง) และข้อความเครดิต -->
-        <div class="mt-auto z-20 flex flex-col gap-2 w-full">
+        <!-- ส่วนล่าง: เมนูไอคอนทั้ง 4 ด่าน (ขยับขึ้นมาในระดับเส้นสีแดง) และข้อความเครดิต -->
+        <div class="absolute inset-x-0 bottom-12 md:bottom-16 z-20 flex flex-col gap-2 w-full px-4">
             
             <!-- เมนูไอคอนทั้ง 4 ด่าน -->
             <nav id="menu-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 w-full max-w-4xl mx-auto">
@@ -68,7 +68,7 @@
             </nav>
 
             <!-- ส่วนท้าย: ข้อความเครดิตผู้จัดทำ -->
-            <footer class="w-full text-center pb-1">
+            <footer class="w-full text-center mt-1">
                 <div class="inline-block bg-white/80 backdrop-blur-sm border-2 border-amber-300/80 px-4 py-1.5 rounded-full shadow-md">
                     <p class="text-xs md:text-sm font-bold text-amber-900 drop-shadow-sm">
                         จัดทำโดย นางวรรณวิมล สงวนพันธุ์ ตำแหน่ง ครู วิทยฐานะ ครูชำนาญการพิเศษ
