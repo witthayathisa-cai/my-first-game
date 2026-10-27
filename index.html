@@ -25,7 +25,7 @@
 </head>
 <body class="bg-gradient-to-b from-sky-100 via-amber-50 to-emerald-100 min-h-screen flex flex-col justify-between overflow-x-hidden relative">
 
-    <!-- ไฟล์เสียงเพลงประกอบพื้นหลัง (BGM) พร้อมสั่งเล่นอัตโนมัติ -->
+    <!-- ไฟล์เสียงเพลงประกอบพื้นหลัง (BGM) -->
     <audio id="bgm" src="SMART ANIMAL.mp3" loop autoplay preload="auto"></audio>
 
     <!-- ปุ่มควบคุมเปิด/ปิดเสียงเพลงแบ็คกราวด์ -->
@@ -211,30 +211,32 @@
         </div>
     </footer>
 
-    <!-- สคริปต์ควบคุมการเล่นเพลงแบ็คกราวด์ -->
+    <!-- สคริปต์ควบคุมการเล่นเพลงแบ็คกราวด์อัจฉริยะ -->
     <script>
         let isPlaying = true;
 
         window.addEventListener('DOMContentLoaded', () => {
             const bgm = document.getElementById('bgm');
             bgm.volume = 0.4;
+
+            // พยายามเล่นเพลงทันที
             bgm.play().then(() => {
                 isPlaying = true;
                 document.getElementById('bgm-text').innerText = 'ปิดเพลง';
             }).catch(error => {
-                console.log("Autoplay restricted by browser, waiting for interaction:", error);
-                isPlaying = false;
-                document.getElementById('bgm-text').innerText = 'เปิดเพลง';
+                console.log("Autoplay blocked by browser, enabling auto-start on first click:", error);
                 
-                // สำรองกรณีเบราว์เซอร์บล็อก ให้เล่นทันทีเมื่อมีการคลิกครั้งแรกบนหน้าจอ
-                document.addEventListener('click', () => {
-                    if (!isPlaying) {
-                        bgm.play().then(() => {
-                            isPlaying = true;
-                            document.getElementById('bgm-text').innerText = 'ปิดเพลง';
-                        });
-                    }
-                }, { once: true });
+                // หากเบราว์เซอร์บล็อก เสียงจะเล่นทันทีเมื่อมีการคลิกหน้าจอครั้งแรกที่ไหนก็ได้
+                const unlockAudio = () => {
+                    bgm.play().then(() => {
+                        isPlaying = true;
+                        document.getElementById('bgm-text').innerText = 'ปิดเพลง';
+                        window.removeEventListener('click', unlockAudio);
+                        window.removeEventListener('touchstart', unlockAudio);
+                    });
+                };
+                window.addEventListener('click', unlockAudio);
+                window.addEventListener('touchstart', unlockAudio);
             });
         });
 
