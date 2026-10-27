@@ -19,7 +19,7 @@
     <div class="relative w-full min-h-screen md:min-h-0 md:max-w-5xl md:aspect-[4/3] md:rounded-3xl shadow-2xl overflow-hidden border-0 md:border-4 border-amber-200/50 flex flex-col justify-between p-3 md:p-6 bg-[#FDF6EC]"
          style="background-image: url('Game1BG.png'); background-size: cover; background-position: center;">
 
-        <!-- ปุ่มควบคุมเสียงเพลง (ปรับตำแหน่งลงมาอยู่ในระดับวงกลมสีแดง) -->
+        <!-- ปุ่มควบคุมเสียงเพลง (ตำแหน่งตามที่นายท่านระบุ) -->
         <button onclick="toggleBGM()" id="bgm-btn" class="absolute top-35 right-15 md:right-15 bg-white/90 hover:bg-white text-amber-900 font-bold px-3 py-1.5 rounded-full shadow-lg transition z-30 flex items-center gap-1.5 border-2 border-amber-300 text-xs md:text-sm cursor-pointer">
             🎵 <span id="bgm-text">ปิดเพลง</span>
         </button>
@@ -53,26 +53,26 @@
         <!-- ส่วนล่าง: จัดเรียงไอคอนทั้ง 4 ด่าน และข้อความเครดิต -->
         <div class="z-20 flex flex-col gap-2 w-full pb-2">
             
-            <!-- เมนูไอคอนทั้ง 4 ด่าน (จัดเรียง 4 ปุ่มครบถ้วน) -->
+            <!-- เมนูไอคอนทั้ง 4 ด่าน (เชื่อมโยงไปยัง game1-1.html ถึง game1-4.html) -->
             <nav id="menu-section" class="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4 w-full max-w-4xl mx-auto px-4">
                 
                 <!-- ด่านที่ 1: ฟังเสียง -->
-                <a href="stage1.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                <a href="game1-1.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
                     <img src="Icon4.png" alt="ด่าน 1 ฟังเสียง" class="w-full h-auto object-contain">
                 </a>
 
                 <!-- ด่านที่ 2: ตามหาสัตว์ -->
-                <a href="stage2.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                <a href="game1-2.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
                     <img src="Icon5.png" alt="ด่าน 2 ตามหาสัตว์" class="w-full h-auto object-contain">
                 </a>
 
                 <!-- ด่านที่ 3: รู้จักคำศัพท์ -->
-                <a href="stage3.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                <a href="game1-3.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
                     <img src="Icon6.png" alt="ด่าน 3 รู้จักคำศัพท์" class="w-full h-auto object-contain">
                 </a>
 
                 <!-- ด่านที่ 4: ไขรหัส -->
-                <a href="stage4.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                <a href="game1-4.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
                     <img src="Icon7.png" alt="ด่าน 4 ไขรหัส" class="w-full h-auto object-contain">
                 </a>
 
@@ -131,7 +131,7 @@
         // ฟังก์ชันเริ่มเล่นเพลงประกอบพื้นหลัง
         function startBackgroundMusic() {
             const bgm = document.getElementById('bgm');
-            bgm.volume = 0.3;
+            bgm.volume = 0.4;
             bgm.play().then(() => {
                 isPlaying = true;
                 document.getElementById('bgm-text').innerText = 'ปิดเพลง';
