@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Smart Safari: ผจญภัยเสียงสัตว์มหาสนุก</title>
+    <!-- เรียกใช้งาน Google Font (Prompt) -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Prompt', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        body {
+            background: linear-gradient(135deg, #a8ede0 0%, #fed6e3 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .game-container {
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            border: none;
+            box-shadow: none;
+        }
+
+        /* สำหรับแท็บเล็ตและคอมพิวเตอร์ ให้แสดงผลเป็นกรอบสวยงามตรงกลาง */
+        @media (min-width: 768px) {
+            body {
+                padding: 20px;
+            }
+            .game-container {
+                max-width: 900px;
+                max-height: 650px;
+                border-radius: 24px;
+                box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+                border: 6px solid #ffcc00;
+                height: 85vh;
+            }
+        }
+
+        /* ส่วนหัวเกม */
+        .header {
+            background: #ff7675;
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: clamp(15px, 4vw, 20px);
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            width: 100%;
+        }
+        .score-board {
+            background: #ffeaa7;
+            color: #d63031;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: clamp(13px, 3.5vw, 16px);
+            white-space: nowrap;
+        }
+
+        /* หน้าจอเนื้อหาแต่ละส่วน */
+        .screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            overflow-y: auto;
+            width: 100%;
+        }
+        .hidden {
+            display: none !important;
+        }
+        h1 {
+            color: #2d3436;
+            font-size: clamp(22px, 6vw, 32px);
+            margin: 5px 0 10px 0;
+        }
+        h2 {
+            font-size: clamp(16px, 4.5vw, 22px);
+            margin: 0 0 10px 0;
+        }
+        p {
+            color: #636e72;
+            font-size: clamp(14px, 3.8vw, 18px);
+            margin: 0 0 15px 0;
+        }
+        .welcome-emoji, .finish-emoji {
+            font-size: clamp(50px, 12vw, 80px);
+            margin-bottom: 5px;
+        }
+
+        /* ปุ่มกดและปุ่มลิงก์สไตล์น่ารักสำหรับเด็ก */
+        .btn {
+            background-color: #00b894;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: clamp(16px, 4.5vw, 22px);
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #00896f;
+            transition: all 0.1s ease;
+            touch-action: manipulation;
+            margin: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #00896f;
+        }
+        .btn-sound {
+            background-color: #0984e3;
+            box-shadow: 0 5px 0 #074b83;
+            font-size: clamp(16px, 4.5vw, 22px);
+            padding: 10px 24px;
+            margin-bottom: 10px;
+        }
+        .btn-sound:active {
+            box-shadow: 0 1px 0 #074b83;
+        }
+        .btn-home {
+            background-color: #e17055;
+            box-shadow: 0 5px 0 #c0392b;
+        }
+        .btn-home:active {
+            box-shadow: 0 1px 0 #c0392b;
+        }
+
+        /* ตัวเลือกรูปภาพสัตว์ */
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .animal-card {
+            background: #f1f2f6;
+            border: 3px solid #dfe4ea;
+            border-radius: 14px;
+            padding: 8px 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+        .animal-card:active {
+            transform: scale(0.95);
+            background: #e8f4fc;
+        }
+        .animal-emoji {
+            font-size: clamp(35px, 10vw, 55px);
+            margin-bottom: 3px;
+        }
+        .animal-name {
+            font-size: clamp(11px, 3.2vw, 16px);
+            font-weight: 600;
+            color: #2d3436;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* กล่องแสดงข้อความผลลัพธ์ */
+        #feedback-msg {
+            font-size: clamp(15px, 3.8vw, 20px);
+            font-weight: 700;
+            margin-top: 10px;
+            min-height: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <!-- แถบด้านบน -->
+    <div class="header">
+        <span>🦁 Smart Safari</span>
+        <div class="score-board">⭐ ดาว: <span id="score">0</span> ดวง</div>
+    </div>
+
+    <!-- หน้าจอที่ 1: หน้าแรกยินดีต้อนรับ -->
+    <div id="screen-welcome" class="screen">
+        <div class="welcome-emoji">🐯🐵🐰</div>
+        <h1>ผจญภัยเสียงสัตว์มหาสนุก</h1>
+        <p>มาร่วมฟังเสียงสัตว์และทายชื่อกับพี่ ๆ กันเถอะเด็ก ๆ!</p>
+        <button class="btn" onclick="startGame()">เริ่มเล่นเกมกันเลย!</button>
+    </div>
+
+    <!-- หน้าจอที่ 2: หน้าเล่นเกมทายเสียง -->
+    <div id="screen-game" class="screen hidden">
+        <h2 id="question-text" style="color: #e17055;">ด่านที่ 1: เสียงใครเอ่ย? เลือกให้ถูกนะจ๊ะ</h2>
+        
+        <!-- ปุ่มกดฟังเสียง -->
+        <button class="btn btn-sound" onclick="playCurrentAnimalSound()">🔊 ฟังเสียงสัตว์</button>
+        
+        <!-- ตัวเลือกสัตว์ -->
+        <div class="choices-grid" id="choices-container">
+            <!-- สร้างผ่าน JavaScript -->
+        </div>
+
+        <div id="feedback-msg"></div>
+    </div>
+
+    <!-- หน้าจอที่ 3: หน้าสรุปผลคะแนน -->
+    <div id="screen-finish" class="screen hidden">
+        <div class="finish-emoji">🏆🎉</div>
+        <h1>ยอดเยี่ยมมากเลยค่ะ!</h1>
+        <p>หนูทำภารกิจเสียงสัตว์สำเร็จแล้ว ได้ดาวทั้งหมด <span id="final-score" style="color: #d63031; font-weight: 700;">0</span> ดวง!</p>
+        <div>
+            <button class="btn" onclick="restartGame()">เล่นใหม่อีกครั้ง</button>
+            <a href="index.html" class="btn btn-home">🏠 กลับหน้าหลัก</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ฐานข้อมูลสัตว์ พร้อมระบุ path ไฟล์เสียง .mp3
+    const animals = [
+        { th: "สิงโต", en: "Lion", emoji: "🦁", audio: "sounds/lion.mp3" },
+        { th: "ช้าง", en: "Elephant", emoji: "🐘", audio: "sounds/elephant.mp3" },
+        { th: "ลิง", en: "Monkey", emoji: "🐵", audio: "sounds/monkey.mp3" },
+        { th: "กระต่าย", en: "Rabbit", emoji: "🐰", audio: "sounds/rabbit.mp3" },
+        { th: "สุนัข", en: "Dog", emoji: "🐶", audio: "sounds/dog.mp3" },
+        { th: "เป็ด", en: "Duck", emoji: "🦆", audio: "sounds/duck.mp3" }
+    ];
+
+    // ไฟล์เสียงเอฟเฟกต์เพิ่มเติม
+    const sfx = {
+        correct: "sounds/correct.mp3",
+        wrong: "sounds/wrong.mp3"
+    };
+
+    let score = 0;
+    let currentRound = 0;
+    const maxRounds = 5;
+    let targetAnimal = null;
+    let isAnswerLocked = false; // ตัวแปรป้องกันการกดซ้ำซ้อนขณะเสียงกำลังเล่น
+
+    function startGame() {
+        score = 0;
+        currentRound = 0;
+        isAnswerLocked = false;
+        document.getElementById('score').innerText = score;
+        document.getElementById('screen-welcome').classList.add('hidden');
+        document.getElementById('screen-finish').classList.add('hidden');
+        document.getElementById('screen-game').classList.remove('hidden');
+        nextRound();
+    }
+
+    function restartGame() {
+        startGame();
+    }
+
+    function nextRound() {
+        isAnswerLocked = false; //ปลดล็อกให้กดเลือกคำตอบได้ใหม่
+        currentRound++;
+        if (currentRound > maxRounds) {
+            endGame();
+            return;
+        }
+
+        document.getElementById('feedback-msg').innerText = "";
+        
+        targetAnimal = animals[Math.floor(Math.random() * animals.length)];
+
+        let choices = [targetAnimal];
+        while (choices.length < 3) {
+            let randomAnimal = animals[Math.floor(Math.random() * animals.length)];
+            if (!choices.includes(randomAnimal)) {
+                choices.push(randomAnimal);
+            }
+        }
+
+        choices.sort(() => Math.random() - 0.5);
+
+        const container = document.getElementById('choices-container');
+        container.innerHTML = "";
+        choices.forEach(animal => {
+            const card = document.createElement('div');
+            card.className = 'animal-card';
+            card.innerHTML = `
+                <div class="animal-emoji">${animal.emoji}</div>
+                <div class="animal-name">${animal.th}<br><span style="font-size:0.8em; opacity:0.8;">(${animal.en})</span></div>
+            `;
+            card.onclick = () => checkAnswer(animal);
+            container.appendChild(card);
+        });
+
+        setTimeout(playCurrentAnimalSound, 400);
+    }
+
+    function playCurrentAnimalSound() {
+        if (!targetAnimal) return;
+        let soundEffect = new Audio(targetAnimal.audio);
+        soundEffect.play().catch(error => {
+            console.log("ไม่สามารถเล่นเสียงอัตโนมัติได้", error);
+        });
+    }
+
+    function checkAnswer(selectedAnimal) {
+        if (isAnswerLocked) return; // ถ้าตอบถูกไปแล้วและเสียงกำลังเล่นอยู่ ห้ามกดซ้ำ
+
+        const feedback = document.getElementById('feedback-msg');
+        
+        if (selectedAnimal.th === targetAnimal.th) {
+            isAnswerLocked = true; // ล็อกการคลิกทันที เพื่อรอฟังเสียงดีใจจนจบ
+            score++;
+            document.getElementById('score').innerText = score;
+            feedback.style.color = '#00b894';
+            feedback.innerText = "🎉 ถูกต้องเก่งมากค่ะ!";
+
+            // เล่นเสียงเอฟเฟกต์ตอบถูก
+            let correctSound = new Audio(sfx.correct);
+            correctSound.play().catch(() => {
+                nextRound(); // เผื่อไฟล์เสียงมีปัญหา ให้ข้ามไปข้อต่อไปทันที
+            });
+
+            // 🎵 รอดูจนกว่าเสียงดีใจ (correct.mp3) จะเล่นจบ แล้วค่อยไปข้อต่อไป
+            correctSound.onended = () => {
+                nextRound();
+            };
+
+        } else {
+            feedback.style.color = '#d63031';
+            feedback.innerText = "❌ เกือบถูกแล้ว ลองใหม่อีกทีนะจ๊ะ";
+
+            let wrongSound = new Audio(sfx.wrong);
+            wrongSound.play().catch(() => {});
+        }
+    }
+
+    function endGame() {
+        document.getElementById('screen-game').classList.add('hidden');
+        document.getElementById('screen-finish').classList.remove('hidden');
+        document.getElementById('final-score').innerText = score;
+    }
+</script>
+
+</body>
+</html>

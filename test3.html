@@ -1,72 +1,12 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>คุณครูต้อนรับ - SMART ANIMAL PLAY BOX</title>
-    <!-- โหลด Tailwind CSS ผ่าน CDN เพื่อความง่ายในการจัดแต่ง -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.3.0/dist/dotlottie-wc.js" type="module"></script>
-</head>
-<body class="bg-gradient-to-b from-sky-200 via-sky-50 to-white min-h-screen flex flex-col items-center justify-between p-6">
+<!-- 👩‍🏫 เปลี่ยนจากรูปภาพเดิม เป็นแท็กวิดีโอ .mp4 ของคุณครู -->
+<div class="w-48 h-48 md:w-60 md:h-60 rounded-full flex items-center justify-center shadow-lg border-4 border-amber-400 overflow-hidden bg-black">
+    <video id="teacher-video" class="w-full h-full object-cover" preload="auto">
+        <source src="teacher-speak.mp4" type="video/mp4">
+        เบราว์เซอร์ของคุณไม่รองรับการแสดงผลวิดีโอ
+    </video>
+</div>
 
-    <!-- ส่วนหัว: ชื่อเรื่อง -->
-    <header class="text-center mt-4">
-        <h1 class="text-2xl md:text-3xl font-bold text-amber-700 drop-shadow-sm">
-            🌟 ยินดีต้อนรับสู่ SMART ANIMAL PLAY BOX 🌟
-        </h1>
-    </header>
-
-    <!-- ส่วนกลาง: คุณครูการ์ตูนและกรอบคำพูด (เต็มจอสวยงาม) -->
-    <main class="flex flex-col items-center justify-center my-auto gap-6 w-full max-w-lg">
-        
-        <!-- กรอบคำพูดทักทาย -->
-        <div class="bg-white/90 backdrop-blur-md border-4 border-amber-400 rounded-3xl p-6 shadow-xl text-center relative animate-bounce">
-            <p class="text-lg md:text-xl font-bold text-gray-800">
-                "สวัสดีค่ะเด็กๆ! มาเรียนรู้และเล่นเกมสนุกๆ ไปด้วยกันเลยนะคะ!"
-            </p>
-            <!-- ลูกศรชี้ลงล่างจากกรอบคำพูด -->
-            <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-amber-400"></div>
-        </div>
-
-        <!-- ตัวการ์ตูนคุณครู (ใช้ Lottie Animation ดุ๊กดิ๊ก หรือเปลี่ยนเป็นรูปภาพได้) -->
-        <div class="w-48 h-48 md:w-60 md:h-60 bg-white/50 rounded-full flex items-center justify-center shadow-inner border-4 border-white">
-            <dotlottie-wc 
-                src="https://lottie.host/embed/840d04c1-96f7-41a0-97cc-f06b9b3e1ec8/0s9c1Y2c3d.json" 
-                autoplay 
-                loop>
-            </dotlottie-wc>
-        </div>
-
-        <!-- ปุ่มสั่งให้คุณครูพูดเสียงออกลำโพง (ใช้ Web Speech API) -->
-        <button onclick="speakGreeting()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-6 py-3 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-base">
-            🔊 ฟังเสียงคุณครูทักทาย
-        </button>
-
-    </main>
-
-    <!-- ส่วนท้าย: ปุ่มกลับหน้าแรก -->
-    <footer class="mb-4">
-        <a href="index.html" class="bg-white text-sky-600 border-2 border-sky-400 hover:bg-sky-50 font-bold px-8 py-3 rounded-full shadow-md transition flex items-center gap-2">
-            🏠 กลับหน้าแรก
-        </a>
-    </footer>
-
-    <!-- สคริปต์สำหรับให้เบราว์เซอร์พูดข้อความภาษาไทยอัตโนมัติเมื่อกดปุ่ม -->
-    <script>
-        function speakGreeting() {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // หยุดเสียงค้างเดิม
-                const text = "สวัสดีค่ะเด็กๆ ยินดีต้อนรับสู่ สมาร์ท แอนิมอล เพลย์ บ็อกซ์ มาเรียนรู้และเล่นเกมสนุกๆ ไปด้วยกันเลยนะคะ";
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'th-TH';
-                utterance.rate = 1.0;
-                window.speechSynthesis.speak(utterance);
-            } else {
-                alert("เบราว์เซอร์ของคุณไม่รองรับเสียงพูดค่ะ");
-            }
-        }
-    </script>
-
-</body>
-</html>
+<!-- ปุ่มกดสั่งเล่นวิดีโอ -->
+<button onclick="playTeacherVideo()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-6 py-3 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-base cursor-pointer">
+    🔊 ฟังเสียงคุณครูทักทาย
+</button>

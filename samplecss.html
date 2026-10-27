@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>ตัวอย่างการใช้ CSS ร่วมกับ id และ class</title>
+    <style>
+        /* 1. การเรียกใช้งาน id (ใช้เครื่องหมาย #) - ใช้กับจุดเดียวที่ไม่ซ้ำใครในหน้านี้ */
+        #special-title {
+            color: #d32f2f;
+            text-align: center;
+            font-size: 26px;
+            border-bottom: 2px dashed #d32f2f;
+            padding-bottom: 10px;
+        }
+
+        /* 2. การเรียกใช้งาน class (ใช้เครื่องหมาย .) - สามารถใช้ซ้ำกับหลายแท็กได้ */
+        .card {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-family: sans-serif;
+        }
+
+        /* class สำหรับแต่งสีฟ้า */
+        .info-box {
+            background-color: #e3f2fd;
+            border-left: 5px solid #2196f3;
+        }
+
+        /* class สำหรับแต่งสีเหลือง/เตือนภัย */
+        .warning-box {
+            background-color: #fff9c4;
+            border-left: 5px solid #fbc02d;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- เรียกใช้ id ชื่อ special-title (มีได้อันเดียวในหน้านี้) -->
+    <h1 id="special-title">รายงานสถานประจำสัปดาห์</h1>
+
+    <!-- กล่องที่ 1 ใช้ class ร่วมกัน (.card) และเติม .info-box เข้าไป -->
+    <div class="card info-box">
+        <h3>ข้อมูลทั่วไป</h3>
+        <p>ระบบทำงานปกติ ไม่มีข้อผิดพลาดใดๆ เกิดขึ้นในระบบหลัก</p>
+    </div>
+
+    <!-- กล่องที่ 2 ใช้ class .card ร่วมกัน แต่เปลี่ยนไปใช้ .warning-box แทน -->
+    <div class="card warning-box">
+        <h3>ข้อควรระวัง</h3>
+        <p>พื้นที่จัดเก็บข้อมูลใกล้เต็มแล้ว กรุณาตรวจสอบและเคลียร์พื้นที่</p>
+    </div>
+
+</body>
+</html>

@@ -13,55 +13,66 @@
         }
     </style>
 </head>
-<body class="bg-gray-900 min-h-screen flex items-center justify-center p-2 md:p-4">
+<body class="bg-[#FDF6EC] min-h-screen flex items-center justify-center p-0 md:p-4">
 
-    <!-- กรอบหน้าจอหลักของเกม (ควบคุมสัดส่วนให้สวยงามทุกหน้าจอ) -->
-    <div class="relative w-full max-w-5xl aspect-[4/3] rounded-3xl shadow-2xl overflow-hidden border-4 border-amber-200/50 flex flex-col justify-between p-4 md:p-6"
+    <!-- กรอบหน้าจอหลัก: ปรับพื้นหลังเป็นสีครีม ยืดหยุ่นเต็มจอในมือถือ และสวยงามบนคอมพิวเตอร์ -->
+    <div class="relative w-full min-h-screen md:min-h-0 md:max-w-5xl md:aspect-[4/3] md:rounded-3xl shadow-2xl overflow-hidden border-0 md:border-4 border-amber-200/50 flex flex-col justify-between p-3 md:p-6 bg-[#FDF6EC]"
          style="background-image: url('Game1BG.png'); background-size: cover; background-position: center;">
 
+        <!-- ปุ่มควบคุมเสียงเพลง (ปรับตำแหน่งลงมาอยู่ในระดับวงกลมสีแดง) -->
+        <button onclick="toggleBGM()" id="bgm-btn" class="absolute top-35 right-15 md:right-15 bg-white/90 hover:bg-white text-amber-900 font-bold px-3 py-1.5 rounded-full shadow-lg transition z-30 flex items-center gap-1.5 border-2 border-amber-300 text-xs md:text-sm cursor-pointer">
+            🎵 <span id="bgm-text">ปิดเพลง</span>
+        </button>
+
+        <!-- ไฟล์เสียงต้อนรับจากไฟล์ MP3 -->
+        <audio id="welcome-audio" src="SoundGame1-1.mp3" preload="auto"></audio>
+
+        <!-- ไฟล์เสียงเพลงประกอบพื้นหลัง (BGM) -->
+        <audio id="bgm" src="music.mp3" loop preload="auto"></audio>
+
         <!-- ส่วนหัว: ป้ายชื่อเกม และ ปุ่มเริ่มสืบ -->
-        <header class="flex items-center justify-between gap-4 z-10 w-full px-2 pt-12 md:pt-16">
+        <header class="flex flex-row items-center justify-between gap-2 z-10 w-full px-2 pt-2 md:pt-4">
             
             <!-- ป้ายชื่อเกม (Icon2.png) -->
-            <div class="w-56 md:w-72 drop-shadow-xl transform hover:scale-105 transition duration-300">
+            <div class="w-44 sm:w-56 md:w-72 drop-shadow-xl transform hover:scale-105 transition duration-300">
                 <img src="Icon2.png" alt="นักสืบสัตว์น้อย ตามหาเจ้าของเสียง" class="w-full h-auto object-contain">
             </div>
 
-            <!-- ปุ่มเริ่มสืบ (Icon3.png) พร้อมเอฟเฟกต์เด้งดุ๊กดิ๊ก -->
-            <a href="#menu-section" class="w-48 md:w-60 drop-shadow-lg animate-bounce hover:scale-105 transition duration-300 cursor-pointer">
+            <!-- ปุ่มเริ่มสืบ (Icon3.png) -->
+            <a href="#menu-section" class="w-32 sm:w-44 md:w-60 drop-shadow-lg animate-bounce hover:scale-105 transition duration-300 cursor-pointer">
                 <img src="Icon3.png" alt="เริ่มสืบกันเลย!" class="w-full h-auto object-contain">
             </a>
 
         </header>
 
-        <!-- ส่วนกลาง: ภาพคุณครู (ใช้ teacher-1.png) -->
-        <div class="absolute inset-x-0 bottom-44 md:bottom-52 flex justify-center items-end pointer-events-none z-10">
-            <img src="teacher-1.png" alt="คุณครูนักสืบ" class="h-48 md:h-72 object-contain drop-shadow-2xl">
+        <!-- ส่วนกลาง: ขยายขนาดรูปคุณครู (teacher-1.png) ให้ใหญ่ขึ้นในมือถือแนวตั้ง และรักษาขนาดปกติบนจอใหญ่ -->
+        <div class="flex justify-center items-center my-auto z-10 py-2">
+            <img src="teacher-1.png" alt="คุณครูนักสืบ" class="h-72 sm:h-80 md:h-80 object-contain drop-shadow-2xl">
         </div>
 
-        <!-- ส่วนล่าง: เมนูไอคอนทั้ง 4 ด่าน (ขยับขึ้นมาในระดับเส้นสีแดง) และข้อความเครดิต -->
-        <div class="absolute inset-x-0 bottom-12 md:bottom-16 z-20 flex flex-col gap-2 w-full px-4">
+        <!-- ส่วนล่าง: จัดเรียงไอคอนทั้ง 4 ด่าน และข้อความเครดิต -->
+        <div class="z-20 flex flex-col gap-2 w-full pb-2">
             
-            <!-- เมนูไอคอนทั้ง 4 ด่าน -->
-            <nav id="menu-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 w-full max-w-4xl mx-auto">
+            <!-- เมนูไอคอนทั้ง 4 ด่าน (จัดเรียง 4 ปุ่มครบถ้วน) -->
+            <nav id="menu-section" class="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4 w-full max-w-4xl mx-auto px-4">
                 
                 <!-- ด่านที่ 1: ฟังเสียง -->
-                <a href="stage1.html" class="transform hover:scale-110 hover:-rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                <a href="stage1.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
                     <img src="Icon4.png" alt="ด่าน 1 ฟังเสียง" class="w-full h-auto object-contain">
                 </a>
 
                 <!-- ด่านที่ 2: ตามหาสัตว์ -->
-                <a href="stage2.html" class="transform hover:scale-110 hover:rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                <a href="stage2.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
                     <img src="Icon5.png" alt="ด่าน 2 ตามหาสัตว์" class="w-full h-auto object-contain">
                 </a>
 
                 <!-- ด่านที่ 3: รู้จักคำศัพท์ -->
-                <a href="stage3.html" class="transform hover:scale-110 hover:-rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                <a href="stage3.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
                     <img src="Icon6.png" alt="ด่าน 3 รู้จักคำศัพท์" class="w-full h-auto object-contain">
                 </a>
 
                 <!-- ด่านที่ 4: ไขรหัส -->
-                <a href="stage4.html" class="transform hover:scale-110 hover:rotate-2 transition-transform duration-300 drop-shadow-xl cursor-pointer">
+                <a href="stage4.html" class="transform hover:scale-105 transition-transform duration-300 drop-shadow-xl cursor-pointer">
                     <img src="Icon7.png" alt="ด่าน 4 ไขรหัส" class="w-full h-auto object-contain">
                 </a>
 
@@ -69,8 +80,8 @@
 
             <!-- ส่วนท้าย: ข้อความเครดิตผู้จัดทำ -->
             <footer class="w-full text-center mt-1">
-                <div class="inline-block bg-white/80 backdrop-blur-sm border-2 border-amber-300/80 px-4 py-1.5 rounded-full shadow-md">
-                    <p class="text-xs md:text-sm font-bold text-amber-900 drop-shadow-sm">
+                <div class="inline-block bg-white/85 backdrop-blur-sm border-2 border-amber-300/80 px-3 py-1 rounded-full shadow-md">
+                    <p class="text-[10px] sm:text-xs md:text-sm font-bold text-amber-900 drop-shadow-sm">
                         จัดทำโดย นางวรรณวิมล สงวนพันธุ์ ตำแหน่ง ครู วิทยฐานะ ครูชำนาญการพิเศษ
                     </p>
                 </div>
@@ -79,6 +90,91 @@
         </div>
 
     </div>
+
+    <!-- ป๊อปอัปข้อความต้อนรับจากคุณครู (ใช้ภาพ teacher-2.png) พร้อมเสียงต้อนรับ MP3 -->
+    <div id="welcome-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-amber-50 border-4 border-amber-400 rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center flex flex-col items-center gap-4">
+            
+            <!-- รูปคุณครูวงกลม (teacher-2.png) -->
+            <div class="w-28 h-28 rounded-full border-4 border-amber-300 overflow-hidden shadow-md bg-white -mt-14 shadow-lg">
+                <img src="teacher-2.png" alt="คุณครูนักสืบ" class="w-full h-full object-cover">
+            </div>
+
+            <!-- ข้อความทักทาย -->
+            <div class="flex flex-col gap-2">
+                <h2 class="text-xl font-bold text-amber-900">👩‍🏫 คุณครูมีภารกิจมาบอก!</h2>
+                <p class="text-base md:text-lg text-gray-700 font-semibold leading-relaxed bg-white/80 p-4 rounded-2xl border border-amber-200 shadow-inner">
+                    "ยินดีต้อนรับ นักสืบตัวจิ๋ว! ทุกคน ภารกิจวันนี้ เราจะตามหาเจ้าของเสียง ถ้าพร้อมแล้ว ไปเริ่มสืบกันเลย"
+                </p>
+            </div>
+
+            <!-- ปุ่มปิดป๊อปอัปเพื่อเริ่มเล่นเกม -->
+            <button onclick="closeWelcomeModal()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-8 py-3 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer text-lg animate-bounce">
+                ✨ พร้อมแล้ว ลุยเลย!
+            </button>
+            
+        </div>
+    </div>
+
+    <!-- สคริปต์ควบคุมเสียงพูด เสียงเพลง และป๊อปอัป -->
+    <script>
+        let isPlaying = false;
+
+        // เมื่อเปิดหน้าเว็บ จะพยายามเล่นเสียงต้อนรับ
+        window.addEventListener('DOMContentLoaded', () => {
+            const welcomeAudio = document.getElementById('welcome-audio');
+            welcomeAudio.play().catch(error => {
+                console.log("Autoplay blocked by browser, waiting for user click:", error);
+            });
+        });
+
+        // ฟังก์ชันเริ่มเล่นเพลงประกอบพื้นหลัง
+        function startBackgroundMusic() {
+            const bgm = document.getElementById('bgm');
+            bgm.volume = 0.3;
+            bgm.play().then(() => {
+                isPlaying = true;
+                document.getElementById('bgm-text').innerText = 'ปิดเพลง';
+            }).catch(error => {
+                console.log("BGM play error:", error);
+            });
+        }
+
+        // ฟังก์ชันเปิด-ปิดเพลงที่ปุ่ม
+        function toggleBGM() {
+            const bgm = document.getElementById('bgm');
+            const bgmText = document.getElementById('bgm-text');
+            if (isPlaying) {
+                bgm.pause();
+                isPlaying = false;
+                bgmText.innerText = 'เปิดเพลง';
+            } else {
+                bgm.play();
+                isPlaying = true;
+                bgmText.innerText = 'ปิดเพลง';
+            }
+        }
+
+        // ฟังก์ชันปิดป๊อปอัป (หยุดเสียงต้อนรับ และเริ่มเล่นเพลงพื้นหลังทันที)
+        function closeWelcomeModal() {
+            const modal = document.getElementById('welcome-modal');
+            const welcomeAudio = document.getElementById('welcome-audio');
+            
+            // หยุดเสียงต้อนรับ
+            welcomeAudio.pause();
+            welcomeAudio.currentTime = 0;
+
+            // สั่งเล่นเพลงพื้นหลังทันที
+            startBackgroundMusic();
+
+            // ซ่อนป๊อปอัป
+            modal.style.opacity = '0';
+            modal.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+    </script>
 
 </body>
 </html>
