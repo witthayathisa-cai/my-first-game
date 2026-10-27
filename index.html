@@ -26,6 +26,14 @@
 </head>
 <body class="bg-gradient-to-b from-sky-100 via-amber-50 to-emerald-100 min-h-screen flex flex-col justify-between overflow-x-hidden relative">
 
+    <!-- ไฟล์เสียงเพลงประกอบพื้นหลัง (BGM) SMART ANIMAL.mp3 -->
+    <audio id="bgm" src="SMART ANIMAL.mp3" loop preload="auto"></audio>
+
+    <!-- ปุ่มควบคุมเปิด/ปิดเสียงเพลงแบ็คกราวด์ (คงตำแหน่งตามที่นายท่านระบุ) -->
+    <button onclick="toggleBGM()" id="bgm-btn" class="absolute top-35 right-15 md:right-15 bg-white/90 hover:bg-white text-amber-900 font-bold px-3 py-1.5 rounded-full shadow-lg transition z-30 flex items-center gap-1.5 border-2 border-amber-300 text-xs md:text-sm cursor-pointer">
+        🎵 <span id="bgm-text">ปิดเพลง</span>
+    </button>
+
     <!-- พื้นหลังตกแต่งก้อนเมฆและธรรมชาติ -->
     <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-sky-200/60 to-transparent pointer-events-none"></div>
 
@@ -40,15 +48,15 @@
         </div>
 
         <nav class="flex items-center gap-3 bg-white/95 backdrop-blur-md px-6 py-3 rounded-full shadow-lg border-4 border-sky-300">
-            <a href="index.html" class="flex flex-col items-center justify-center transition hover:scale-95 gap-2 px-5 py-2.5 rounded-full bg-yellow-300 text-yellow-900 font-bold text-base shadow-sm transition hover:scale-80">
+            <a href="index.html" class="flex flex-col items-center justify-center transition hover:scale-95 gap-2 px-5 py-2.5 rounded-full bg-yellow-300 text-yellow-900 font-bold text-base shadow-sm">
                 <span class="text-xl">🏠</span> 
                 <span class="text-xs">หน้าแรก</span>
             </a>
-            <a href="#games-section" class="flex flex-col items-center justify-center transition hover:scale-95 gap-2 px-5 py-2.5 rounded-full hover:bg-pink-100 text-gray-700 font-bold text-base transition hover:scale-80">
+            <a href="#games-section" class="flex flex-col items-center justify-center transition hover:scale-95 gap-2 px-5 py-2.5 rounded-full hover:bg-pink-100 text-gray-700 font-bold text-base">
                 <span class="text-xl">🎮</span> 
                 <span class="text-xs">เล่นเกม</span>
             </a>
-            <a href="#teacher" class="flex flex-col items-center justify-center transition hover:scale-95 gap-2 px-5 py-2.5 rounded-full hover:bg-sky-100 text-gray-700 font-bold text-base transition hover:scale-80">
+            <a href="#teacher" class="flex flex-col items-center justify-center transition hover:scale-95 gap-2 px-5 py-2.5 rounded-full hover:bg-sky-100 text-gray-700 font-bold text-base">
                 <span class="text-xl">👩‍🏫</span> 
                 <span class="text-xs">เกี่ยวกับสื่อ</span>
             </a>
@@ -66,7 +74,7 @@
                 <div class="absolute -top-3 -right-3 bg-pink-400 text-white w-8 h-8 rounded-full flex items-center justify-center text-lg shadow-md animate-bounce">💖</div>
                 
                 <div class="w-full h-100 rounded-2xl overflow-hidden bg-sky-50 border-2 border-gray-100 mb-4 shadow-inner">
-                    <!-- รูปภาพคุณครู (นำลิงก์รูปภาพคุณครูที่อัปโหลดมาใส่ตรงนี้) -->
+                    <!-- รูปภาพคุณครู -->
                     <img src="teacher.jpg" alt="คุณครูผู้สอน" class="w-full h-full object-cover">
                 </div>
                 
@@ -79,7 +87,6 @@
             </div>
 
             <!-- มาสคอตสิงโตน้อยดุ๊กดิ๊กด้านล่างซ้าย -->
-            <!-- ปรับให้มีความกว้างพอดีกับกล่องด้านบน (ใส่ max-w-md และ mx-auto) -->
             <div class="w-full max-w-md mx-auto bg-yellow-100 border-2 border-yellow-300 rounded-2xl p-3 flex items-center justify-center gap-3 shadow-sm mt-3">
                 <span class="text-2xl">🦁</span>
                 <span class="text-base md:text-lg font-bold text-yellow-800">ยินดีต้อนรับเด็กๆ ทุกคนจ้า!</span>
@@ -105,8 +112,8 @@
                         </span>
                     </h1>
                 </div>
-                
             </div>
+
             <!-- กล่องหัวข้อ 6 กิจกรรมหลัก -->
             <div id="games-section" class="bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-xl border-4 border-purple-200">
                 <div class="flex items-center justify-between mb-4">
@@ -130,8 +137,8 @@
                         <span class="text-amber-500 text-xl font-bold">🎨</span>
                     </a>
 
-                    <!-- กิจกรรมที่ 2 (ลิงก์ไปหน้าเกมหลัก) -->
-                    <a href="matching-game.html" class="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white border-2 border-purple-300 transition transform hover:scale-105 shadow-md group">
+                    <!-- กิจกรรมที่ 2 -->
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white border-2 border-purple-300 transition transform hover:scale-105 shadow-md group">
                         <div class="flex items-center gap-3">
                             <div class="text-4xl bg-white/20 p-2.5 rounded-2xl">🧸</div>
                             <div>
@@ -140,10 +147,10 @@
                             </div>
                         </div>
                         <span class="text-white text-xl font-bold group-hover:translate-x-1 transition">➡️</span>
-                    </a>
+                    </div>
                     
                     <!-- กิจกรรมที่ 3 -->
-                    <a href="Smart Safari.html" class="flex items-center justify-between p-4 rounded-2xl bg-pink-50 border-2 border-pink-200 hover:border-pink-400 transition transform hover:scale-102 shadow-sm">
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-pink-50 border-2 border-pink-200 hover:border-pink-400 transition transform hover:scale-102 shadow-sm">
                         <div class="flex items-center gap-3">
                             <div class="text-4xl bg-white p-2.5 rounded-2xl shadow-sm">🐰</div>
                             <div>
@@ -152,9 +159,7 @@
                             </div>
                         </div>
                         <span class="text-pink-500 text-xl font-bold">🎵</span>
-                    </a>
-
-                    
+                    </div>
 
                     <!-- กิจกรรมที่ 4 -->
                     <div class="flex items-center justify-between p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200 hover:border-emerald-400 transition transform hover:scale-102 shadow-sm">
@@ -192,8 +197,6 @@
                         <span class="text-teal-500 text-xl font-bold">🌳</span>
                     </div>
 
-                    
-
                 </div>
             </div>
 
@@ -208,6 +211,47 @@
             <p class="text-xs text-gray-500">✨ สื่อการเรียนรู้ออนไลน์สำหรับเด็กปฐมวัย | เรียนรู้ผ่านการเล่น เติบโตอย่างมีความสุข ✨</p>
         </div>
     </footer>
+
+    <!-- สคริปต์ควบคุมการเล่นเพลงแบ็คกราวด์อัตโนมัติและการกดเปิด/ปิดเสียง -->
+    <script>
+        let isPlaying = false;
+
+        // พยายามเล่นเพลงแบ็คกราวด์อัตโนมัติเมื่อเปิดหน้าเว็บ
+        window.addEventListener('DOMContentLoaded', () => {
+            const bgm = document.getElementById('bgm');
+            bgm.volume = 0.4;
+            bgm.play().then(() => {
+                isPlaying = true;
+                document.getElementById('bgm-text').innerText = 'ปิดเพลง';
+            }).catch(error => {
+                console.log("Autoplay restricted by browser, waiting for user interaction:", error);
+                // หากเบราว์เซอร์บล็อก จะเริ่มเล่นทันทีเมื่อมีการคลิกครั้งแรกบนหน้าจอ
+                document.addEventListener('click', () => {
+                    if (!isPlaying) {
+                        bgm.play().then(() => {
+                            isPlaying = true;
+                            document.getElementById('bgm-text').innerText = 'ปิดเพลง';
+                        });
+                    }
+                }, { once: true });
+            });
+        });
+
+        // ฟังก์ชันเปิด-ปิดเสียงเพลงที่ปุ่ม
+        function toggleBGM() {
+            const bgm = document.getElementById('bgm');
+            const bgmText = document.getElementById('bgm-text');
+            if (isPlaying) {
+                bgm.pause();
+                isPlaying = false;
+                bgmText.innerText = 'เปิดเพลง';
+            } else {
+                bgm.play();
+                isPlaying = true;
+                bgmText.innerText = 'ปิดเพลง';
+            }
+        }
+    </script>
 
 </body>
 </html>
