@@ -8,9 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Prompt', sans-serif; }
-        /* 🌟 เพิ่มคำสั่งนี้เพื่อให้หน้าจอเลื่อนลงไปแบบนุ่มนวล */
         html {
-        scroll-behavior: smooth;
+            scroll-behavior: smooth;
         }
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -26,10 +25,10 @@
 </head>
 <body class="bg-gradient-to-b from-sky-100 via-amber-50 to-emerald-100 min-h-screen flex flex-col justify-between overflow-x-hidden relative">
 
-    <!-- ไฟล์เสียงเพลงประกอบพื้นหลัง (BGM) SMART ANIMAL.mp3 -->
-    <audio id="bgm" src="SMART ANIMAL.mp3" loop preload="auto"></audio>
+    <!-- ไฟล์เสียงเพลงประกอบพื้นหลัง (BGM) พร้อมสั่งเล่นอัตโนมัติ -->
+    <audio id="bgm" src="SMART ANIMAL.mp3" loop autoplay preload="auto"></audio>
 
-    <!-- ปุ่มควบคุมเปิด/ปิดเสียงเพลงแบ็คกราวด์ (คงตำแหน่งตามที่นายท่านระบุ) -->
+    <!-- ปุ่มควบคุมเปิด/ปิดเสียงเพลงแบ็คกราวด์ -->
     <button onclick="toggleBGM()" id="bgm-btn" class="absolute top-35 right-15 md:right-15 bg-white/90 hover:bg-white text-amber-900 font-bold px-3 py-1.5 rounded-full shadow-lg transition z-30 flex items-center gap-1.5 border-2 border-amber-300 text-xs md:text-sm cursor-pointer">
         🎵 <span id="bgm-text">ปิดเพลง</span>
     </button>
@@ -212,11 +211,10 @@
         </div>
     </footer>
 
-    <!-- สคริปต์ควบคุมการเล่นเพลงแบ็คกราวด์อัตโนมัติและการกดเปิด/ปิดเสียง -->
+    <!-- สคริปต์ควบคุมการเล่นเพลงแบ็คกราวด์ -->
     <script>
-        let isPlaying = false;
+        let isPlaying = true;
 
-        // พยายามเล่นเพลงแบ็คกราวด์อัตโนมัติเมื่อเปิดหน้าเว็บ
         window.addEventListener('DOMContentLoaded', () => {
             const bgm = document.getElementById('bgm');
             bgm.volume = 0.4;
@@ -224,8 +222,11 @@
                 isPlaying = true;
                 document.getElementById('bgm-text').innerText = 'ปิดเพลง';
             }).catch(error => {
-                console.log("Autoplay restricted by browser, waiting for user interaction:", error);
-                // หากเบราว์เซอร์บล็อก จะเริ่มเล่นทันทีเมื่อมีการคลิกครั้งแรกบนหน้าจอ
+                console.log("Autoplay restricted by browser, waiting for interaction:", error);
+                isPlaying = false;
+                document.getElementById('bgm-text').innerText = 'เปิดเพลง';
+                
+                // สำรองกรณีเบราว์เซอร์บล็อก ให้เล่นทันทีเมื่อมีการคลิกครั้งแรกบนหน้าจอ
                 document.addEventListener('click', () => {
                     if (!isPlaying) {
                         bgm.play().then(() => {
@@ -246,9 +247,10 @@
                 isPlaying = false;
                 bgmText.innerText = 'เปิดเพลง';
             } else {
-                bgm.play();
-                isPlaying = true;
-                bgmText.innerText = 'ปิดเพลง';
+                bgm.play().then(() => {
+                    isPlaying = true;
+                    bgmText.innerText = 'ปิดเพลง';
+                });
             }
         }
     </script>
