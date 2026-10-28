@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>เกมป่าปริศนาเสียงสัตว์ - Jungle Mystery Sound</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 8px;
+            display: grid;
+            place-items: center;
+            background: #fffdf4;
+            font-family: "Prompt", sans-serif;
+        }
+
+        /* กรอบเกมและภาพพื้นหลังใหม่ */
+        .game-screen {
+            position: relative;
+            width: min(1200px, 100%);
+            aspect-ratio: 1672 / 941;
+            overflow: hidden;
+
+            border: none;
+            border-radius: 18px;
+
+            background-color: #fffdf4;
+            background-image: url("images/bggame1-2.png");
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            container-type: inline-size;
+        }
+
+        .game-title,
+        .home-button,
+        .start-button,
+        .teacher {
+            position: absolute;
+        }
+
+        .game-title img,
+        .home-button img,
+        .start-button img,
+        .teacher img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* หัวข้อเกมอยู่กลางด้านบน */
+        .game-title {
+            top: 7%;
+            left: 53%;
+            width: 33%;
+            transform: translateX(-50%);
+            z-index: 3;
+        }
+
+        /* ปุ่มหน้าหลักมุมขวาบน */
+        .home-button {
+            top: 15%;
+            right: 7%;
+            width: 15.5%;
+            z-index: 5;
+            transition: transform 0.2s ease;
+        }
+
+        .home-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* ปุ่มเริ่มเกมอยู่ใต้หัวข้อ */
+        .start-button {
+            top: 35%;
+            left: 53%;
+            width: 21%;
+            transform: translateX(-50%);
+            z-index: 5;
+            transition: transform 0.2s ease;
+        }
+
+        .start-button:hover {
+            transform: translateX(-50%) scale(1.07);
+        }
+
+        /* ขยายคุณครู โดยคงระดับเท้าใกล้ตำแหน่งเดิม */
+        .teacher {
+            position: absolute;
+            right: 20%;
+            bottom: 14%;
+            width: 21%;
+            z-index: 4;
+            pointer-events: none;
+}
+
+        /* เครดิตด้านล่าง */
+        .credits {
+            position: absolute;
+            left: 50%;
+            bottom: 7%;
+            transform: translateX(-50%);
+            z-index: 6;
+
+            max-width: 94%;
+            padding: 0.35em 1.2em;
+            border: 1px solid #e7aa43;
+            border-radius: 999px;
+            background: rgba(255, 205, 119, 0.94);
+
+            color: #6f350b;
+            font-size: clamp(5px, 0.95cqw, 12px);
+            font-weight: 700;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* ย้ายปุ่มเพลงลงมาใต้ปุ่มหน้าหลัก */
+        .music-button {
+            position: absolute;
+            top: 30%;
+            right: 10%;
+            z-index: 10;
+
+            padding: 0.45em 0.8em;
+            border: 2px solid #edba55;
+            border-radius: 999px;
+            background: #fffbed;
+            color: #713b13;
+
+            font: inherit;
+            font-size: clamp(8px, 1.2cqw, 14px);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid #175dbe;
+            outline-offset: 4px;
+        }
+
+        /* คงสัดส่วนภาพไว้เมื่อเปิดบนมือถือ */
+        @media (max-width: 600px) {
+            body {
+                padding: 4px;
+            }
+
+            .game-screen {
+                border-width: 2px;
+                border-radius: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <audio
+        id="bgm"
+        src="bgmusicg1-1.mp3"
+        loop
+        preload="auto"
+    ></audio>
+
+    <div class="game-screen">
+
+        <header>
+            <div class="game-title">
+                <img
+                    src="game1-1.png"
+                    alt="เกมป่าปริศนาเสียงสัตว์"
+                >
+            </div>
+
+            <a
+                href="index.html"
+                class="home-button"
+                aria-label="กลับหน้าหลัก"
+            >
+                <img src="iconbacktohome.png" alt="หน้าหลัก">
+            </a>
+
+            <!--
+                หากต้องการซ่อนปุ่มเพลงให้เหมือนภาพที่ 2
+                ให้เพิ่ม hidden ที่ปุ่มนี้:
+                <button ... hidden>
+            -->
+            <button
+                type="button"
+                id="bgm-btn"
+                class="music-button"
+                aria-label="เปิดเพลงพื้นหลัง"
+                aria-pressed="false"
+            >
+                🎵 <span id="bgm-text">เปิดเพลง</span>
+            </button>
+        </header>
+
+        <main aria-label="เริ่มเกมป่าปริศนาเสียงสัตว์">
+            <a href="game1-1.html" class="start-button">
+                <img src="StartGame1.png" alt="เริ่มเกม">
+            </a>
+
+            <div class="teacher">
+                <img src="teacher-1.png" alt="คุณครูผู้สอน">
+            </div>
+        </main>
+
+        <footer class="credits">
+            จัดทำโดย นางวรรณวิมล สงวนพันธุ์
+            ตำแหน่ง ครู วิทยฐานะ ครูชำนาญการพิเศษ
+        </footer>
+
+    </div>
+
+    <script>
+        const bgm = document.getElementById("bgm");
+        const musicButton = document.getElementById("bgm-btn");
+        const musicText = document.getElementById("bgm-text");
+
+        bgm.volume = 0.4;
+
+        // จดจำว่าผู้ใช้เลือกควบคุมเพลงด้วยตนเองแล้วหรือยัง
+        let manuallyControlled = false;
+
+        function updateMusicButton() {
+            const isPlaying = !bgm.paused && !bgm.ended;
+
+            musicText.textContent = isPlaying ? "ปิดเพลง" : "เปิดเพลง";
+            musicButton.setAttribute("aria-pressed", String(isPlaying));
+            musicButton.setAttribute(
+                "aria-label",
+                isPlaying ? "ปิดเพลงพื้นหลัง" : "เปิดเพลงพื้นหลัง"
+            );
+        }
+
+        async function playMusic() {
+            try {
+                await bgm.play();
+            } catch {
+                // หากเบราว์เซอร์ยังไม่อนุญาต ให้รอการแตะหน้าจอ
+            }
+
+            updateMusicButton();
+        }
+
+        musicButton.addEventListener("click", async () => {
+            manuallyControlled = true;
+
+            if (bgm.paused) {
+                await playMusic();
+            } else {
+                bgm.pause();
+            }
+
+            updateMusicButton();
+        });
+
+        // ลองเปิดเพลงเมื่อโหลดหน้า
+        playMusic();
+
+        // ถ้า Autoplay ถูกบล็อก ให้เปิดหลังแตะพื้นที่ว่าง
+        document.addEventListener("click", (event) => {
+            if (manuallyControlled || !bgm.paused) return;
+
+            // ไม่เปิดเพลงซ้ำเมื่อกดปุ่มควบคุมหรือเปลี่ยนหน้า
+            if (event.target.closest("button, a")) return;
+
+            playMusic();
+        });
+
+        bgm.addEventListener("play", updateMusicButton);
+        bgm.addEventListener("pause", updateMusicButton);
+        bgm.addEventListener("error", updateMusicButton);
+    </script>
+
+</body>
+</html>
