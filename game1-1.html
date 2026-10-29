@@ -165,6 +165,40 @@
                 border-radius: 8px;
             }
         }
+        /* จัดทั้งสองป้ายให้มีขนาดและรูปแบบเดียวกัน */
+        #progress,
+        #listen-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 11em;
+            min-width: 0;
+            min-height: 3em;
+            padding: 0.45em 0.8em;
+
+            border: 3px solid #ffb32e;
+            border-radius: 999px;
+            background: #fff194;
+            color: #c33016;
+
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: 800;
+            line-height: 1.2;
+            white-space: nowrap;
+            opacity: 1;
+        }
+
+        /* ให้พอดีกับมือถือจอเล็ก */
+        @media (max-width: 400px) {
+            #progress,
+            #listen-button {
+                width: auto;
+                flex: 1;
+                padding-inline: 0.4em;
+            }
+        }
     </style>
 </head>
 
@@ -212,7 +246,7 @@
         </header>
 
         <main aria-label="เริ่มเกมป่าปริศนาเสียงสัตว์">
-            <a href="game1-1.html" class="start-button">
+            <a href="game1-1-1.html" class="start-button">
                 <img src="StartGame1.png" alt="เริ่มเกม">
             </a>
 

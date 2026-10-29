@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ด่านที่ 2: ตามหาสัตว์ - นักสืบสัตว์น้อย</title>
+    <!-- โหลด Tailwind CSS จาก CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Prompt', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-2 md:p-4">
+
+    <!-- กรอบหน้าจอหลักของเกม -->
+    <div class="relative w-full max-w-5xl aspect-[4/3] rounded-3xl shadow-2xl overflow-hidden border-4 border-amber-200/50 flex flex-col justify-between p-6 md:p-8"
+         style="background-image: url('Game1BG.png'); background-size: cover; background-position: center;">
+
+        <!-- ส่วนหัว: ปุ่มกลับหน้าหลัก และ ชื่อด่าน -->
+        <header class="flex items-center justify-between z-10 w-full">
+            <!-- ปุ่มกลับหน้าแรก -->
+            <a href="index.html" class="bg-white/90 hover:bg-white text-amber-800 font-bold px-4 py-2 rounded-full shadow-md transition flex items-center gap-2 border-2 border-amber-300">
+                🏠 หน้าหลัก
+            </a>
+            <!-- ป้ายชื่อด่าน -->
+            <div class="bg-amber-100/90 border-2 border-amber-400 px-6 py-2 rounded-full shadow-md">
+                <h1 class="text-lg md:text-xl font-bold text-amber-800">🔍 ด่านที่ 2: ตามหาสัตว์ - เลือกภาพเจ้าของเสียง</h1>
+            </div>
+            <div class="w-20"></div> <!-- เว้นพื้นที่จัดกึ่งกลาง -->
+        </header>
+
+        <!-- ส่วนกลาง: คำใบ้และกริดตัวเลือกรูปภาพสัตว์ -->
+        <main class="flex flex-col items-center justify-center my-auto gap-6 z-10 w-full max-w-3xl mx-auto">
+            
+            <!-- กล่องคำถาม -->
+            <div class="bg-white/90 backdrop-blur-md border-4 border-amber-400 rounded-3xl p-5 shadow-xl text-center w-full">
+                <p class="text-base md:text-lg font-semibold text-gray-700">
+                    "จากเสียงร้องเมื่อครู่ เลือกรูปภาพเจ้าของเสียงที่ถูกต้องกันเถอะ!"
+                </p>
+            </div>
+
+            <!-- ตัวเลือกรูปภาพสัตว์ (Grid 3 ช่อง) -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 w-full">
+                
+                <!-- ตัวเลือกที่ 1: แมว (คำตอบที่ถูกต้อง) -->
+                <button onclick="checkAnimalImage('cat', this)" class="bg-white/90 hover:bg-amber-50 border-4 border-amber-300 hover:border-amber-500 rounded-2xl p-4 shadow-md transition transform hover:scale-105 flex flex-col items-center gap-2 cursor-pointer group">
+                    <div class="w-28 h-28 md:w-32 md:h-32 bg-amber-100 rounded-xl flex items-center justify-center overflow-hidden border-2 border-amber-200">
+                        <span class="text-6xl group-hover:scale-110 transition">🐱</span>
+                    </div>
+                    <span class="font-bold text-gray-800 text-lg">แมวเหมียว</span>
+                </button>
+
+                <!-- ตัวเลือกที่ 2: สุนัข -->
+                <button onclick="checkAnimalImage('dog', this)" class="bg-white/90 hover:bg-amber-50 border-4 border-amber-300 hover:border-amber-500 rounded-2xl p-4 shadow-md transition transform hover:scale-105 flex flex-col items-center gap-2 cursor-pointer group">
+                    <div class="w-28 h-28 md:w-32 md:h-32 bg-amber-100 rounded-xl flex items-center justify-center overflow-hidden border-2 border-amber-200">
+                        <span class="text-6xl group-hover:scale-110 transition">🐶</span>
+                    </div>
+                    <span class="font-bold text-gray-800 text-lg">น้องหมา</span>
+                </button>
+
+                <!-- ตัวเลือกที่ 3: กระต่าย -->
+                <button onclick="checkAnimalImage('rabbit', this)" class="bg-white/90 hover:bg-amber-50 border-4 border-amber-300 hover:border-amber-500 rounded-2xl p-4 shadow-md transition transform hover:scale-105 flex flex-col items-center gap-2 cursor-pointer group">
+                    <div class="w-28 h-28 md:w-32 md:h-32 bg-amber-100 rounded-xl flex items-center justify-center overflow-hidden border-2 border-amber-200">
+                        <span class="text-6xl group-hover:scale-110 transition">🐰</span>
+                    </div>
+                    <span class="font-bold text-gray-800 text-lg">กระต่ายน้อย</span>
+                </button>
+
+            </div>
+
+        </main>
+
+        <!-- ส่วนท้าย: ผลลัพธ์และปุ่มไปด่านถัดไป -->
+        <footer class="flex flex-col items-center justify-center z-10 gap-2">
+            <p id="result-text" class="text-lg font-bold text-amber-900 drop-shadow-sm"></p>
+            <!-- ปุ่มไปด่าน 3 (จะซ่อนไว้ก่อนจนกว่าจะตอบถูก) -->
+            <div id="next-container" class="hidden">
+                <a href="stage3.html" class="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-2 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2">
+                    ➡️ ไปด่านที่ 3 (รู้จักคำศัพท์)
+                </a>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- สคริปต์ตรวจสอบคำตอบรูปภาพ -->
+    <script>
+        function checkAnimalImage(selected, element) {
+            const resultText = document.getElementById('result-text');
+            const nextContainer = document.getElementById('next-container');
+
+            if (selected === 'cat') {
+                resultText.innerHTML = "🎉 เก่งมาก! นี่คือภาพเจ้าของเสียงแมวเหมียวตัวจริง!";
+                resultText.className = "text-xl font-bold text-green-600 drop-shadow-md animate-bounce";
+                nextContainer.classList.remove('hidden'); // แสดงปุ่มไปด่านถัดไป
+            } else {
+                resultText.innerHTML = "❌ ยังไม่ใช่น้า ลองมองหารูปภาพตัวอื่นดูนะ!";
+                resultText.className = "text-xl font-bold text-red-600 drop-shadow-md";
+                nextContainer.classList.add('hidden'); // ซ่อนปุ่มถ้าตอบผิด
+            }
+        }
+    </script>
+
+</body>
+</html>
