@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>เกมป่าปริศนาเสียงสัตว์</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 8px;
+            display: grid;
+            place-items: center;
+            background: #fff9e9;
+            color: #60330f;
+            font-family: Tahoma, sans-serif;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 4px solid #1975cc;
+            outline-offset: 5px;
+        }
+
+        /* กรอบเกมแนวนอน */
+        .game {
+            position: relative;
+            width: min(1366px, 100%);
+            aspect-ratio: 1366 / 768;
+            overflow: hidden;
+            border-radius: 22px;
+
+            background:
+                #e5f2ce
+                url("images/bg-Sec1-part1.png")
+                center / 100% 100% no-repeat;
+
+            container-type: inline-size;
+        }
+
+        /* หัวข้อกลางด้านบน */
+        .game-title {
+            position: absolute;
+            top: 3%;
+            left: 35%;
+            width: 35%;
+            margin: 0;
+            z-index: 2;
+        }
+
+        .game-title img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* คุณครูด้านขวา */
+        .teacher {
+            position: absolute;
+            right: 18.5%;
+            bottom: 11%;
+            width: 18%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .teacher img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* ปุ่มภาพฟังเสียงสัตว์ */
+        .listen-button {
+            position: absolute;
+            top: 31%;
+            left: 41%;
+            width: 20%;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            z-index: 3;
+            transition: transform 0.2s ease;
+        }
+
+        .listen-button img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .listen-button:not(:disabled):hover {
+            transform: scale(1.05);
+        }
+
+        .listen-button.attention {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .listen-button.playing {
+            filter: drop-shadow(0 0 12px #fff28a);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.045);
+            }
+        }
+
+        /* ปุ่มกลับหน้าหลัก */
+        .home {
+            position: absolute;
+            top: 5%;
+            right: 3%;
+            z-index: 5;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 0.65em 1.1em;
+
+            border: 3px solid #f2a82b;
+            border-radius: 999px;
+            background: #fff2a6;
+            color: #71390f;
+
+            font-size: clamp(12px, 1.5cqw, 20px);
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 3px 0 rgba(141, 87, 15, 0.2);
+        }
+
+        .home {
+            border-color: #ee7337;
+        }
+
+        .next {
+            position: absolute;
+            right: 4%;
+            bottom: 5%;
+            z-index: 5;
+        }
+
+        /* ข้อความสถานะ */
+        .sound-status {
+            position: absolute;
+            left: 32%;
+            bottom: 15%;
+            width: 35%;
+            margin: 0;
+            padding: 0.65em 0.9em;
+
+            border: 2px solid #f2bd55;
+            border-radius: 18px;
+            background: rgba(255, 248, 210, 0.96);
+
+            font-size: clamp(11px, 1.4cqw, 19px);
+            font-weight: 700;
+            text-align: center;
+            z-index: 4;
+        }
+
+        .credits {
+            position: absolute;
+            bottom: 2%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: max-content;
+            max-width: 93%;
+            padding: 0.35em 0.9em;
+
+            border-radius: 999px;
+            background: rgba(255, 240, 192, 0.94);
+            font-size: clamp(7px, 0.85cqw, 12px);
+            text-align: center;
+            z-index: 3;
+        }
+
+        /* ฉากป๊อปอัพเมื่อเข้าหน้า */
+        .intro-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            overflow-y: auto;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: safe center;
+            gap: 10px;
+
+            padding: 16px;
+            background: rgba(28, 40, 27, 0.75);
+        }
+
+        .popup-card {
+            position: relative;
+            flex-shrink: 0;
+
+            /* ลดทุกค่าลงเหลือ 75% ของเดิม */
+            width: min(570px, 70.5vw, 61.5vh);
+            width: min(570px, 70.5vw, 61.5dvh);
+        }
+
+        .popup-image {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /*
+         * ภาพป๊อปอัพมีปุ่มสีส้มอยู่แล้ว
+         * วางปุ่ม HTML โปร่งใสทับตรงปุ่มในภาพ
+         */
+        .ready-button {
+            position: absolute;
+            left: 24%;
+            top: 74%;
+            width: 52%;
+            height: 13.5%;
+
+            padding: 0;
+            border: 0;
+            border-radius: 999px;
+            background: transparent;
+        }
+
+        .ready-button:disabled {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .ready-button:not(:disabled):hover {
+            background: rgba(255, 255, 255, 0.14);
+            box-shadow: 0 0 0 4px rgba(255, 226, 111, 0.8);
+        }
+
+        .intro-controls {
+            width: min(650px, 94vw);
+            padding: 12px;
+            border-radius: 16px;
+            background: #fff9e7;
+            text-align: center;
+        }
+
+        .intro-controls p {
+            margin: 0 0 8px;
+            line-height: 1.6;
+        }
+
+        .intro-controls p:last-child {
+            margin-bottom: 0;
+        }
+
+        .intro-action {
+            min-height: 44px;
+            margin: 4px;
+            padding: 10px 18px;
+            border: 2px solid #dc9426;
+            border-radius: 999px;
+            background: #ffdf76;
+            color: #653309;
+            font-weight: 700;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip-path: inset(50%);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .listen-button.attention {
+                animation: none;
+            }
+
+            .listen-button {
+                transition: none;
+            }
+        }
+
+        /* มือถือแนวตั้ง */
+        @media (max-width: 650px) and (orientation: portrait) {
+            .game {
+                min-height: 740px;
+                aspect-ratio: auto;
+                background-size: auto 100%;
+                background-position: 43% center;
+            }
+
+            .game-title {
+                top: 13%;
+                left: 12%;
+                width: 76%;
+            }
+
+            .teacher {
+                right: 4%;
+                bottom: 17%;
+                width: 34%;
+            }
+
+            .listen-button {
+                top: 39%;
+                left: 9%;
+                width: 48%;
+            }
+
+            .sound-status {
+                left: 7%;
+                bottom: 14%;
+                width: 86%;
+                font-size: 15px;
+            }
+
+            .nav-button {
+                font-size: 14px;
+            }
+
+            .next {
+                bottom: 6%;
+                right: 5%;
+            }
+
+            .credits {
+                bottom: 1.5%;
+                width: 94%;
+                font-size: 9px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- หน้าหลักจะยังโต้ตอบไม่ได้ จนกว่าจะปิดป๊อปอัพ -->
+    <main id="game" class="game" inert>
+        <h1 class="game-title">
+            <img
+                src="images/hSec1-part1.png"
+                alt="เกมป่าปริศนาเสียงสัตว์ Jungle Mystery Sound"
+            >
+        </h1>
+
+        <a class="home nav-button" href="index.html">
+            🏡 หน้าหลัก
+        </a>
+
+        <div class="teacher">
+            <img
+                src="images/teacher-4.png"
+                alt="คุณครูชวนฟังเสียงสัตว์"
+            >
+        </div>
+
+        <button
+            id="listen-button"
+            class="listen-button attention"
+            type="button"
+            aria-label="ฟังเสียงสัตว์"
+        >
+            <img src="images/Icon8.png" alt="">
+        </button>
+
+        <p
+            id="sound-status"
+            class="sound-status"
+            role="status"
+            aria-live="polite"
+        >
+            กดปุ่มเพื่อฟังเสียงสัตว์ค่ะ
+        </p>
+
+        <!-- เปลี่ยนชื่อไฟล์ปลายทางให้ตรงกับด่านถัดไป -->
+        <a class="next nav-button" href="section1-part2.html">
+            ด่านต่อไป ➜
+        </a>
+
+        <footer class="credits">
+            จัดทำโดย นางวรรณวิมล สงวนพันธุ์
+            ตำแหน่ง ครู วิทยฐานะ ครูชำนาญการพิเศษ
+        </footer>
+    </main>
+
+    <!-- ป๊อปอัพแสดงทันทีเมื่อเปิดหน้า -->
+    <section
+        id="intro-overlay"
+        class="intro-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="คุณครูมีภารกิจมาบอก"
+        aria-describedby="intro-status"
+    >
+        <div class="popup-card">
+            <img
+                class="popup-image"
+                src="images/popup-sec1-part1.png"
+                alt="คุณครูมีภารกิจมาบอก ตั้งใจฟังเสียงนี้ดีๆ นะคะเด็กๆ แล้วทายซิว่าเสียงใครเอ่ย"
+            >
+
+            <button
+                id="ready-button"
+                class="ready-button"
+                type="button"
+                disabled
+            >
+                <span class="sr-only">พร้อมแล้ว ลุยเลย!</span>
+            </button>
+        </div>
+
+        <div class="intro-controls">
+            <p id="intro-status" role="status" aria-live="polite">
+                กำลังเตรียมเสียงคุณครู…
+            </p>
+
+            <!-- แสดงเมื่อเล่นอัตโนมัติไม่ได้ หรือโหลดเสียงผิดพลาด -->
+            <button
+                id="retry-intro"
+                class="intro-action"
+                type="button"
+                hidden
+            >
+                🔊 แตะเพื่อฟังเสียงคุณครู
+            </button>
+
+            <!-- ทางออกกรณีไฟล์เสียงมีปัญหา -->
+            <button
+                id="skip-intro"
+                class="intro-action"
+                type="button"
+                hidden
+            >
+                อ่านคำแนะนำแล้ว เข้าสู่เกม
+            </button>
+        </div>
+    </section>
+
+    <script>
+        // ===== กำหนดไฟล์เสียง =====
+        const INTRO_SOUND = "sounds/popupsound-s1-p1.mp3";
+        const ANIMAL_SOUND = "sounds/SoundSection1Part1.mp3";
+
+        const game = document.getElementById("game");
+        const overlay = document.getElementById("intro-overlay");
+        const readyButton = document.getElementById("ready-button");
+        const retryIntro = document.getElementById("retry-intro");
+        const skipIntro = document.getElementById("skip-intro");
+        const introStatus = document.getElementById("intro-status");
+        const listenButton = document.getElementById("listen-button");
+        const soundStatus = document.getElementById("sound-status");
+
+        const introAudio = new Audio(INTRO_SOUND);
+        const animalAudio = new Audio(ANIMAL_SOUND);
+
+        introAudio.preload = "auto";
+        animalAudio.preload = "auto";
+
+        let introFinished = false;
+        let introBusy = false;
+
+        function introFailed(error) {
+            introBusy = false;
+            readyButton.disabled = true;
+            retryIntro.hidden = false;
+
+            if (error && error.name === "NotAllowedError") {
+                introStatus.textContent =
+                    "แตะปุ่มด้านล่างเพื่อเปิดเสียงคุณครูก่อนนะคะ";
+
+                skipIntro.hidden = true;
+            } else {
+                introStatus.textContent =
+                    "เปิดเสียงคุณครูไม่ได้ กรุณาตรวจสอบไฟล์ " +
+                    INTRO_SOUND +
+                    " แล้วลองอีกครั้ง หรืออ่านคำแนะนำเพื่อเล่นต่อ";
+
+                skipIntro.hidden = false;
+            }
+
+            retryIntro.focus();
+        }
+
+        async function playIntroduction() {
+            if (introBusy || introFinished) return;
+
+            introBusy = true;
+            readyButton.disabled = true;
+            retryIntro.hidden = true;
+            skipIntro.hidden = true;
+
+            introStatus.textContent =
+                "กำลังฟังเสียงคุณครู… ฟังจบแล้วกดปุ่มสีส้มได้เลยค่ะ";
+
+            try {
+                introAudio.currentTime = 0;
+                await introAudio.play();
+            } catch (error) {
+                introFailed(error);
+            }
+        }
+
+        // เมื่อเสียงบรรยายจบ จึงเปิดปุ่มในภาพ
+        introAudio.addEventListener("ended", () => {
+            introBusy = false;
+            introFinished = true;
+            readyButton.disabled = false;
+            retryIntro.hidden = true;
+            skipIntro.hidden = true;
+
+            introStatus.textContent =
+                "ฟังจบแล้วค่ะ กด “พร้อมแล้ว ลุยเลย!” ได้เลย";
+
+            readyButton.focus();
+        });
+
+        introAudio.addEventListener("error", () => {
+            introFailed(new Error("โหลดเสียงไม่สำเร็จ"));
+        });
+
+        function enterGame() {
+            introAudio.pause();
+            overlay.hidden = true;
+            game.inert = false;
+            listenButton.focus();
+        }
+
+        readyButton.addEventListener("click", () => {
+            if (!introFinished) return;
+            enterGame();
+        });
+
+        retryIntro.addEventListener("click", playIntroduction);
+
+        // ใช้ได้เฉพาะเมื่อแสดงปุ่มจากกรณีไฟล์มีปัญหา
+        skipIntro.addEventListener("click", enterGame);
+
+        function resetAnimalButton() {
+            listenButton.disabled = false;
+            listenButton.classList.remove("playing");
+            listenButton.classList.add("attention");
+            listenButton.setAttribute("aria-label", "ฟังเสียงสัตว์อีกครั้ง");
+        }
+
+        function animalFailed() {
+            resetAnimalButton();
+
+            soundStatus.textContent =
+                "เปิดเสียงไม่ได้ กรุณาตรวจสอบไฟล์ " +
+                ANIMAL_SOUND +
+                " แล้วกดฟังอีกครั้งค่ะ";
+        }
+
+        listenButton.addEventListener("click", async () => {
+            if (!overlay.hidden || listenButton.disabled) return;
+
+            listenButton.disabled = true;
+            listenButton.classList.remove("attention");
+            listenButton.classList.add("playing");
+            listenButton.setAttribute("aria-label", "กำลังเล่นเสียงสัตว์");
+
+            soundStatus.textContent =
+                "กำลังเล่นเสียง… ตั้งใจฟังนะคะ เป็นเสียงของใครเอ่ย?";
+
+            try {
+                animalAudio.currentTime = 0;
+                await animalAudio.play();
+            } catch {
+                animalFailed();
+            }
+        });
+
+        animalAudio.addEventListener("ended", () => {
+            resetAnimalButton();
+
+            soundStatus.textContent =
+                "ฟังจบแล้วค่ะ! กดฟังซ้ำ หรือไปด่านต่อไปได้เลย";
+        });
+
+        animalAudio.addEventListener("error", animalFailed);
+
+        // หยุดเสียงเมื่อออกจากหน้า
+        window.addEventListener("pagehide", () => {
+            introAudio.pause();
+            animalAudio.pause();
+        });
+
+        // ลองเปิดเสียงบรรยายทันทีเมื่อเข้าหน้า
+        playIntroduction();
+    </script>
+</body>
+</html>
