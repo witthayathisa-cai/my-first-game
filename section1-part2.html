@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>เฉลยเจ้าของเสียง — ป่าปริศนาเสียงสัตว์</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 8px;
+
+            display: grid;
+            place-items: center;
+
+            background: #fff9e9;
+            color: #63350f;
+            font-family: Tahoma, sans-serif;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer;
+        }
+
+        a:focus-visible,
+        button:focus-visible {
+            outline: 4px solid #176fc4;
+            outline-offset: 5px;
+        }
+
+        /* ===== กรอบเกม ===== */
+        .game {
+            position: relative;
+            width: min(1366px, 100%);
+            aspect-ratio: 1366 / 768;
+            overflow: hidden;
+
+            border: 3px solid #8d805c;
+            border-radius: 22px;
+
+            background:
+                #e0efc5
+                url("images/bg-Sec1-part1.png")
+                center / 100% 100% no-repeat;
+
+            container-type: inline-size;
+        }
+
+        /* ===== หัวข้อ ===== */
+        .heading {
+            position: absolute;
+            top: 3%;
+            left: 39%;
+            width: 25%;
+            margin: 0;
+            z-index: 2;
+        }
+
+        .heading img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* ===== วิดีโอด้านซ้าย ===== */
+        .video-area {
+            position: absolute;
+            top: 23%;
+            left: 5%;
+            width: 71%;
+            aspect-ratio: 16 / 9;
+
+            overflow: hidden;
+            border: 4px solid #fff8dc;
+            border-radius: 16px;
+            background: #182318;
+            box-shadow: 0 8px 22px rgba(49, 52, 15, 0.25);
+            z-index: 3;
+        }
+
+        .video-area iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+
+            color: #fff4ce;
+            font-size: clamp(14px, 2cqw, 26px);
+            text-align: center;
+        }
+
+        /* ===== คุณครูด้านขวา ===== */
+        .teacher {
+            position: absolute;
+            right: 3%;
+            bottom: 14%;
+            width: 20%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .teacher img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* ===== ปุ่มนำทาง ===== */
+        .nav-button {
+            position: absolute;
+            z-index: 5;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 44px;
+            padding: 0.65em 1.15em;
+
+            border: 3px solid #f4ae37;
+            border-radius: 999px;
+            background: #fff0a6;
+            color: #704015;
+
+            font-size: clamp(12px, 1.55cqw, 21px);
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 3px 0 rgba(132, 83, 14, 0.18);
+        }
+
+        .nav-button:hover {
+            background: #ffe47f;
+        }
+
+        .home {
+            top: 5%;
+            right: 3%;
+        }
+
+        .next {
+            bottom: 4%;
+            right: 3%;
+        }
+
+        .video-help {
+            position: absolute;
+            left: 6%;
+            bottom: 3%;
+            width: 69%;
+            margin: 0;
+
+            font-size: clamp(9px, 1.05cqw, 14px);
+            line-height: 1.5;
+            text-align: center;
+            z-index: 4;
+        }
+
+        .video-help a {
+            color: #63350f;
+            font-weight: 700;
+        }
+
+        /* ===== ป๊อปอัพ ===== */
+        .popup-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+
+            display: grid;
+            place-items: center;
+            overflow-y: auto;
+            padding: 20px;
+
+            background: rgba(30, 44, 27, 0.68);
+        }
+
+        .popup-card {
+            width: min(530px, 100%);
+            max-height: 90dvh;
+            overflow-y: auto;
+            padding: clamp(22px, 5vw, 38px);
+
+            border: 5px solid #ffbd35;
+            border-radius: 30px;
+            background: #fffbea;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+
+            text-align: center;
+        }
+
+        .popup-icon {
+            margin-bottom: 12px;
+            font-size: 52px;
+        }
+
+        .popup-card h2 {
+            margin: 0 0 18px;
+            color: #7b4314;
+            font-size: clamp(22px, 4vw, 30px);
+        }
+
+        .popup-message {
+            margin: 0 0 24px;
+            padding: 20px 16px;
+
+            border: 2px solid #f6d778;
+            border-radius: 20px;
+            background: #fff;
+
+            font-size: clamp(18px, 3vw, 24px);
+            font-weight: 700;
+            line-height: 1.8;
+        }
+
+        .ready-button {
+            min-height: 54px;
+            padding: 14px 24px;
+
+            border: 0;
+            border-radius: 999px;
+            background: #ff9d00;
+            color: #fff;
+
+            font-size: clamp(18px, 3vw, 23px);
+            font-weight: 700;
+            box-shadow: 0 5px 0 #dc7900;
+        }
+
+        .ready-button:hover {
+            background: #f28e00;
+        }
+
+        .ready-button:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #dc7900;
+        }
+
+        /* ===== มือถือแนวตั้ง ===== */
+        @media (max-width: 650px) and (orientation: portrait) {
+            .game {
+                aspect-ratio: auto;
+                min-height: 780px;
+                background-size: auto 100%;
+                background-position: center;
+            }
+
+            .heading {
+                top: 11%;
+                left: 15%;
+                width: 70%;
+            }
+
+            .video-area {
+                top: 31%;
+                left: 4%;
+                width: 92%;
+            }
+
+            .teacher {
+                right: 7%;
+                bottom: 13%;
+                width: 31%;
+            }
+
+            .nav-button {
+                font-size: 14px;
+            }
+
+            .home {
+                top: 2%;
+                right: 4%;
+            }
+
+            .next {
+                bottom: 4%;
+                right: 5%;
+            }
+
+            .video-help {
+                left: 5%;
+                bottom: 8%;
+                width: 53%;
+                padding: 8px;
+                border-radius: 12px;
+                background: #fff8df;
+                font-size: 12px;
+            }
+        }
+
+        .popup-voice-button {
+                display: block;
+                margin: 0 auto 12px;
+                padding: 10px 20px;
+                min-height: 44px;
+
+                border: 2px solid #efb13b;
+                border-radius: 999px;
+                background: #fff0ac;
+                color: #713b13;
+
+                font: inherit;
+                font-weight: 700;
+                cursor: pointer;
+}
+
+.popup-voice-notice {
+    margin: 0 0 12px;
+    color: #794416;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.popup-voice-notice:empty {
+    display: none;
+}
+    </style>
+</head>
+
+<body>
+    <!-- ยังโต้ตอบกับหน้าหลักไม่ได้ จนกว่าจะปิดป๊อปอัพ -->
+    <main id="game" class="game" inert>
+        <h1 class="heading">
+            <img
+                src="images/hSec1-part2.png"
+                alt="เฉลยเจ้าของเสียง"
+            >
+        </h1>
+
+        <!-- เปลี่ยน index.html ให้ตรงกับหน้าหลักของท่าน -->
+        <a class="nav-button home" href="index.html">
+            🏡 หน้าหลัก
+        </a>
+
+        <section class="video-area" aria-label="วิดีโอเฉลยเจ้าของเสียง">
+            <div id="video-placeholder" class="video-placeholder">
+                เตรียมพบกับเจ้าของเสียงค่ะ…
+            </div>
+
+            <iframe
+                id="youtube-player"
+                title="วิดีโอเฉลยเจ้าของเสียงสัตว์"
+                allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+                hidden
+            ></iframe>
+        </section>
+
+        <div class="teacher">
+            <img
+                src="images/teacher-3.png"
+                alt="คุณครูชวนเด็ก ๆ ตรวจคำตอบ"
+            >
+        </div>
+
+        <p class="video-help">
+            หากคลิปยังไม่เล่น ให้กด ▶ ในวิดีโอ
+            <br>
+            <a
+                href="https://youtu.be/wlzpng4DZVE"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                เปิดดูบน YouTube ↗
+            </a>
+        </p>
+
+        <!-- เปลี่ยนปลายทางให้ตรงกับไฟล์ด่านถัดไป -->
+        <a class="nav-button next" href="section1-part3.html">
+            ด่านต่อไป ➜
+        </a>
+    </main>
+
+    <!-- ป๊อปอัพเปิดทันทีที่เข้าหน้า -->
+    <section
+        id="popup-overlay"
+        class="popup-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="popup-title"
+        aria-describedby="popup-message"
+    >
+        <div class="popup-card">
+            <div class="popup-icon" aria-hidden="true">🔍 🐾</div>
+
+            <h2 id="popup-title">มาตรวจคำตอบกันค่ะ!</h2>
+
+            <p id="popup-message" class="popup-message">
+                "เด็กๆคะ! ไหนลองบอกหน่อยสิคะว่า เมื่อกี้ใครทายเสียงสัตว์ถูกบ้าง? <br> งั้นเรามาตรวจกัน
+            </p>
+
+            <button id="ready-button" class="ready-button" type="button">
+                ✨ ถ้าพร้อมแล้วลุยกันเลย
+            </button>
+        </div>
+    </section>
+
+    <script>
+        const VIDEO_ID = "wlzpng4DZVE";
+
+        const game = document.getElementById("game");
+        const popup = document.getElementById("popup-overlay");
+        const readyButton = document.getElementById("ready-button");
+        const player = document.getElementById("youtube-player");
+        const placeholder = document.getElementById("video-placeholder");
+
+        let started = false;
+
+        readyButton.addEventListener("click", () => {
+            if (started) return;
+            started = true;
+
+            // ปิดป๊อปอัพและเปิดให้ใช้งานหน้าหลัก
+            popup.hidden = true;
+            game.inert = false;
+
+            // โหลดวิดีโอเมื่อผู้เล่นกดเริ่มเท่านั้น
+            // autoplay=1 : ขอให้เริ่มเล่นทันที
+            // controls=1 : แสดงปุ่มเล่น หยุด และปรับเสียง
+            // loop=0     : เล่นจบแล้วไม่วนซ้ำ
+            player.src =
+                "https://www.youtube.com/embed/" +
+                VIDEO_ID +
+                "?autoplay=1&controls=1&playsinline=1&loop=0";
+
+            placeholder.hidden = true;
+            player.hidden = false;
+            player.focus();
+        });
+
+        // ให้ใช้แป้นพิมพ์เริ่มกิจกรรมได้ทันที
+        readyButton.focus();
+
+        // เก็บการกด Tab ไว้ในป๊อปอัพขณะที่ยังเปิดอยู่
+        popup.addEventListener("keydown", (event) => {
+            if (event.key === "Tab") {
+                event.preventDefault();
+                readyButton.focus();
+            }
+        });
+        // ===== เสียงบรรยายหน้าป๊อปอัพ =====
+        const popupVoice = new Audio("sounds/popupsec1-part2-1.mp3");
+        popupVoice.preload = "auto";
+        popupVoice.volume = 1;
+
+            // สร้างปุ่มสำรอง เผื่อเบราว์เซอร์บล็อกเสียงอัตโนมัติ
+        const voiceButton = document.createElement("button");
+        voiceButton.type = "button";
+        voiceButton.className = "popup-voice-button";
+        voiceButton.textContent = "🔊 ฟังคำแนะนำ";
+        voiceButton.hidden = true;
+
+        const voiceNotice = document.createElement("p");
+        voiceNotice.className = "popup-voice-notice";
+        voiceNotice.setAttribute("role", "status");
+
+        readyButton.before(voiceButton, voiceNotice);
+
+        async function playPopupVoice() {
+                if (popup.hidden) return;
+
+            voiceButton.hidden = true;
+            voiceNotice.textContent = "";
+
+                try {
+                    await popupVoice.play();
+                } catch (error) {
+                    if (popup.hidden) return;
+
+                voiceButton.hidden = false;
+
+                voiceNotice.textContent =
+                        error.name === "NotAllowedError"
+                            ? "แตะฟังคำแนะนำเพื่อเปิดเสียงคุณครูค่ะ"
+                            : "เปิดเสียงไม่ได้ กรุณาตรวจสอบไฟล์ sounds/popupsec1-part2-1.mp3";
+                }
+            }
+
+            voiceButton.addEventListener("click", () => {
+                popupVoice.currentTime = 0;
+                playPopupVoice();
+            });
+
+            // หยุดเสียงคุณครูก่อนสคริปต์เดิมเริ่มวิดีโอ
+            readyButton.addEventListener("click", () => {
+                popupVoice.pause();
+                popupVoice.currentTime = 0;
+            }, { capture: true });
+
+            // หยุดเสียงเมื่อออกจากหน้า
+            window.addEventListener("pagehide", () => {
+                popupVoice.pause();
+            });
+
+            // พยายามเล่นทันทีเมื่อเปิดป๊อปอัพ
+        playPopupVoice();
+    </script>
+</body>
+</html>
