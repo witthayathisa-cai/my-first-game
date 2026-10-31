@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>วิดีโอภารกิจสัตว์</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 20px;
+
+            background:
+                #e9f3ce
+                url("images/bg-Sec1-part1.png")
+                center / cover fixed no-repeat;
+
+            color: #60340f;
+            font-family: Tahoma, sans-serif;
+        }
+
+        .page {
+            width: min(1100px, 100%);
+            margin: auto;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            margin: 0;
+            padding: 12px 22px;
+            border: 3px solid #ffb43b;
+            border-radius: 20px;
+            background: #fff5b8;
+            font-size: clamp(22px, 4vw, 34px);
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 12px 20px;
+            border: 3px solid #f1a635;
+            border-radius: 999px;
+            background: #fff1a6;
+            color: #60340f;
+            font: inherit;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #ffe482;
+        }
+
+        .button:focus-visible {
+            outline: 4px solid #176fc4;
+            outline-offset: 4px;
+        }
+
+        .video {
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            border: 5px solid #fff4bd;
+            border-radius: 20px;
+            background: #172017;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .help {
+            margin-top: 16px;
+            padding: 14px;
+            border-radius: 16px;
+            background: #fff9e7;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+        <header class="toolbar">
+            <h1 id="animal-title">วิดีโอภารกิจสัตว์</h1>
+
+            <a id="back-top" class="button" href="section1-part4.html?return=1">
+                ← กลับไปเลือกสัตว์
+            </a>
+        </header>
+
+        <div class="video">
+            <iframe
+                id="video-player"
+                title="วิดีโอสัตว์"
+                allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+            ></iframe>
+        </div>
+
+        <div class="help">
+            หากคลิปยังไม่เริ่ม ให้กด ▶ ในวิดีโอค่ะ
+            <br>
+            ดูแล้วช่วยกันเลือกตัวอักษรมาเรียงเป็นคำศัพท์นะคะ
+
+            <div class="actions">
+                <a
+                    id="back-bottom"
+                    class="button"
+                    href="section1-part4.html?return=1"
+                >
+                    ← กลับไปเลือกสัตว์
+                </a>
+
+                <a
+                    id="youtube-link"
+                    class="button"
+                    href="https://www.youtube.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    เปิดบน YouTube ↗
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // รหัสคลิปตามลิงก์ที่ท่านกำหนด
+        const videos = {
+            cat: {
+                label: "CAT – แมว",
+                id: "Qj_oyON4dgM"
+            },
+            duck: {
+                label: "DUCK – เป็ด",
+                id: "Av54uaMrDFE"
+            },
+            dog: {
+                label: "DOG – หมา",
+                id: "Qzho5RVrN50"
+            },
+            cow: {
+                label: "COW – วัว",
+                id: "K6qLPTm5ip0"
+            },
+            pig: {
+                label: "PIG – หมู",
+                id: "3_6i29daX-U"
+            }
+        };
+
+        const requestedAnimal = new URLSearchParams(location.search)
+            .get("animal");
+
+        // รับเฉพาะชื่อสัตว์ที่กำหนดไว้
+        const animalKey = Object.hasOwn(videos, requestedAnimal)
+            ? requestedAnimal
+            : "cat";
+
+        const animal = videos[animalKey];
+
+        document.title = animal.label + " | ภารกิจอักษรสัตว์";
+        document.getElementById("animal-title").textContent = animal.label;
+
+        const player = document.getElementById("video-player");
+
+        player.title = "วิดีโอ " + animal.label;
+        player.src =
+            "https://www.youtube.com/embed/" +
+            animal.id +
+            "?autoplay=1&controls=1&playsinline=1&loop=0";
+
+        document.getElementById("youtube-link").href =
+            "https://youtu.be/" + animal.id;
+
+        const backUrl =
+            "section1-part4.html?return=1&animal=" + animalKey;
+
+        document.getElementById("back-top").href = backUrl;
+        document.getElementById("back-bottom").href = backUrl;
+    </script>
+</body>
+</html>

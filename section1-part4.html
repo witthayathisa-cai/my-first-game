@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ด่านที่ 4 ภารกิจกู้คืนอักษรสัตว์ปริศนา</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 8px;
+            display: grid;
+            place-items: center;
+            background: #fff9e9;
+            color: #60340f;
+            font-family: Tahoma, sans-serif;
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer;
+        }
+
+        a:focus-visible,
+        button:focus-visible {
+            outline: 4px solid #176fc4;
+            outline-offset: 5px;
+        }
+
+        /* กรอบเกม */
+        .game {
+            position: relative;
+            width: min(1366px, 100%);
+            aspect-ratio: 1366 / 768;
+            overflow: hidden;
+            border-radius: 20px;
+
+            background:
+                #e0efc5
+                url("images/bg-Sec1-part1.png")
+                center / 100% 100% no-repeat;
+
+            container-type: inline-size;
+        }
+
+        /* หัวข้อ */
+        .heading {
+            position: absolute;
+            top: 3%;
+            left: 33%;
+            width: 37%;
+            margin: 0;
+        }
+
+        .heading img,
+        .teacher img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* คุณครูด้านขวา */
+        .teacher {
+            position: absolute;
+            right: 12%;
+            bottom: 6%;
+            width: 21%;
+            pointer-events: none;
+        }
+
+        /* ปุ่มสัตว์: 2 แถว และปุ่มสุดท้ายอยู่กลาง */
+        .animal-menu {
+            position: absolute;
+            top: 38%;
+            left: 30%;
+            width: 37%;
+
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: clamp(16px, 3cqw, 40px) 16px;
+            z-index: 3;
+        }
+
+        .animal-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 56px;
+            padding: 0.4em 0.25em;
+
+            border: clamp(3px, 0.45cqw, 6px) solid #f51519;
+            border-radius: 28px;
+            background: #dfa0a0;
+            color: #1d100b;
+
+            font-size: clamp(15px, 2.35cqw, 32px);
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+
+            transition: transform 0.15s, background 0.15s;
+        }
+
+        .animal-button:hover {
+            transform: translateY(-3px);
+            background: #f7bbbb;
+        }
+
+        .animal-button:last-child {
+            grid-column: 1 / -1;
+            width: calc((100% - 16px) / 2);
+            justify-self: center;
+        }
+
+        .home {
+            position: absolute;
+            top: 5%;
+            right: 3%;
+            z-index: 5;
+
+            padding: 0.65em 1em;
+            border: 3px solid #ffad36;
+            border-radius: 999px;
+            background: #fff1a6;
+            color: #713b13;
+
+            font-size: clamp(12px, 1.4cqw, 19px);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .credits {
+            position: absolute;
+            bottom: 1.5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: max-content;
+            max-width: 94%;
+            margin: 0;
+            padding: 5px 12px;
+
+            border-radius: 999px;
+            background: rgba(255, 242, 203, 0.95);
+            font-size: clamp(7px, 0.85cqw, 11px);
+            text-align: center;
+        }
+
+        /* ป๊อปอัพ */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            overflow-y: auto;
+            background: rgba(25, 42, 23, 0.7);
+        }
+
+        .popup {
+            width: min(560px, 100%);
+            max-height: 90dvh;
+            overflow-y: auto;
+            padding: 28px;
+
+            border: 5px solid #ffbe35;
+            border-radius: 30px;
+            background: #fffbea;
+            text-align: center;
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.25);
+        }
+
+        .popup h2 {
+            margin: 0 0 20px;
+            font-size: clamp(22px, 4vw, 30px);
+        }
+
+        .popup p {
+            margin: 0 0 24px;
+            padding: 20px;
+            border: 2px solid #ffdd84;
+            border-radius: 20px;
+            background: #fff;
+
+            font-size: clamp(18px, 3vw, 24px);
+            font-weight: 700;
+            line-height: 1.8;
+        }
+
+        .ready-button {
+            min-height: 54px;
+            padding: 14px 22px;
+            border: 0;
+            border-radius: 999px;
+            background: #ff9b00;
+            color: #fff;
+            font-size: 21px;
+            font-weight: 700;
+            box-shadow: 0 5px 0 #d87900;
+        }
+
+        .ready-button:hover {
+            background: #ed8a00;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .animal-button {
+                transition: none;
+            }
+        }
+
+        /* มือถือแนวตั้ง */
+        @media (max-width: 650px) and (orientation: portrait) {
+            .game {
+                aspect-ratio: auto;
+                min-height: 800px;
+                background-size: auto 100%;
+            }
+
+            .heading {
+                top: 11%;
+                left: 8%;
+                width: 84%;
+            }
+
+            .animal-menu {
+                top: 37%;
+                left: 6%;
+                width: 88%;
+                gap: 20px 12px;
+            }
+
+            .animal-button {
+                font-size: 22px;
+            }
+
+            .animal-button:last-child {
+                width: calc((100% - 12px) / 2);
+            }
+
+            .teacher {
+                right: 5%;
+                bottom: 5%;
+                width: 34%;
+            }
+
+            .home {
+                top: 2%;
+                font-size: 14px;
+            }
+
+            .credits {
+                font-size: 9px;
+                width: 94%;
+            }
+        }
+        /* ปุ่มสัตว์ทั้ง 5: สีสดใสและขอบนูน */
+.animal-menu .animal-button {
+    border: 4px solid var(--button-border);
+    background: linear-gradient(
+        180deg,
+        var(--button-light),
+        var(--button-color)
+    );
+
+    color: #392711;
+    border-radius: 26px;
+
+    box-shadow:
+        inset 0 3px 0 rgba(255, 255, 255, 0.75),
+        0 6px 0 var(--button-border),
+        0 9px 14px rgba(73, 53, 18, 0.18);
+
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* CAT – แมว: สีส้มพีช */
+.animal-button[href*="animal=cat"] {
+    --button-light: #ffe4bd;
+    --button-color: #ffbd75;
+    --button-border: #b85b16;
+}
+
+/* DUCK – เป็ด: สีเหลือง */
+.animal-button[href*="animal=duck"] {
+    --button-light: #fff5ad;
+    --button-color: #ffdf63;
+    --button-border: #a77500;
+}
+
+/* DOG – หมา: สีฟ้า */
+.animal-button[href*="animal=dog"] {
+    --button-light: #d7f5ff;
+    --button-color: #8cdbf5;
+    --button-border: #237ba0;
+}
+
+/* COW – วัว: สีม่วง */
+.animal-button[href*="animal=cow"] {
+    --button-light: #efe1ff;
+    --button-color: #cbb0f4;
+    --button-border: #8053af;
+}
+
+/* PIG – หมู: สีชมพู */
+.animal-button[href*="animal=pig"] {
+    --button-light: #ffe0ec;
+    --button-color: #ffabc9;
+    --button-border: #b64975;
+}
+
+/* เมื่อชี้เมาส์หรือเลือกด้วยแป้นพิมพ์ */
+.animal-menu .animal-button:hover,
+.animal-menu .animal-button:focus-visible {
+    transform: translateY(-3px);
+}
+
+/* เมื่อกด ปุ่มจะยุบเล็กน้อย */
+.animal-menu .animal-button:active {
+    transform: translateY(4px);
+
+    box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.6),
+        0 2px 0 var(--button-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animal-menu .animal-button {
+        transition: none;
+    }
+}
+    </style>
+</head>
+
+<body>
+    <main id="game" class="game" inert>
+        <h1 class="heading">
+            <img
+                src="images/hSec1-part4.png"
+                alt="ภารกิจกู้คืนอักษรสัตว์ปริศนา"
+            >
+        </h1>
+
+        <a class="home" href="index.html">🏡 หน้าหลัก</a>
+
+        <div class="teacher">
+            <img
+                src="images/teacher-6.png"
+                alt="คุณครูชวนเลือกสัตว์เพื่อทำภารกิจ"
+            >
+        </div>
+
+        <nav class="animal-menu" aria-label="เลือกสัตว์">
+            <a class="animal-button" href="animal-video.html?animal=cat">
+                CAT – แมว
+            </a>
+
+            <a class="animal-button" href="animal-video.html?animal=duck">
+                DUCK – เป็ด
+            </a>
+
+            <a class="animal-button" href="animal-video.html?animal=dog">
+                DOG – หมา
+            </a>
+
+            <a class="animal-button" href="animal-video.html?animal=cow">
+                COW – วัว
+            </a>
+
+            <a class="animal-button" href="animal-video.html?animal=pig">
+                PIG – หมู
+            </a>
+        </nav>
+
+        <p class="credits">
+            จัดทำโดย นางวรรณวิมล สงวนพันธุ์
+            ตำแหน่ง ครู วิทยฐานะ ครูชำนาญการพิเศษ
+        </p>
+    </main>
+
+    <section
+        id="overlay"
+        class="overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="popup-title"
+        aria-describedby="popup-message"
+    >
+        <div class="popup">
+            <h2 id="popup-title">🔍 ภารกิจตัวอักษรสัตว์!</h2>
+
+            <p id="popup-message">
+                เด็กๆคะ! จัดกลุ่มแล้วช่วยกัน
+                <br>เลือกหาตัวอักษร และเรียงตัวอักษร
+                <br>ให้เป็นคำศัพท์สัตว์ที่ถูกต้อง
+            </p>
+
+            <button id="ready-button" class="ready-button" type="button">
+                ✨ ถ้าพร้อมแล้วลุยกันเล้ย!
+            </button>
+        </div>
+    </section>
+
+    <script>
+        const game = document.getElementById("game");
+        const overlay = document.getElementById("overlay");
+        const readyButton = document.getElementById("ready-button");
+        const animalButtons = [...document.querySelectorAll(".animal-button")];
+
+        function openMenu() {
+            overlay.hidden = true;
+            game.inert = false;
+
+            // หากกลับจากวิดีโอ ให้โฟกัสที่สัตว์ตัวเดิม
+            const animal = new URLSearchParams(location.search).get("animal");
+
+            const previousButton = animalButtons.find((button) => {
+                const url = new URL(button.href);
+                return url.searchParams.get("animal") === animal;
+            });
+
+            (previousButton || animalButtons[0]).focus();
+        }
+
+        readyButton.addEventListener("click", openMenu);
+
+        // แสดงป๊อปอัพเมื่อเข้าด่านใหม่
+        // กลับจากวิดีโอจะเข้าหน้าเลือกสัตว์ได้ทันที
+        const returning = new URLSearchParams(location.search)
+            .get("return") === "1";
+
+        if (returning) {
+            openMenu();
+        } else {
+            readyButton.focus();
+        }
+
+        overlay.addEventListener("keydown", (event) => {
+            if (event.key === "Tab") {
+                event.preventDefault();
+                readyButton.focus();
+            }
+        });
+        // ===== เสียงคำแนะนำหน้าป๊อปอัพ =====
+const popupAudio = new Audio("sounds/popupsec1-part4-1.mp3");
+popupAudio.preload = "auto";
+
+// ปุ่มสำรองเมื่อเปิดเสียงอัตโนมัติไม่ได้
+const audioButton = document.createElement("button");
+audioButton.type = "button";
+audioButton.textContent = "🔊 ฟังคำแนะนำ";
+audioButton.hidden = true;
+
+Object.assign(audioButton.style, {
+    display: "block",
+    margin: "0 auto 14px",
+    padding: "10px 20px",
+    border: "2px solid #edac32",
+    borderRadius: "999px",
+    background: "#fff0a6",
+    color: "#713b13",
+    fontWeight: "700"
+});
+
+const audioStatus = document.createElement("div");
+audioStatus.setAttribute("role", "status");
+audioStatus.style.marginBottom = "12px";
+
+readyButton.before(audioButton, audioStatus);
+
+async function playPopupAudio() {
+    // ไม่เล่นเสียงซ้ำเมื่อกลับจากหน้าวิดีโอ
+    if (overlay.hidden) return;
+
+    audioButton.hidden = true;
+    audioStatus.textContent = "";
+
+    try {
+        await popupAudio.play();
+    } catch (error) {
+        if (overlay.hidden) return;
+
+        audioButton.hidden = false;
+        audioStatus.textContent =
+            error.name === "NotAllowedError"
+                ? "แตะปุ่มฟังคำแนะนำเพื่อเปิดเสียงคุณครูค่ะ"
+                : "เล่นเสียงไม่ได้ กรุณาตรวจสอบไฟล์ sounds/popupsec1-part4-1.mp3";
+    }
+}
+
+audioButton.addEventListener("click", () => {
+    popupAudio.currentTime = 0;
+    playPopupAudio();
+});
+
+// หยุดเสียงก่อนปิดป๊อปอัพ
+readyButton.addEventListener("click", () => {
+    popupAudio.pause();
+    popupAudio.currentTime = 0;
+}, { capture: true });
+
+// หยุดเสียงเมื่อออกจากหน้า
+window.addEventListener("pagehide", () => {
+    popupAudio.pause();
+});
+
+// ลองเล่นทันที เมื่อป๊อปอัพปรากฏ
+playPopupAudio();
+    </script>
+</body>
+</html>
