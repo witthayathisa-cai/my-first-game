@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="th">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ขบวนรถไฟมหัศจรรย์ · สัตว์น่ารู้</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --ink: #66380e;
+            --orange: #ff9e00;
+            --cream: #fffbed
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, 'Noto Sans Thai', sans-serif;
+            color: var(--ink);
+            background: linear-gradient(#d7f4fc 0%, #f0fcf5 65%, #e2edbf 100%);
+            min-height: 100vh
+        }
+
+        button,
+        a {
+            font: inherit
+        }
+
+        button {
+            cursor: pointer
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 4px solid #167b97;
+            outline-offset: 5px
+        }
+
+        .shell {
+            max-width: 1100px;
+            margin: auto;
+            padding: 26px 22px 40px
+        }
+
+        .top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap
+        }
+
+        .home,
+        .outline {
+            background: #fffbed;
+            border: 2px solid #eecb75;
+            border-radius: 30px;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: var(--ink);
+            font-weight: bold
+        }
+
+        .eyebrow {
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: #3a7978
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0 22px
+        }
+
+        h1 {
+            font-size: clamp(28px, 5vw, 46px);
+            margin: 8px 0 12px
+        }
+
+        header p {
+            line-height: 1.7;
+            margin: 0;
+            color: #53716d
+        }
+
+        .signals {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 22px 0
+        }
+
+        .signal {
+            padding: 12px 21px;
+            border-radius: 18px;
+            background: #fff;
+            border-bottom: 4px solid #ddd;
+            text-align: center;
+            font-size: 14px
+        }
+
+        .signal b {
+            display: block;
+            font-size: 23px;
+            margin-bottom: 5px
+        }
+
+        .go {
+            color: #287954;
+            border-color: #7ed0a2
+        }
+
+        .slow {
+            color: #247caa;
+            border-color: #7ccbec
+        }
+
+        .stop {
+            color: #c64c45;
+            border-color: #ef9b95
+        }
+
+        .video-card {
+            padding: 14px;
+            border-radius: 28px;
+            background: #fffdf5;
+            box-shadow: 0 15px 45px #38655718;
+            border: 2px solid white
+        }
+
+        .video {
+            aspect-ratio: 16/9;
+            background: #173e48;
+            border-radius: 18px;
+            overflow: hidden;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            text-align: center
+        }
+
+        .video iframe {
+            width: 100%;
+            height: 100%;
+            border: 0
+        }
+
+        .waiting {
+            padding: 25px
+        }
+
+        .waiting span {
+            display: block;
+            font-size: 60px;
+            margin-bottom: 15px
+        }
+
+        .waiting p {
+            color: #c2dce1;
+            line-height: 1.7
+        }
+
+        .footer {
+            text-align: center;
+            line-height: 1.8;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #547369
+        }
+
+        dialog {
+            width: min(640px, calc(100% - 30px));
+            max-height: 90dvh;
+            overflow: visible;
+            padding: 0;
+            border: 4px solid #ffc323;
+            border-radius: 28px;
+            background: var(--cream);
+            color: var(--ink);
+            box-shadow: 0 24px 80px #17271040
+        }
+
+        dialog::backdrop {
+            background: #152c36a8;
+            backdrop-filter: blur(7px)
+        }
+
+        .modal-inner {
+            max-height: 85dvh;
+            overflow: auto;
+            padding: 64px 26px 25px;
+            text-align: center;
+            border-radius: 23px
+        }
+
+        .medallion {
+            position: absolute;
+            top: -48px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            border: 4px solid #ffd036;
+            border-radius: 50%;
+            background: white;
+            display: grid;
+            place-items: center;
+            font-size: 52px;
+            box-shadow: 0 4px 9px #8f611b22
+        }
+
+        .modal-inner h2 {
+            font-size: clamp(23px, 4vw, 31px);
+            margin: 0 0 10px
+        }
+
+        .subtitle {
+            color: #a86619;
+            font-size: 15px;
+            margin: 0 0 17px
+        }
+
+        .description {
+            background: white;
+            border: 1px solid #ffdc7e;
+            border-radius: 18px;
+            padding: 18px 21px;
+            line-height: 1.9;
+            font-size: 17px;
+            color: #465062
+        }
+
+        .plan {
+            font-size: 13px;
+            line-height: 1.8;
+            color: #7b725f;
+            margin: 14px 0
+        }
+
+        .primary {
+            border: 0;
+            color: white;
+            background: var(--orange);
+            padding: 16px 28px;
+            border-radius: 32px;
+            font-weight: bold;
+            font-size: 19px;
+            box-shadow: 0 6px 14px #c1831628
+        }
+
+        .primary:hover {
+            background: #ed8d00
+        }
+
+        .listen {
+            display: block;
+            margin: 12px auto 0;
+            background: none;
+            border: 0;
+            color: #896021;
+            text-decoration: underline;
+            padding: 8px;
+            font-size: 14px
+        }
+
+        .status {
+            font-size: 12px;
+            min-height: 18px;
+            margin: 7px 0 0;
+            color: #876c46
+        }
+
+        @media(max-width:480px) {
+            .shell {
+                padding: 18px 12px
+            }
+
+            .modal-inner {
+                padding: 58px 17px 20px
+            }
+
+            .description {
+                padding: 15px;
+                font-size: 15px
+            }
+
+            .signal {
+                padding: 10px 16px
+            }
+
+            .top .eyebrow {
+                display: none
+            }
+
+            .primary {
+                font-size: 17px
+            }
+
+            dialog {
+                margin-top: 70px
+            }
+        }
+
+        @media(prefers-reduced-motion:no-preference) {
+            dialog[open] {
+                animation: appear .25s ease-out
+            }
+
+            @keyframes appear {
+                from {
+                    opacity: 0;
+                    transform: translateY(12px)
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0)
+                }
+            }
+
+            /* ฟอนต์หลักทั้งหน้า */
+            body {
+                font-family: 'Kanit', Tahoma, sans-serif;
+                font-weight: 500;
+            }
+
+            /* ปุ่มและลิงก์ใช้ฟอนต์เดียวกัน */
+            button,
+            a,
+            input,
+            select,
+            textarea {
+                font-family: inherit;
+            }
+
+            /* หัวข้อ */
+            h1,
+            h2,
+            strong,
+            b {
+                font-weight: 700;
+            }
+
+            /* ข้อความคำแนะนำในป๊อปอัป */
+            .description {
+                font-weight: 600;
+            }
+
+            /* ข้อความประกอบ */
+            .subtitle,
+            .plan,
+            .footer,
+            .signal,
+            .listen,
+            .status {
+                font-weight: 500;
+            }
+
+            .video-card {
+                padding: 3px;
+                border: 1px solid white;
+                border-radius: 22px;
+            }
+
+            .video {
+                border-radius: 18px;
+            }
+
+            header {
+                padding: 4px 0;
+            }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <main class="shell" id="activity" inert>
+        <nav class="top" aria-label="เมนู"><a class="home" href="index.html">← กลับหน้าหลัก</a> <button class="outline"
+                id="instructions">
+                คำแนะนำกิจกรรม
+            </button>
+        </nav>
+
+        <header>
+            <h1>🚂 ขบวนรถไฟมหัศจรรย์</h1>
+        </header>
+        <div class="signals" aria-label="สัญญาณการเคลื่อนไหว">
+            <div class="signal go"><b>GO</b>เดินต่อไป</div>
+            <div class="signal slow"><b>SLOW</b>เดินช้าลง</div>
+            <div class="signal stop"><b>STOP</b>หยุดนิ่ง</div>
+        </div>
+        <section class="video-card" aria-label="วิดีโอกิจกรรม">
+            <div class="video" id="video">
+                <div class="waiting"><span aria-hidden="true">🚂</span><strong>พื้นที่วิดีโอกิจกรรม</strong>
+                    <p>รอเพิ่มลิงก์ YouTube สำหรับขบวนรถไฟมหัศจรรย์</p>
+                </div>
+            </div>
+        </section>
+        <p class="footer">ปรบมือ ย่ำเท้า และเลียนแบบท่าทางสัตว์ตามสัญญาณ<br>เว้นระยะห่างจากเพื่อน แล้วสนุกไปด้วยกันนะคะ
+        </p>
+    </main>
+    <dialog id="welcome" aria-labelledby="modal-title" aria-describedby="description">
+        <div class="medallion" aria-hidden="true">🚂</div>
+        <div class="modal-inner">
+            <h2 id="modal-title">ขบวนรถไฟมหัศจรรย์</h2>
+            <p class="subtitle">คำแนะนำก่อนเริ่มกิจกรรม</p>
+            <div class="description" id="description">ชวนเด็ก ๆ เดินทางสู่สถานีสัตว์ ผ่านภาพรถไฟและเสียงเพลง พร้อมปรบมือ
+                เคลื่อนไหวช้า–เร็ว และเลียนแบบท่าทางสัตว์ตามสัญญาณ <b>GO / SLOW / STOP</b>
+                เพื่อฝึกการฟังและควบคุมร่างกาย</div>
+            <p class="plan">ตามแผนการจัดประสบการณ์การเรียนรู้เชิงรุก (Active Learning)<br>หน่วย สัตว์น่ารู้ (Animal
+                World)</p><button class="primary" id="start">✨ เริ่มเล่นกิจกรรม</button><button class="listen"
+                id="listen">🔊 ฟังคำแนะนำ</button>
+            <p class="status" id="audio-status" role="status" aria-live="polite"></p>
+        </div>
+    </dialog>
+    <audio id="narration" preload="auto" src="PopupActiveLearning.mp3"></audio>
+    <script>
+        // ใส่รหัสวิดีโอ YouTube ที่นี่ เช่น ส่วนท้ายของ https://www.youtube.com/watch?v=VIDEO_ID
+        const YOUTUBE_VIDEO_ID = '5VItSu99ErQ';
+        const dialog = document.getElementById('welcome'), activity = document.getElementById('activity'), audio = document.getElementById('narration'), statusText = document.getElementById('audio-status');
+        let videoLoaded = false, returnFocus = null;
+        async function playNarration() { try { await audio.play(); statusText.textContent = 'กำลังเล่นเสียงคำแนะนำ'; } catch (error) { statusText.textContent = error.name === 'NotAllowedError' ? 'กด “ฟังคำแนะนำ” เพื่อเปิดเสียง' : 'ยังไม่สามารถเล่นเสียงคำแนะนำได้'; } }
+        function openInstructions() { returnFocus = document.activeElement; activity.inert = true; dialog.showModal(); audio.currentTime = 0; playNarration(); }
+        function begin() { audio.pause(); audio.currentTime = 0; dialog.close(); activity.inert = false; if (YOUTUBE_VIDEO_ID && !videoLoaded) { const frame = document.createElement('iframe'); frame.title = 'ขบวนรถไฟมหัศจรรย์ — วิดีโอกิจกรรม'; frame.src = 'https://www.youtube.com/embed/' + encodeURIComponent(YOUTUBE_VIDEO_ID) + '?rel=0&playsinline=1'; frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'; frame.allowFullscreen = true; document.getElementById('video').replaceChildren(frame); videoLoaded = true; } document.getElementById('instructions').focus(); }
+        document.getElementById('start').addEventListener('click', begin);
+        document.getElementById('listen').addEventListener('click', () => { audio.currentTime = 0; playNarration(); });
+        document.getElementById('instructions').addEventListener('click', openInstructions);
+        dialog.addEventListener('cancel', event => { event.preventDefault(); begin(); });
+        audio.addEventListener('ended', () => { statusText.textContent = 'ฟังคำแนะนำจบแล้ว พร้อมเริ่มกิจกรรมได้เลย'; });
+        audio.addEventListener('error', () => { statusText.textContent = 'กรุณาวางไฟล์ PopupActiveLearning.mp3 ไว้ในโฟลเดอร์เดียวกับหน้านี้'; });
+        openInstructions();
+    </script>
+</body>
+
+</html>
