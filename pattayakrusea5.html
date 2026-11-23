@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="th">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>กองข้าวแบ่งปัน ผูกสัมพันธ์ชุมชน</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700;800;900&amp;display=swap">
+  <style>
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: #ecf7f8;
+      color: #203238;
+      font: 16px/1.7 "Prompt", "Leelawadee UI", Tahoma, sans-serif
+    }
+
+    body.lesson-open {
+      min-height: 100vh;
+      background:
+        linear-gradient(180deg, transparent 48%, #14365475),
+        radial-gradient(ellipse at 5% 5%, #ffffffb8 0%, transparent 16%),
+        radial-gradient(ellipse at 98% 15%, #ffffffb8 0%, transparent 16%),
+        linear-gradient(180deg, #66bef6, #b9e8fa 72%, #5f8eaf);
+    }
+
+    main {
+      width: min(1004px, 92%);
+      margin: 0 auto;
+      padding: 26px 0 16px
+    }
+
+    .lesson-header h1 {
+      font-size: clamp(1.085rem, 3.08vw, 1.925rem);
+      font-weight: 500;
+    }
+
+    .lesson-header .series {
+      font-size: 1.25rem;
+    }
+
+    .series {
+      font-size: .88rem;
+      font-weight: 800;
+      letter-spacing: .035em;
+      margin: 0 0 .3rem
+    }
+
+    h1 {
+      margin: 0 0 .55rem;
+      color: #db1041;
+      font-size: clamp(1.55rem, 4.4vw, 2.75rem);
+      line-height: 1.25;
+      font-weight: 900;
+      text-shadow: 0 1px 10px #fff9
+    }
+
+    .lesson-description {
+      margin: 0
+    }
+
+    .video {
+      aspect-ratio: 16/9;
+      background: #152b30;
+      border: 6px solid #fff;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px #17395340
+    }
+
+    .lesson-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: .65rem;
+      margin: .85rem 0
+    }
+
+    .lesson-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 46px;
+      padding: .5rem clamp(.65rem, 2.5vw, 1.55rem);
+      border-radius: 999px;
+      background: #f6fbff;
+      color: #153857;
+      text-decoration: none;
+      font-weight: bold
+    }
+
+    .lesson-nav a:hover {
+      filter: brightness(.94)
+    }
+
+    .video-help {
+      text-align: center;
+      font-size: .85rem;
+      margin: 0;
+      color: #102d48
+    }
+
+    .video-help a {
+      color: inherit;
+      font-weight: bold
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0
+    }
+
+    a {
+      color: #005f65
+    }
+
+    dialog {
+      width: min(700px, calc(100% - 24px));
+      max-height: calc(100dvh - 24px);
+      border: 0;
+      border-radius: 16px;
+      padding: clamp(16px, 4vw, 30px);
+      color: #263238;
+      box-shadow: 0 16px 60px #142d4240
+    }
+
+    dialog {
+      background-color: #fff4da;
+      background-image:
+        linear-gradient(rgba(255, 244, 218, 0.6), rgba(255, 244, 218, 0.6)),
+        url("./assets/bgเวทีมวย.png");
+      background-position: center, center bottom;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    dialog::backdrop {
+      background: #183c48a8
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: 22% 1fr;
+      gap: clamp(10px, 3vw, 28px);
+      align-items: center
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      max-height: 320px;
+      object-fit: contain
+    }
+
+    p {
+      margin: 0 0 .8rem
+    }
+
+    #script {
+      font-size: clamp(.88rem, 2.2vw, 1rem);
+      line-height: 1.9
+    }
+
+    #script p:last-child {
+      margin-bottom: 0
+    }
+
+    #status {
+      font-size: .88rem;
+      color: #425b63;
+      margin: 1rem 0 .5rem
+    }
+
+    .actions {
+      display: flex;
+      gap: .6rem;
+      justify-content: flex-end;
+      flex-wrap: wrap
+    }
+
+    button {
+      font: inherit;
+      font-weight: bold;
+      padding: .55rem 1rem;
+      border: 1px solid #00686e;
+      border-radius: 9px;
+      background: white;
+      color: #006067;
+      cursor: pointer
+    }
+
+    #enter {
+      background: #00686e;
+      color: white
+    }
+
+    button:disabled {
+      opacity: .5;
+      cursor: default
+    }
+
+    :focus-visible {
+      outline: 3px solid #ae5a00;
+      outline-offset: 3px
+    }
+
+    @media (min-width: 1200px) and (hover: hover) and (pointer: fine) {
+      dialog[open] {
+        position: fixed;
+        inset: 13dvh 0 auto;
+        margin: 0 auto;
+        box-sizing: border-box;
+
+        width: 82vw;
+        max-width: 62vw;
+        height: 70dvh;
+        max-height: 70dvh;
+
+        display: grid;
+        grid-template-rows: minmax(min-content, 1fr) auto auto;
+        overflow-y: auto;
+      }
+
+      dialog[open] #script {
+        width: 82%;
+        min-width: 0;
+        justify-self: start;
+        box-sizing: border-box;
+        padding-inline-end: 0px;
+        font-size: clamp(16px, 1.4vw, 20px);
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+      }
+
+      dialog[open] #teacher {
+        position: absolute;
+        left: 2.5%;
+        bottom: -3px;
+        width: 23%;
+        height: auto;
+        max-height: 70%;
+        object-fit: contain;
+        object-position: center bottom;
+        transform: none;
+      }
+
+      dialog[open] .intro>#script {
+        grid-column: 2;
+      }
+
+      dialog[open] .actions {
+        justify-self: end;
+        width: auto;
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+      }
+
+      dialog[open] .actions button {
+        min-height: 70px;
+        padding: 16px 28px;
+        border-width: 2px;
+        border-radius: 18px;
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+    }
+
+    .lesson-nav .game-link {
+      margin-inline-start: auto;
+      background: #d80b3f;
+      color: #fff;
+    }
+
+    @media (min-width: 1200px) and (hover: hover) and (pointer: fine) {
+      main {
+        width: min(70vw, 1200px);
+      }
+    }
+
+    dialog[open] #script p {
+      text-indent: 3em;
+    }
+
+    @media (min-width: 820px) and (max-width: 1180px) and (hover: none) and (pointer: coarse) {
+      dialog[open] #script {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        justify-self: start;
+      }
+
+      dialog[open] {
+        position: fixed;
+      }
+
+      dialog[open] .intro {
+        position: static;
+      }
+
+      dialog[open] #teacher {
+        position: absolute;
+        left: 4%;
+        bottom: 0;
+        width: 28.5%;
+        height: auto;
+        max-height: 70%;
+        object-fit: contain;
+        object-position: center bottom;
+        transform: none;
+      }
+
+      dialog[open] .intro>#script {
+        grid-column: 2;
+      }
+    }
+
+    .lesson-header {
+      text-align: center;
+    }
+
+    .lesson-header .series,
+    .lesson-header h1,
+    .lesson-header .lesson-description {
+      text-align: center;
+    }
+
+    dialog[open] .actions {
+      align-items: end;
+    }
+
+    dialog[open] .listen-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    dialog[open] .listen-group> :first-child {
+      position: static;
+      margin: 0;
+      text-align: center;
+    }
+  </style>
+
+</head>
+
+<body>
+  <main hidden>
+    <header class="lesson-header">
+      <p class="series">ไข่มุกบูรพา พัทยาน่าอยู่</p>
+      <h1 tabindex="-1">หน่วยที่ 5 ครูยอดธงคนดี</h1>
+      <p class="lesson-description"> ครูยอดธงคนดี ทำความดีเพื่อชุมชน</p>
+    </header>
+    <div class="video" id="video"></div>
+    <nav class="lesson-nav" aria-label="นำทางบทเรียน">
+      <a href="index.html">← กลับหน้าหลัก</a>
+      <a class="game-link" href="pattayakrusea4-game1.html">เล่นเกมกัน →</a>
+    </nav>
+    <p class="video-help">หากวิดีโอไม่เล่น <a href="https://www.youtube.com/embed/rc_g0pLXnqI" target="_blank"
+        rel="noopener">รับชมบน
+        YouTube</a></p>
+  </main>
+  <dialog aria-label="บทนำเรื่องกองข้าวแบ่งปัน">
+    <div class="intro">
+      <img id="teacher" src="./assets/ครูมวยผมเงินสอนท่าชก.png" alt="คุณครูยอดธง ครูมวยผมเงิน กำลังสอนท่าชกให้เด็กๆ" />
+      <div id="script">
+        <p>ยอดธง ยอดครูแห่งวงการมวยไทย
+        </p>
+        <p>เด็ก ๆ เคยสงสัยไหมครับว่า เด็กชายที่ชอบดูมวยไทยในงานวัด เติบโตมาเป็นครูมวยที่มีลูกศิษย์ระดับแชมป์โลกได้อย่างไร? วันนี้เราจะไปรู้จัก ครูยอดธง เสนานันท์ หรือ ครูตุ๊ย ตั้งแต่วัยเด็กที่จังหวัดราชบุรี จนถึงวันที่ย้ายมาอยู่บางละมุง และขึ้นชกครั้งแรกเมื่ออายุ 15 ปี ได้ก่อตั้งค่ายมวยศิษย์ยอดธง และนำประสบการณ์บนเวทีมาสอนนักมวยรุ่นใหม่</p>
+
+          <p>ในเรื่องนี้ เด็ก ๆ
+          จะได้รู้จักการไหว้ครู และความหมายของการเคารพ ผู้สอนผ่านเหตุการณ์ที่ครูยอดธง พานักมวยไทยไปแข่งขัน กับนักคิกบ็อกซิ่งญี่ปุ่น
+          รวมถึงเรื่องราวที่ท่าน ช่วยสืบทอดมวยไทย ให้คนรุ่นต่อไป เมื่อดูจบลองคิดกันนะครับว่า ความขยัน ความอดทน
+          และการเคารพครู มีส่วนอย่างไรในการเดินทางจากเด็กที่รักมวยไทยสู่ครูผู้สร้างนักมวยรุ่นใหม่?
+        </p>
+      </div>
+    </div>
+    <p id="status" role="status"></p>
+    <div class="actions">
+      <button id="listen" type="button">ฟังคำบรรยาย</button>
+      <button id="enter" type="button">เข้าสู่บทเรียน</button>
+    </div>
+  </dialog>
+  <script>
+    const dialog = document.querySelector('dialog');
+    const listen = document.querySelector('#listen');
+    const enter = document.querySelector('#enter');
+    const status = document.querySelector('#status');
+    const narration = new Audio('./Sound/55-popup1part5-1.mp3');
+    narration.preload = 'none';
+    let attempt = 0;
+    let timer;
+
+    function finish(message, replay = false) {
+      clearTimeout(timer);
+      status.textContent = message;
+      listen.textContent = replay ? 'ฟังอีกครั้ง' : 'ฟังคำบรรยาย';
+      listen.disabled = false;
+      enter.disabled = false;
+    }
+    const listenGroup = document.createElement('div');
+    listenGroup.className = 'listen-group';
+
+    listen.before(listenGroup);
+    listenGroup.append(status, listen);
+
+    async function playIntro() {
+      const id = ++attempt;
+      clearTimeout(timer);
+      listen.disabled = true;
+      status.textContent = 'กำลังเปิดเสียงคำบรรยาย…';
+      narration.onended = () => {
+        if (id === attempt) finish('ฟังจบแล้ว', true);
+      };
+      narration.onerror = () => {
+        if (id !== attempt) return;
+        attempt++;
+        finish('เปิดไฟล์เสียงไม่ได้ กรุณาตรวจสอบตำแหน่งไฟล์ MP3');
+      };
+      timer = setTimeout(() => {
+        if (id !== attempt) return;
+        attempt++;
+        narration.pause();
+        finish('โหลดเสียงนานเกินไป กรุณากดฟังคำบรรยายอีกครั้ง');
+      }, 12000);
+      try {
+        if (narration.error) narration.load();
+        if (narration.ended) narration.currentTime = 0;
+        await narration.play();
+        if (id !== attempt) return;
+        clearTimeout(timer);
+        status.textContent = 'กำลังอ่านบทนำ…';
+        listen.textContent = 'หยุดฟัง';
+        listen.disabled = false;
+      } catch (error) {
+        if (id !== attempt) return;
+        finish(error.name === 'NotAllowedError'
+          ? 'กดฟังคำบรรยายเพื่อเริ่มเล่นเสียง'
+          : 'เปิดไฟล์เสียงไม่ได้ กรุณาตรวจสอบตำแหน่งไฟล์ MP3');
+      }
+    }
+
+    listen.addEventListener('click', () => {
+      if (narration.paused) {
+        playIntro();
+        return;
+      }
+
+      attempt++;
+      narration.pause();
+      finish('หยุดเสียงชั่วคราว');
+      listen.textContent = 'ฟังต่อ';
+    });
+    dialog.addEventListener('cancel', event => event.preventDefault());
+    enter.addEventListener('click', () => {
+      attempt++;
+      clearTimeout(timer);
+      narration.pause();
+      dialog.close();
+      const main = document.querySelector('main');
+      main.hidden = false;
+      document.body.classList.add('lesson-open');
+      const frame = document.createElement('iframe');
+      frame.title = 'วิดีโอประเพณีกินเจจาก YouTube';
+      frame.referrerPolicy = 'strict-origin-when-cross-origin';
+      frame.allow = 'encrypted-media; picture-in-picture; fullscreen';
+      frame.allowFullscreen = true;
+      frame.src = 'https://www.youtube.com/embed/rc_g0pLXnqI';
+      document.querySelector('#video').append(frame);
+      main.querySelector('h1').focus();
+    });
+
+    dialog.showModal();
+    playIntro();
+  </script>
+</body>
+
+</html>

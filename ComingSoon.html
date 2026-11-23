@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>กำลังก่อสร้าง รอสักครู่</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:24px;font-family:'Kanit',Tahoma,sans-serif;color:#41345f;background:#fff8e9 url('background.png') center/cover no-repeat}
+main{width:min(100%,580px);padding:48px 26px;text-align:center;border:2px solid #fff;border-radius:36px;background:rgba(255,250,240,.95);box-shadow:12px 16px 40px #66503a25,inset 5px 5px 10px #fff,inset -5px -5px 12px #dbc7a42b}
+.icon{display:grid;place-items:center;width:112px;height:112px;margin:0 auto 24px;font-size:58px;background:#ffebbf;border-radius:32px;box-shadow:6px 8px 14px #bb96432b,inset 5px 5px 8px #fff8e4,inset -5px -5px 8px #dfb85b44}
+h1{margin:0 0 10px;font-size:clamp(30px,7vw,42px);color:#7241b5;line-height:1.4}
+p{margin:0;font-size:19px;line-height:1.8;color:#686078}
+.dots{display:flex;justify-content:center;gap:9px;margin:24px 0 32px}
+.dots span{width:10px;height:10px;border-radius:50%;background:#b491dd;animation:pulse 1.4s ease-in-out infinite}
+.dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
+a{display:inline-flex;justify-content:center;align-items:center;min-height:48px;gap:8px;padding:13px 28px;color:#533184;background:#e6d8ff;border:2px solid #fff8;border-radius:19px;text-decoration:none;font-size:18px;font-weight:500;box-shadow:5px 6px 12px #8060a82b,inset 4px 4px 7px #ffffffcf,inset -4px -4px 7px #a583cc40;transition:transform .15s}
+a:hover{transform:translateY(-2px)}a:active{transform:translateY(2px)}a:focus-visible{outline:3px solid #7241b5;outline-offset:5px}
+@keyframes pulse{0%,80%,100%{opacity:.4;transform:translateY(0)}40%{opacity:1;transform:translateY(-5px)}}
+@media(prefers-reduced-motion:reduce){.dots span{animation:none}a{transition:none;transform:none!important}}
+</style>
+</head>
+<body>
+<main>
+<div class="icon" aria-hidden="true">🚧</div>
+<h1>กำลังก่อสร้าง</h1>
+<p>รอสักครู่นะคะ<br>เรากำลังเตรียมกิจกรรมสนุก ๆ ให้เด็ก ๆ</p>
+<div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
+<!-- เปลี่ยน index.html ให้ตรงกับชื่อไฟล์หน้าหลักของท่าน -->
+<a href="index.html"><span aria-hidden="true">⌂</span> กลับหน้าหลัก</a>
+</main>
+</body>
+</html>

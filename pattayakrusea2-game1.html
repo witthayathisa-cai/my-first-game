@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="th">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>น้องปอพาเที่ยววันไหลพัทยา</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;700;800&display=swap">
+    <style>
+        /* เปลี่ยน .map-hero เป็นชื่อคลาสของกล่องภาพแผนที่ในไฟล์ */
+        @media (min-width: 1024px) {
+            .map-hero {
+                height: 420px;
+            }
+        }
+
+        :root {
+            color-scheme: light;
+            --ink: #153d46;
+            --teal: #006b65;
+            --cream: #fffaf0;
+            --line: #b4d7cc
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: #e2f5ef;
+            color: var(--ink);
+            font: 500 1.0rem/1.55 "Prompt", sans-serif;
+        }
+
+        main {
+            max-width: 900px;
+            margin: auto;
+            padding: clamp(12px, 4vw, 36px)
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px
+        }
+
+        .brand {
+            font-weight: 800;
+            color: #005951
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer;
+            min-height: 48px;
+            border: 2px solid var(--line);
+            background: #fff;
+            color: var(--ink);
+            border-radius: 16px;
+            padding: 10px 18px;
+            font-weight: 700
+        }
+
+        button:hover:not(:disabled) {
+            border-color: var(--teal);
+            background: #edfbf6
+        }
+
+        button:focus-visible {
+            outline: 3px solid #174bc2;
+            outline-offset: 3px
+        }
+
+        button:disabled {
+            cursor: default;
+            color: #52656a;
+            background: #f1f4f2
+        }
+
+        .primary,
+        .primary:hover:not(:disabled) {
+            background: var(--teal);
+            color: white;
+            border-color: var(--teal)
+        }
+
+        .panel {
+            overflow: hidden;
+            border: 2px solid var(--line);
+            border-radius: 28px;
+            background: var(--cream);
+            box-shadow: 0 12px 32px #11443718
+        }
+
+        .scene {
+            min-height: clamp(140px, 29vw, 250px);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: clamp(8px, 3vw, 26px);
+            padding: 15px 10px 24px;
+            background: radial-gradient(circle at 83% 23%, #fff4a5 0 20px, transparent 22px), linear-gradient(#a7e7ed 0 66%, #a2d689 66% 100%)
+        }
+
+        .beach {
+            background: radial-gradient(circle at 83% 23%, #fff4a5 0 20px, transparent 22px), linear-gradient(#abe8f4 0 55%, #53caba 55% 73%, #f4d39d 73%)
+        }
+
+        .figure {
+            font-size: clamp(40px, 10vw, 90px);
+            line-height: 1.18;
+            text-align: center;
+            min-width: 0
+        }
+
+        .figure small {
+            display: block;
+            font-size: .95rem;
+            font-weight: 800;
+            background: #fff;
+            padding: 2px 8px;
+            border-radius: 18px;
+            margin-top: 7px
+        }
+
+        .sand {
+            position: relative;
+            width: 112px;
+            height: 75px;
+            display: grid;
+            place-items: center;
+            background: #e9b565;
+            clip-path: polygon(39% 0, 61% 0, 100% 100%, 0 100%);
+            font-size: 26px;
+            padding-top: 29px
+        }
+
+        .sand.filled {
+            clip-path: none;
+            border-radius: 12px;
+            transform: perspective(140px) rotateX(-14deg);
+            background: #5298ab
+        }
+
+        .castle {
+            position: relative;
+            display: grid;
+            justify-items: center
+        }
+
+        .flag {
+            font-size: 36px;
+            line-height: 1;
+            min-height: 36px
+        }
+
+        .statue {
+            font-size: 0
+        }
+
+        .statue::before {
+            content: "";
+            display: block;
+            width: 74px;
+            height: 77px;
+            margin: auto;
+            background: linear-gradient(125deg, #ffe98a, #bf7818);
+            clip-path: polygon(50% 0, 55% 11%, 63% 20%, 64% 33%, 58% 40%, 68% 46%, 74% 61%, 83% 62%, 94% 75%, 94% 86%, 100% 89%, 100% 100%, 0 100%, 0 89%, 6% 86%, 6% 75%, 17% 62%, 26% 61%, 32% 46%, 42% 40%, 36% 33%, 37% 20%, 45% 11%)
+        }
+
+        .flow {
+            font-size: 42px;
+            align-self: center
+        }
+
+        .content {
+            padding: clamp(14px, 4vw, 32px)
+        }
+
+        h1 {
+            font-size: clamp(1.55rem, 5vw, 2.5rem);
+            line-height: 1.25;
+            margin: 0 0 10px
+        }
+
+        h1:focus {
+            outline: none
+        }
+
+        p {
+            margin: 0 0 14px
+        }
+
+        .dialogue {
+            background: #fff1ce;
+            border-radius: 14px;
+            padding: 12px 15px
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 165px), 1fr));
+            gap: 10px;
+            margin-top: 14px
+        }
+
+        .tile span {
+            display: block;
+            font-size: 2rem
+        }
+
+        .tile[aria-pressed=true] {
+            background: #d1f2df;
+            border-color: var(--teal)
+        }
+
+        .feedback {
+            margin: 13px 0 0;
+            font-weight: 700
+        }
+
+        .feedback:empty {
+            display: none
+        }
+
+        .progress {
+            font-weight: 800;
+            color: #005951;
+            margin-bottom: 10px
+        }
+
+        @media(max-width:400px) {
+            .actions button {
+                flex: 1 1 100%
+            }
+        }
+
+        .scene.intro-scene {
+            background-image: url("./assets/sea.png");
+            background-size: cover;
+            background-position: center bottom;
+            background-repeat: no-repeat;
+        }
+
+        .intro-character {
+            display: block;
+            height: clamp(90px, 18vw, 180px);
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            margin: 0 auto;
+        }
+
+        .scene.intro-scene {
+            position: relative;
+        }
+
+        .scene.intro-scene>.figure {
+            position: absolute;
+            bottom: 0;
+            transform: translateX(-50%);
+        }
+
+        .scene.intro-scene>.figure:first-child {
+            left: 29%;
+            /* น้องปอ */
+        }
+
+        .scene.intro-scene>.figure:last-child {
+            left: 68%;
+            /* คุณปู่ */
+        }
+
+        .scene.intro-scene>.figure>small {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        /* ขยายกรอบเกมให้กว้างขึ้น */
+        main {
+            max-width: 1100px;
+        }
+
+        /* เพิ่มความสูงให้ภาพชายหาดในฉากเปิด */
+        .scene.intro-scene {
+            min-height: clamp(234px, 54vh, 522px);
+        }
+
+        /* ขยายภาพน้องปอและคุณปู่ให้สมดุลกับฉาก */
+        .scene.intro-scene .intro-character {
+            height: clamp(135px, 27vh, 270px);
+        }
+
+        .scene.map-scene {
+            min-height: clamp(200px, 36vw, 600px);
+            background: url("./assets/BG-เจดีย์ทราย.png") center bottom 30px / cover no-repeat;
+            background-position: center calc(100% + 15px);
+        }
+
+        .sand-grandpa {
+            display: block;
+            height: clamp(90px, 16vw, 175px);
+            width: auto;
+            margin: 0 auto;
+        }
+
+        /* เฉพาะฉากก่อเจดีย์ทรายที่มีภาพคุณปู่ */
+        .scene:has(.sand-grandpa) {
+            background:
+                radial-gradient(circle at 83% 23%, #fff4a5 0 20px, transparent 22px),
+                linear-gradient(to bottom,
+                    #83cef4 0%,
+                    #d2f3ff 66%,
+                    #f4d49b 66%,
+                    #e5ba78 100%);
+        }
+
+        /* จัดข้อความและปุ่มให้อยู่กึ่งกลางเฉพาะด่านก่อเจดีย์ทราย */
+        .scene:has(.sand-grandpa)+.content {
+            padding: 20px 16px 24px;
+            text-align: center;
+        }
+
+        .scene:has(.sand-grandpa)+.content .dialogue {
+            width: fit-content;
+            max-width: 100%;
+            margin-inline: auto;
+        }
+
+        .scene:has(.sand-grandpa)+.content .actions {
+            justify-content: center;
+        }
+
+        .scene.intro-scene+.content .actions {
+            justify-content: center;
+        }
+
+        .scene.intro-scene+.content .actions>button {
+            flex: 0 1 auto;
+        }
+
+        #game .actions>button[data-action="map"] {
+            display: block;
+            flex: 0 0 auto;
+            width: fit-content;
+            margin-inline: auto;
+        }
+
+        #game:has(.sand-grandpa) h1,
+        #game:has(.sand-grandpa) .dialogue {
+            text-align: center;
+        }
+
+        #game:has(.sand-grandpa) .actions {
+            display: flex;
+            justify-content: center;
+        }
+
+        #game:has(.sand-grandpa) .actions>button {
+            flex: 0 0 auto;
+        }
+
+        #game:has(.statue) .actions {
+            display: flex;
+            justify-content: center;
+        }
+
+        #game:has(.statue) .actions>button {
+            flex: 0 1 auto;
+        }
+
+        #game:has(.statue) .feedback {
+            text-align: center;
+        }
+
+        .water-teacher {
+            display: block;
+            height: clamp(90px, 16vw, 175px);
+            width: auto;
+            margin: 0 auto;
+        }
+
+        #game:has(.water-teacher) .controls {
+            justify-content: center;
+        }
+
+        #game:has(.water-teacher) .feedback {
+            text-align: center;
+        }
+
+        :has(> button[data-action="choose-pour"]):has(> button[data-action="splash-statue"]) {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        :has(> button[data-action="pour"]) {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        :has(> button[data-action="finish-water"]) {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        :has(> button[data-action="choose-sky"]):has(> button[data-action="choose-tree"]) {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        #game:has(button[data-action="choose-tree"]) .feedback {
+            width: fit-content;
+            max-width: 100%;
+            margin-inline: auto;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <div class="brand">วันไหลพัทยา</div>
+            <div>
+                <button id="sound" type="button" aria-pressed="false" hidden>เปิดเสียงอ่าน</button>
+                <button id="read" type="button" hidden>ฟังอีกครั้ง</button>
+            </div>
+        </header>
+        <div class="progress" id="progress" hidden></div>
+        <section class="panel" id="game" aria-label="เกมน้องปอพาเที่ยววันไหลพัทยา"></section>
+    </main>
+    <script>
+        "use strict";
+        const game = document.querySelector("#game");
+        const progress = document.querySelector("#progress");
+        const sound = document.querySelector("#sound");
+        const introAudio = new Audio("./Sound/Sound-game11.mp3");
+        const sandIntroAudio = new Audio("./Sound/Sound-game13.mp3");
+        const sandLiftAudio = new Audio("./Sound/Sound-game15.mp3");
+        const sandFlagAudio = new Audio("./Sound/Sound-game16.mp3");
+        const sandFlowerAudio = new Audio("./Sound/Sound-game17.mp3");
+        const sandSummaryAudio = new Audio("./Sound/Sound-game18.mp3");
+        const waterQuestionAudio = new Audio("./Sound/Sound-game19.mp3");
+        const waterPourAudio = new Audio("./Sound/Sound-game20.mp3");
+        const waterSummaryAudio = new Audio("./Sound/Sound-game21.mp3");
+        const waterHintAudio = new Audio("./Sound/Sound-game22.mp3");
+        const beachIntroAudio = new Audio("./Sound/Sound-game23.mp3");
+        const beachSuccessAudio = new Audio("./Sound/Sound-game24.mp3");
+        const beachHintAudio = new Audio("./Sound/Sound-game25.mp3");
+        const reviewAudio = new Audio("./Sound/Sound-game26.mp3");
+        const endingAudio = new Audio("./Sound/Sound-game27.mp3");
+
+
+        const canSpeak = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+        const state = { page: "intro", completed: 0, sand: 0, flag: "", flower: "", water: 0, friend: false, voice: false };
+        const selected = new Set();
+        let narration = "";
+        const mapAudio = new Audio("./Sound/Sound-game12.mp3");
+        function stopNarration() {
+            introAudio.pause();
+            mapAudio.pause();
+            sandIntroAudio.pause();
+            sandLiftAudio.pause();
+            sandFlagAudio.pause();
+            sandFlowerAudio.pause();
+            sandSummaryAudio.pause();
+            waterQuestionAudio.pause();
+            waterPourAudio.pause();
+            waterSummaryAudio.pause();
+            waterHintAudio.pause();
+            beachIntroAudio.pause();
+            beachSuccessAudio.pause();
+            beachHintAudio.pause();
+            reviewAudio.pause();
+            endingAudio.pause();
+
+            if (canSpeak) speechSynthesis.cancel();
+        }
+
+        function speak(message = narration) {
+            stopNarration();
+            if (!state.voice) return;
+
+            if ((state.page === "review" || state.page === "ending") && message === narration)  {
+                const audio = state.page === "review" ? reviewAudio : endingAudio;
+                audio.currentTime = 0;
+                audio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงบรรยายไม่ได้", error);
+                    }
+                });
+                return;
+            }
+
+            if (state.page === "review" && message === narration) {
+                reviewAudio.currentTime = 0;
+                reviewAudio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงหน้าทบทวนไม่ได้", error);
+                    }
+                });
+                return;
+            }
+
+            if (state.page === "beach") {
+                let audio = state.friend ? beachSuccessAudio : beachIntroAudio;
+
+                if (!state.friend && message !== narration) {
+                    audio = beachHintAudio;
+                }
+
+                audio.currentTime = 0;
+                audio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงหน้าเล่นน้ำไม่ได้", error);
+                    }
+                });
+                return;
+            }
+
+            if (state.page === "beach" && message === narration) {
+                const audio = state.friend ? beachSuccessAudio : beachIntroAudio;
+                audio.currentTime = 0;
+                audio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงหน้าเล่นน้ำไม่ได้", error);
+                    }
+                });
+                return;
+            }
+
+            if (state.page === "beach" && !state.friend && message === narration) {
+                beachIntroAudio.currentTime = 0;
+                beachIntroAudio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงหน้าเล่นน้ำไม่ได้", error);
+                    }
+                });
+                return;
+            }
+
+            if (state.page === "water" && state.water === 0 && message !== narration) {
+                waterHintAudio.currentTime = 0;
+                waterHintAudio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงคำใบ้การสรงน้ำพระไม่ได้", error);
+                    }
+                });
+                return;
+            }
+
+            if (state.page === "water" && state.water === 2 && message === narration) {
+                waterSummaryAudio.currentTime = 0;
+                waterSummaryAudio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงสรุปการสรงน้ำพระไม่ได้", error);
+                    }
+                });
+                return;
+            }
+
+            if (state.page === "water" && state.water === 1 && message === narration) {
+                waterPourAudio.currentTime = 0;
+                waterPourAudio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงคำแนะนำการรินน้ำไม่ได้", error);
+                    }
+                });
+                return;
+            }
+
+            if (state.page === "water" && state.water === 0 && message === narration) {
+                waterQuestionAudio.currentTime = 0;
+                waterQuestionAudio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงคำถามสรงน้ำพระไม่ได้", error);
+                    }
+                });
+                return;
+            }
+
+            if (state.page === "sand" && state.sand === 4) {
+                sandSummaryAudio.currentTime = 0;
+                sandSummaryAudio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงสรุปเจดีย์ทรายไม่ได้", error);
+                    }
+                });
+                return;
+            }
+
+            if (state.page === "sand" && state.sand === 3) {
+                sandFlowerAudio.currentTime = 0;
+                sandFlowerAudio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงเลือกดอกไม้ไม่ได้", error);
+                    }
+                });
+                return;
+            }
+            if (state.page === "sand" && state.sand === 2) {
+                sandFlagAudio.currentTime = 0;
+                sandFlagAudio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงเลือกธงไม่ได้", error);
+                    }
+                });
+                return;
+            }
+            if (state.page === "sand" && state.sand === 1) {
+                if (canSpeak) speechSynthesis.cancel();
+
+                sandLiftAudio.currentTime = 0;
+                sandLiftAudio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงยกแม่พิมพ์ไม่ได้", error);
+                    }
+                });
+                return;
+            }
+            if (state.page === "sand" && state.sand === 0) {
+                if (canSpeak) speechSynthesis.cancel();
+
+                sandIntroAudio.currentTime = 0;
+                sandIntroAudio.play().catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("เล่นเสียงคุณปู่ไม่ได้", error);
+                    }
+                });
+                return;
+            }
+
+
+            if (state.page === "intro") {
+                if (canSpeak) speechSynthesis.cancel();
+
+                introAudio.pause();
+                introAudio.currentTime = 0;
+                introAudio.play().catch(error => {
+                    if (error.name === "AbortError") return;
+
+                    if (error.name === "NotAllowedError" && state.page === "intro") {
+                        state.voice = false;
+                        sound.textContent = "เปิดเสียงอ่าน";
+                        sound.setAttribute("aria-pressed", "false");
+                        read.hidden = true;
+                        return;
+                    }
+
+                    console.warn("เล่นเสียงฉากเปิดไม่ได้", error);
+                });
+                return;
+            }
+            if (state.voice && document.querySelector(".scene.map-scene")) {
+                if (canSpeak) speechSynthesis.cancel();
+
+                mapAudio.pause();
+                mapAudio.currentTime = 0;
+                mapAudio.play().catch(error => {
+                    console.warn("เล่นเสียงหน้าแผนที่ไม่ได้", error);
+                });
+                return;
+            }
+            if (!canSpeak) return;
+            speechSynthesis.cancel();
+            const speech = new SpeechSynthesisUtterance(message);
+            speech.lang = "th-TH";
+            speech.rate = 0.9;
+            const thaiVoice = speechSynthesis.getVoices().find(voice => voice.lang.startsWith("th"));
+            if (thaiVoice) speech.voice = thaiVoice;
+            speechSynthesis.speak(speech);
+        }
+
+        sound.hidden = !canSpeak;
+        sound.addEventListener("click", () => {
+            state.voice = !state.voice;
+            sound.setAttribute("aria-pressed", state.voice);
+            sound.textContent = state.voice ? "ปิดเสียงอ่าน" : "เปิดเสียงอ่าน";
+            read.hidden = !state.voice;
+            if (state.voice) speak();
+            else {
+                stopNarration();
+            }
+        });
+        read.addEventListener("click", () => speak());
+
+        function figure(icon, label = "") {
+            return `<div class="figure"><span aria-hidden="true">${icon}</span>${label ? `<small>${label}</small>` : ""}</div>`;
+        }
+
+        function button(label, action, options = {}) {
+            const { primary = false, disabled = false, icon = "", pressed, tile = false } = options;
+            const classes = [primary && "primary", tile && "tile"].filter(Boolean).join(" ");
+            return `<button type="button" data-action="${action}" class="${classes}" ${disabled ? "disabled" : ""} ${pressed === undefined ? "" : `aria-pressed="${pressed}"`}>${icon ? `<span aria-hidden="true">${icon}</span>` : ""}${label}</button>`;
+        }
+
+        function render({ title, prompt, scene, beach = false, controls, grid = false, choices = "" }) {
+            progress.hidden = state.page === "intro";
+            progress.textContent = `ผ่านภารกิจ ${state.completed} จาก 3`;
+            narration = `${title} ${prompt}`;
+
+            game.innerHTML = `
+    <div class="scene ${beach ? "beach" : ""} ${state.page === "intro" ? "intro-scene" : ""} ${state.page === "map" ? "map-scene" : ""}" aria-hidden="true">${scene}</div>
+<h1 tabindex="-1" style="text-align: center;">${title}</h1>
+<p class="dialogue" style="text-align: center;">${prompt}</p>
+      ${choices ? `<div class="grid">${choices}</div>` : ""}
+      <div class="${grid ? "grid" : "actions"}">${controls}</div>
+      <p class="feedback" role="status"></p>
+    </div>`;
+            game.querySelector("h1").focus({ preventScroll: true });
+            speak();
+        }
+
+        function feedback(message) {
+            game.querySelector(".feedback").textContent = message;
+            speak(message);
+        }
+
+        const missions = [
+            { page: "sand", title: "ก่อเจดีย์ทราย", icon: "🚩" },
+            { page: "water", title: "สรงน้ำพระ", icon: "💧" },
+            { page: "beach", title: "เล่นน้ำกับเพื่อน", icon: "🏖️" }
+        ];
+
+        function showPage(page) {
+            if (state.page === "intro" && page !== "intro") {
+                introAudio.pause();
+                introAudio.currentTime = 0;
+            }
+
+            state.page = page;
+            screens[page]();
+        }
+
+        function finishMission(number) {
+            state.completed = number;
+            showPage("map");
+        }
+
+        const screens = {
+            intro() {
+                render({
+                    title: "น้องปอพาเที่ยววันไหลพัทยา",
+                    prompt: "น้องปอถือขันน้ำมาหาคุณปู่ ปู่ยิ้มแล้วบอกว่า วันนี้เราไปเที่ยวงานวันไหลกัน แวะช่วยปู่ก่อเจดีย์ทรายก่อนนะ",
+                    scene: `
+  <div class="figure">
+    <img class="intro-character" src="./assets/น้องปอ.png" alt="">
+    <small>น้องปอ</small>
+  </div>
+  <div class="figure">
+    <img class="intro-character" src="./assets/คุณปู่.png" alt="">
+    <small>คุณปู่</small>
+  </div>
+`,
+                    controls: button("เริ่มเที่ยวงาน", "map", { primary: true })
+                });
+            },
+            map() {
+                render({
+                    title: "แผนที่งานวันไหล",
+                    prompt: state.completed === missions.length ? "เราเที่ยวครบแล้ว ไปเล่าให้คุณปู่ฟังกัน" : "แตะภารกิจที่เปิดอยู่เพื่อเดินทางต่อ",
+                    scene: "<!-- พื้นที่แผนที่ -->",
+                    grid: true,
+                    controls: missions.map((mission, index) => button(
+                        `${mission.title}${index < state.completed ? " ✓" : ""}`, mission.page,
+                        { icon: mission.icon, tile: true, disabled: index !== state.completed, primary: index === state.completed }
+                    )).join("") + (state.completed === missions.length ? button("ทบทวนกับครูซี", "review", { primary: true }) : "")
+                });
+            },
+            sand() {
+                const steps = [
+                    "คุณปู่บอกว่า แตะถังเพื่อเททรายลงแม่พิมพ์",
+                    "ทรายเต็มแล้ว ยกแม่พิมพ์ขึ้นดูสิ",
+                    "เลือกธงมาปักบนเจดีย์ทราย",
+                    "เลือกดอกไม้มาประดับเจดีย์ทราย",
+                    "สมัยก่อนชาวบ้านช่วยกันขนทรายเข้าวัด เรียกว่า ประเพณีก่อพระทรายน้ำไหล แล้วประดับเจดีย์ทรายด้วยธงและดอกไม้เพื่อถวายเป็นพุทธบูชา"
+                ];
+                const controls = [
+                    button("🪣 เททราย", "next-sand", { primary: true }),
+                    button("ยกแม่พิมพ์", "next-sand", { primary: true }),
+                    button("🚩 ธงแดง", "red-flag") + button("🏳️ ธงขาว", "white-flag"),
+                    button("🌼 ดอกไม้สีเหลือง", "yellow-flower") + button("🌸 ดอกไม้สีชมพู", "pink-flower"),
+                    button("กลับแผนที่", "finish-sand", { primary: true })
+                ];
+                const sandArt = state.sand >= 2
+                    ? `<div class="castle"><div class="flag">${state.flag}</div><div class="sand">${state.flower}</div></div>`
+                    : figure("🪣") + `<div class="sand filled">${state.sand === 1 ? "ทราย" : ""}</div>`;
+                render({
+                    title: "ช่วยปู่ก่อเจดีย์ทราย", prompt: steps[state.sand],
+                    scene: `
+  <div class="figure">
+    <img class="sand-grandpa" src="./assets/คุณปู่เดินถือถังทรายสีเขียว.png" alt="">
+    <small>คุณปู่</small>
+  </div>
+` + sandArt, controls: controls[state.sand]
+                });
+            },
+            water() {
+                const steps = [
+                    "ครูซีถามว่า เราควรสรงน้ำพระพุทธรูปอย่างไร",
+                    "ใช่แล้ว ค่อย ๆ รินน้ำเบา ๆ แตะขันเพื่อสรงน้ำพระได้เลย",
+                    "การสรงน้ำพระพุทธรูปเป็นกิจกรรมทำบุญในงานวันไหล เราสรงน้ำด้วยความสำรวม"
+                ];
+                const controls = [
+                    button("💧 ค่อย ๆ รินน้ำ", "choose-pour") + button("💦 สาดน้ำ", "splash-statue"),
+                    button("แตะขันเพื่อรินน้ำ", "pour", { primary: true, icon: "🥣", tile: true }),
+                    button("กลับแผนที่", "finish-water", { primary: true })
+                ];
+                render({
+                    title: "สรงน้ำพระกับครูซี", prompt: steps[state.water],
+                    scene: `
+    <div class="figure">
+        <img class="water-teacher" src="./assets/คุณครูซีในชุดพื้นเมือง.png" alt="">
+        <small>ครูซี</small>
+    </div>
+    ${state.water === 2 ? '<span class="flow">💧</span>' : ""}
+    <div class="figure">
+        <img
+            src="./assets/แท่นพุทธรูปแดงทองพร้อมวงล้อและดอกไม้.png"
+            alt=""
+            style="display: block; width: min(48vw, 240px); height: 225px; object-fit: contain; object-position: center bottom"
+        >
+        <small>พระพุทธรูป</small>
+    </div>
+`,
+                    controls: controls[state.water]
+                });
+            },
+            beach() {
+                render({
+                    title: "เล่นน้ำสงกรานต์ที่ชายหาดพัทยา",
+                    prompt: state.friend ? "เพื่อนฟ้ายิ้มแล้วบอกว่า มาเล่นด้วยกันเลย เราเล่นน้ำกับคนที่ตกลงเล่นด้วยนะ" :
+                        "เพื่อนฟ้าบอกว่า มาเล่นน้ำด้วยกันเถอะ เพื่อนต้นบอกว่า เราไม่อยากเปียก น้องปอควรชวนใครเล่นน้ำดี",
+                    scene: `
+    <div class="figure">
+        <img src="./assets/1-เพื่อนฟ้า.png" alt=""
+             style="display: block; width: min(22vw, 100px); height: 150px; object-fit: contain; object-position: center bottom; margin-inline: auto;">
+        <small>ฟ้า</small>
+    </div>
+    ${figure(state.friend ? "💦" : "🏖️")}
+    <div class="figure">
+        <img src="./assets/1-เพื่อนต้น.png" alt=""
+             style="display: block; width: min(22vw, 100px); height: 150px; object-fit: contain; object-position: center bottom; margin-inline: auto;">
+        <small>ต้น</small>
+    </div>
+`,
+                    controls: state.friend ? button("กลับแผนที่", "finish-beach", { primary: true }) :
+                        button("ชวนเพื่อนฟ้า", "choose-sky") + button("ชวนเพื่อนต้น", "choose-tree")
+                });
+            },
+            review() {
+                render({
+                    title: "วันนี้น้องปอทำอะไรบ้าง",
+                    prompt: "ครูซีชวนแตะเลือก 3 ภาพที่ตรงกับกิจกรรมที่น้องปอทำวันนี้",
+                    scene: `
+    <div class="figure">
+        <img src="./assets/คุณครูซีในชุดพื้นเมือง.png" alt=""
+             style="display: block; width: min(22vw, 110px); height: 150px; object-fit: contain; object-position: center bottom; margin-inline: auto;">
+        <small>ครูซี</small>
+    </div>
+    <div class="figure">
+        <img src="./assets/น้องปอ.png" alt=""
+             style="display: block; width: min(22vw, 110px); height: 150px; object-fit: contain; object-position: center bottom; margin-inline: auto;">
+        <small>น้องปอ</small>
+    </div>
+`,
+                    choices: [
+                        ["🚩", "ก่อเจดีย์ทราย", "sand"], ["🚲", "ปั่นจักรยาน", "cycle"],
+                        ["💧", "สรงน้ำพระ", "water"], ["💦", "เล่นน้ำกับเพื่อน", "beach"]
+                    ].map(([icon, label, id]) => button(label, "select-" + id, { icon, tile: true, pressed: selected.has(id) })).join(""),
+                    controls: button("ตรวจคำตอบ", "check", { primary: true })
+                });
+            },
+            end() {
+                render({
+                    title: "เที่ยวงานวันไหลครบแล้ว!",
+                    prompt: "คุณปู่ชวนเลือกหนึ่งกิจกรรม แล้วเล่าให้เพื่อนฟังว่าทำอะไร เช่น หนูช่วยคุณปู่ก่อเจดีย์ทรายที่วัดค่ะ",
+                    scene: `
+    <div class="figure">
+        <img src="./assets/คุณปู่.png" alt=""
+             style="display: block; width: min(22vw, 110px); height: 150px; object-fit: contain; object-position: center bottom; margin-inline: auto;">
+        <small>คุณปู่</small>
+    </div>
+    ${figure("🏖️")}
+    <div class="figure">
+        <img src="./assets/น้องปอ.png" alt=""
+             style="display: block; width: min(22vw, 110px); height: 150px; object-fit: contain; object-position: center bottom; margin-inline: auto;">
+        <small>น้องปอ</small>
+    </div>
+`,
+                    beach: true,
+                    controls: button("เล่นอีกครั้ง", "restart", { primary: true })
+                });
+            }
+        };
+
+        const actions = {
+            map: () => showPage("map"),
+            sand: () => showPage("sand"),
+            water: () => showPage("water"),
+            beach: () => showPage("beach"),
+            "next-sand": () => { state.sand += 1; screens.sand(); },
+            "red-flag": () => decorate("flag", "🚩"),
+            "white-flag": () => decorate("flag", "🏳️"),
+            "yellow-flower": () => decorate("flower", "🌼"),
+            "pink-flower": () => decorate("flower", "🌸"),
+            "finish-sand": () => finishMission(1),
+            "choose-pour": () => { state.water = 1; screens.water(); },
+            "splash-statue": () => feedback("ครูซีบอกว่า ลองเลือกวิธีที่รินน้ำเบา ๆ ดูนะ"),
+            pour: () => { state.water = 2; screens.water(); },
+            "finish-water": () => finishMission(2),
+            "choose-sky": () => { state.friend = true; screens.beach(); },
+            "choose-tree": () => feedback("เพื่อนต้นบอกว่า เราขอดูอยู่ตรงนี้นะ ลองชวนเพื่อนที่อยากเล่นด้วยสิ"),
+            "finish-beach": () => finishMission(3),
+            review: () => showPage("review"),
+            check() {
+                if (selected.size === 3 && missions.every(mission => selected.has(mission.page))) {
+                    showPage("end");
+                    return;
+                }
+                feedback("ลองนึกถึงสิ่งที่ทำที่ลานวัดและชายหาด แล้วเลือกให้ครบ 3 ภาพนะ");
+            },
+            restart() {
+                Object.assign(state, { completed: 0, sand: 0, flag: "", flower: "", water: 0, friend: false });
+                selected.clear();
+                showPage("intro");
+            }
+        };
+
+        function decorate(part, icon) {
+            state[part] = icon;
+            state.sand += 1;
+            screens.sand();
+        }
+
+        game.addEventListener("click", event => {
+            const target = event.target.closest("button[data-action]");
+            if (!target || target.disabled) return;
+            const action = target.dataset.action;
+            if (action.startsWith("select-")) {
+                const id = action.slice("select-".length);
+                if (selected.has(id)) selected.delete(id);
+                else selected.add(id);
+                target.setAttribute("aria-pressed", selected.has(id));
+                return;
+            }
+            actions[action]();
+        });
+
+        showPage("intro");
+        sound.click();
+
+    </script>
+</body>
+
+</html>

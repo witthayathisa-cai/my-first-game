@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="th">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <title>เกมจับคู่ภาพปัจจุบันกับภาพอดีต | วัดคู่ชุมชน</title>
+    <style>
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            min-height: 100svh;
+            font-family: Tahoma, "Noto Sans Thai", sans-serif;
+            color: #142a46;
+            background: #bce2fb url('assets/bg1part1.png') center/cover fixed
+        }
+
+        body:before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(#eaf6ffb8, #eff8ff8a 55%, #183451b0);
+            z-index: -1
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer
+        }
+
+        button:disabled {
+            cursor: default
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        [hidden] {
+            display: none !important
+        }
+
+        :focus-visible {
+            outline: 4px solid #f59e0b;
+            outline-offset: 4px
+        }
+
+        .page {
+            width: min(1180px, 100%);
+            margin: auto;
+            padding: 28px 24px 24px
+        }
+
+        .top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap
+        }
+
+        .eyebrow {
+            font-size: 12px;
+            letter-spacing: .06em;
+            color: #365591;
+            font-weight: bold;
+            margin: 0 0 8px
+        }
+
+        h1 {
+            font-size: clamp(24px, 3.1vw, 38px);
+            margin: 0;
+            line-height: 1.45
+        }
+
+        h1 span {
+            color: #e11d48
+        }
+
+        .subtitle {
+            line-height: 1.7;
+            margin: 10px 0 20px
+        }
+
+        .pill {
+            background: #fff;
+            padding: 12px 20px;
+            border: 1px solid #bbd8f0;
+            border-radius: 999px;
+            font-weight: bold;
+            color: #274d91;
+            white-space: nowrap
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(230px, 1.2fr);
+            gap: 20px;
+            align-items: stretch
+        }
+
+        .column {
+            min-width: 0
+        }
+
+        .column h2 {
+            font-size: 20px;
+            margin: 0 0 12px;
+            text-align: center
+        }
+
+        .column.past h2 {
+            color: #9d174d
+        }
+
+        .cards {
+            display: grid;
+            gap: 14px
+        }
+
+        .card {
+            width: 100%;
+            display: block;
+            text-align: left;
+            padding: 0;
+            background: #f8fcff;
+            border: 3px solid #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 5px 16px #18345120;
+            overflow: hidden;
+            color: #16324b;
+            transition: transform .18s, border-color .18s, box-shadow .18s;
+            position: relative
+        }
+
+        .picture {
+            height: clamp(100px, 14vw, 160px);
+            background: #dcebf7;
+            position: relative;
+            display: grid;
+            place-items: center;
+            overflow: hidden
+        }
+
+        .picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            position: absolute;
+            inset: 0
+        }
+
+        .placeholder {
+            text-align: center;
+            padding: 12px;
+            color: #4d6b85;
+            font-size: 12px;
+            line-height: 1.7
+        }
+
+        .placeholder b {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 4px
+        }
+
+        .caption {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 10px 12px;
+            min-height: 48px;
+            font-size: 13px;
+            line-height: 1.5
+        }
+
+        .badge {
+            display: grid;
+            place-items: center;
+            min-width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #e1edff;
+            color: #274d91;
+            font-weight: bold
+        }
+
+        .past .badge {
+            background: #fce7f3;
+            color: #9d174d
+        }
+
+        .card.selected {
+            border-color: #f472b6;
+            box-shadow: 0 0 0 3px #f472b64d;
+            transform: translateY(-3px)
+        }
+
+        .card.matched {
+            border-color: #059669
+        }
+
+        .card.matched:after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            border-radius: 50%;
+            background: #047857;
+            color: white;
+            width: 29px;
+            height: 29px;
+            display: grid;
+            place-items: center;
+            font-weight: bold
+        }
+
+        .card.wrong {
+            border-color: #e11d48
+        }
+
+        .explanation {
+            border: 1px solid #fff;
+            background: #f9fcfff2;
+            box-shadow: 0 8px 24px #1834511a;
+            border-radius: 22px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px
+        }
+
+        .explanation h2 {
+            font-size: 21px;
+            margin: 0
+        }
+
+        .explanation p {
+            font-size: 15px;
+            line-height: 1.9;
+            margin: 0
+        }
+
+        .status {
+            border-radius: 12px;
+            background: #eaf3ff;
+            padding: 12px 14px;
+            line-height: 1.7;
+            font-size: 14px
+        }
+
+        .status.success {
+            background: #dcfce7;
+            color: #166534
+        }
+
+        .status.error {
+            background: #fff1f2;
+            color: #be123c
+        }
+
+        .learned {
+            display: grid;
+            gap: 12px
+        }
+
+        .learned article {
+            padding-top: 12px;
+            border-top: 1px solid #d5e4ef
+        }
+
+        .learned h3 {
+            margin: 0 0 6px;
+            font-size: 15px;
+            color: #be123c
+        }
+
+        .learned article p {
+            font-size: 13px
+        }
+
+        .complete {
+            padding: 16px;
+            background: #dcfce7;
+            border-radius: 14px;
+            color: #166534
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 18px
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            min-height: 46px;
+            padding: 12px 20px;
+            border: 1px solid #b9d6f1;
+            background: #fff;
+            border-radius: 999px;
+            font-weight: bold;
+            box-shadow: 0 3px 12px #1834511a
+        }
+
+        .primary {
+            background: #e11d48;
+            color: #fff;
+            border-color: #e11d48
+        }
+
+        .setup {
+            margin-top: 16px;
+            border: 1px solid #c4dbef;
+            border-radius: 14px;
+            padding: 12px 16px;
+            background: #f5faffeb;
+            font-size: 13px;
+            line-height: 1.7
+        }
+
+        .setup summary {
+            cursor: pointer;
+            font-weight: bold
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 12px
+        }
+
+        .upload-grid label {
+            display: grid;
+            gap: 6px
+        }
+
+        .upload-grid input {
+            max-width: 100%;
+            font-size: 12px
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            background: #10264199;
+            backdrop-filter: blur(6px);
+            z-index: 20;
+            padding: 20px;
+            overflow: auto
+        }
+
+        .dialog {
+            width: min(590px, 100%);
+            padding: clamp(24px, 5vw, 42px);
+            max-height: calc(100svh - 40px);
+            overflow: auto;
+            background: #f8fcff;
+            border: 1px solid #fff;
+            border-radius: 26px;
+            box-shadow: 0 25px 80px #10233e66
+        }
+
+        .dialog h2 {
+            font-size: 29px;
+            color: #e11d48;
+            margin: 10px 0 16px
+        }
+
+        .dialog p {
+            font-size: 18px;
+            line-height: 1.95;
+            margin: 0 0 24px
+        }
+
+        .dialog .tip {
+            font-size: 14px;
+            background: #eaf3ff;
+            border-radius: 12px;
+            padding: 12px 16px
+        }
+
+        #intro #rules>p:first-child {
+            margin-bottom: 8px;
+        }
+
+        #intro #rules ol {
+            padding-inline-start: 1.5rem;
+            margin: 0 0 16px;
+            line-height: 1.65;
+        }
+
+        #intro #rules li+li {
+            margin-top: 8px;
+        }
+
+        .footnote {
+            font-size: 12px;
+            line-height: 1.7;
+            color: #4b647a;
+            margin: 10px 0 0
+        }
+
+        @media(max-width:800px) {
+            .page {
+                padding: 20px 14px
+            }
+
+            .board {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px
+            }
+
+            .explanation {
+                grid-column: 1/-1;
+                padding: 20px
+            }
+
+            .picture {
+                height: clamp(100px, 25vw, 180px)
+            }
+
+            .column h2 {
+                font-size: 18px
+            }
+
+            .caption {
+                font-size: 12px;
+                padding: 8px
+            }
+
+            .cards {
+                gap: 12px
+            }
+
+            .upload-grid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .pill {
+                padding: 9px 14px;
+                font-size: 13px
+            }
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+            .card {
+                transition: none
+            }
+        }
+
+        .reward-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            background: rgba(16, 38, 65, 0.65);
+            backdrop-filter: blur(6px);
+        }
+
+        .reward-box {
+            width: min(420px, 100%);
+            max-height: 90svh;
+            overflow-y: auto;
+            padding: 32px 24px;
+            border: 3px solid #fbbf24;
+            border-radius: 28px;
+            background: #fffdf5;
+            text-align: center;
+            box-shadow: 0 20px 70px #0004;
+        }
+
+        .reward-trophy {
+            font-size: 100px;
+            line-height: 1.3;
+        }
+
+        .reward-box h2 {
+            margin: 14px 0;
+            color: #be123c;
+            font-size: 28px;
+        }
+
+        .reward-box p {
+            line-height: 1.8;
+            color: #334155;
+        }
+
+        .reward-box .button {
+            margin-top: 14px;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .reward-trophy {
+                animation: trophy-bounce 0.7s ease;
+            }
+
+            @keyframes trophy-bounce {
+                0% {
+                    transform: scale(0.5);
+                }
+
+                55% {
+                    transform: scale(1.2) rotate(-8deg);
+                }
+
+                80% {
+                    transform: scale(0.95) rotate(5deg);
+                }
+
+                100% {
+                    transform: scale(1) rotate(0);
+                }
+            }
+        }
+
+        /* ใช้ฟอนต์เดียวกันทั้งข้อความ การ์ด ปุ่ม และป๊อปอัป */
+        body,
+        body * {
+            font-family: 'Bai Jamjuree', sans-serif !important;
+        }
+
+        .prompt-font,
+        .prompt-font :is(h1, h2, p, span) {
+            font-family: "Prompt", sans-serif;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <main class="page" id="game" inert>
+        <header class="top">
+            <div>
+                <p class="eyebrow">หน่วยที่ 1 · วัดคู่ชุมชน</p>
+                <h1>จับคู่ภาพ <span>กิจกรรมทางวัด ↔ กิจกรรมชุมชน</span></h1>
+            </div>
+            <div class="pill" id="score" aria-label="ความคืบหน้า">จับคู่แล้ว 0 / 3 คู่</div>
+        </header>
+        <p class="subtitle">เลือกภาพปัจจุบัน 1 ใบ แล้วเลือกภาพ กิจกรรมทางวัด ที่สัมพันธ์กันกับ "กิจกรรมชุมชน"
+            เพื่อสำรวจเรื่องราวของวัดกับผู้คน </p>
+        <section class="board" aria-label="กระดานจับคู่ภาพ">
+            <div class="column current">
+                <h2>กิจกรรมทางวัด</h2>
+                <div class="cards" id="currentCards"></div>
+            </div>
+            <div class="column past">
+                <h2>กิจกรรมชุมชน</h2>
+                <div class="cards" id="pastCards"></div>
+            </div>
+            <aside class="explanation" aria-label="คำอธิบายความสัมพันธ์">
+                <p class="eyebrow">วัด · ผู้คน · ชุมชน</p>
+                <h2>เชื่อมภาพ เชื่อมเรื่องราว</h2>
+                <div id="status" class="status" role="status" aria-live="polite">เริ่มจากเลือกภาพปัจจุบันทางซ้าย 1 ใบค่ะ
+                </div>
+                <p id="hint">เมื่อจับคู่ถูก จะมีคำถามชวนคิดปรากฏที่นี่ ลองสังเกตสิ่งที่เปลี่ยนไป
+                    และความสัมพันธ์ที่ยังคงอยู่</p>
+                <div class="learned" id="learned"></div>
+                <div class="complete" id="complete" hidden><strong>จับคู่ครบแล้ว เก่งมากค่ะ!</strong>
+                    <p>วัดกับผู้คนในชุมชนเกี่ยวข้องกันอย่างไร? ลองเล่าจากภาพที่นักเรียนสังเกตเห็นค่ะ</p>
+                </div>
+            </aside>
+        </section>
+        <nav class="actions" aria-label="นำทาง"><a href="index.html" class="button">← กลับหน้าหลัก</a><a
+                href="pattayakrusea1.html" class="button">กลับไปชมบทเรียน</a><button type="button"
+                class="button primary" id="reset">↻ เริ่มเกมใหม่</button></nav>
+        <details class="setup">
+            <summary>สำหรับคุณครู: ใส่ภาพจริงของทั้ง 3 คู่</summary>
+            <p>ขณะนี้เป็นช่องภาพตัวอย่าง กรุณาใส่ภาพปัจจุบันและภาพอดีตของสถานที่หรือกิจกรรมเดียวกัน
+                ภาพที่เลือกด้านล่างใช้ได้เฉพาะหน้านี้ เมื่อรีเฟรชต้องเลือกใหม่ หากต้องการใช้ถาวร ให้วางไฟล์ตามชื่อใน
+                README และปรับข้อมูล PAIRS ในโค้ด</p>
+            <div class="upload-grid" id="uploads"></div>
+            <p class="footnote">ข้อความบนการ์ดและคำถามชวนคิดเป็นแม่แบบ ควรปรับให้ตรงกับภาพจริงก่อนให้นักเรียนเล่น</p>
+        </details>
+    </main>
+    <div class="overlay" id="intro">
+        <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" aria-describedby="rules">
+            <p class="eyebrow">เกมนักสืบชุมชนนาเกลือ</p>
+            <h2 id="dialogTitle">ภารกิจของเกม</h2>
+            <div id="rules">
+                <p><strong>กติกาของเกมนักสืบชุมชนนาเกลือ</strong></p>
+                <ol>
+                    <li><strong>สำรวจวัดเก่า</strong> แตะการ์ดอุโบสถไม้และสระโบสถ์เพื่อเก็บเบาะแส</li>
+                    <li><strong>ตามรอยการค้า</strong> ส่งสินค้าจากตะกร้าของป่าและเรือจากทะเลเข้าตลาดให้ครบทั้ง 2 เส้นทาง
+                    </li>
+                    <li><strong>ไขปริศนาชื่อของนาเกลือ</strong> เปิดอ่านการ์ดคำบอกเล่าให้ครบทั้ง 3 ใบ</li>
+                </ol>
+                <p class="tip">เมื่อเก็บเบาะแสครบในแต่ละด่าน ให้ตอบคำถามให้ถูกเพื่อไปต่อ จากนั้นนำการ์ดทั้ง 3
+                    ใบมาประกอบป้ายประวัติศาสตร์ เลือกวิธีดูแลชุมชน 1 ข้อ แล้วกด “นำเสนอป้ายของฉัน” เพื่อจบเกม</p>
+            </div>
+            <button type="button" class="button" id="playRules">
+                🔊 ฟังกติกา
+            </button>
+
+
+
+            <!-- เพิ่มปุ่มตรงนี้ -->
+            <a class="button primary" id="start" href="./pattayakrusea1-game1.html">
+                เริ่มกันเลย →
+            </a>
+
+            <p id="rulesAudioStatus" role="status" style="font-size:13px; margin:12px 0;">
+            </p>
+        </section>
+    </div>
+    <div class="reward-overlay" id="rewardPopup" hidden>
+        <section class="reward-box" role="dialog" aria-modal="true" aria-labelledby="rewardTitle"
+            aria-describedby="rewardMessage">
+
+            <div class="reward-trophy" aria-hidden="true">🏆</div>
+
+            <h2 id="rewardTitle">เก่งมากค่ะ!</h2>
+
+            <p id="rewardMessage">
+                นักเรียนจับคู่ภาพถูกต้องครบทั้ง 3 คู่แล้ว<br>
+                รับถ้วยรางวัลแห่งการเรียนรู้ไปเลยค่ะ 🎉
+            </p>
+
+            <button type="button" class="button primary" id="closeReward">
+                เรียนรู้สำเร็จ เยี่ยมเลย!
+            </button>
+
+        </section>
+    </div>
+    <script>
+        // แก้ชื่อภาพ ชื่อการ์ด และคำถามให้ตรงกับภาพจริงของแต่ละคู่
+        const PAIRS = [
+            { id: 'learning', title: 'วิถีชีวิตของชุมชน', current: 'assets/pair1-current.jpg', past: 'assets/pair1-past.jpg', explanation: 'จากภาพทั้งสอง นักเรียนพบกิจกรรมการเรียนรู้ใดบ้าง? ผู้คนใช้พื้นที่วัดเพื่อเรียนรู้ร่วมกันอย่างไร?' },
+            { id: 'tradition', title: 'วัดกับประเพณี', current: 'assets/pair2-current.jpg', past: 'assets/pair2-past.jpg', explanation: 'สังเกตผู้คนและกิจกรรมในภาพ ประเพณีเชื่อมความสัมพันธ์ของคนในชุมชนอย่างไร? มีสิ่งใดเปลี่ยนไปหรือยังคงอยู่?' },
+            { id: 'community', title: 'ประเพณีการตักบาตรเทโว', current: 'assets/pair3-current.jpg', past: 'assets/pair3-past.jpg', explanation: 'บรรยากาศ พุทธศาสนิกชนชาวนาเกลือ พัทยา และพื้นที่ใกล้เคียง พาครอบครัวมาร่วมทำบุญตักบาตรกันอย่างเนืองแน่นและคึกคัก ไฮไลต์สำคัญ ถวายข้าวสารอาหารแห้งและเอกลักษณ์ประจำวันออกพรรษาอย่าง "ข้าวต้มหาง" เพื่อสืบสานประเพณีทางพระพุทธศาสนาตามพุทธประวัติ' }
+        ];
+        const status = document.getElementById('status');
+        let selected = null, matched = new Set(), locked = false, timer = null;
+        const temporaryURLs = new Map();
+        function shuffle(items) { const a = [...items]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; } return a; }
+        function feedback(text, kind = '') { status.textContent = text; status.className = 'status' + (kind ? ' ' + kind : ''); }
+        function makeCard(pair, side, index) {
+            const b = document.createElement('button'); b.type = 'button'; b.className = 'card'; b.dataset.pair = pair.id; b.dataset.side = side; b.setAttribute('aria-pressed', 'false');
+            b.setAttribute('aria-label', (side === 'current' ? 'ภาพปัจจุบัน ' : 'ภาพอดีต ') + pair.title);
+            const picture = document.createElement('div'); picture.className = 'picture';
+            const placeholder = document.createElement('div'); placeholder.className = 'placeholder';
+            const symbol = document.createElement('b'); symbol.textContent = side === 'current' ? '▧' : '▤';
+            placeholder.append(symbol, document.createTextNode('ช่องภาพ' + (side === 'current' ? 'ปัจจุบัน' : 'อดีต') + ' · ' + pair.title));
+            picture.append(placeholder);
+            const img = document.createElement('img'); img.alt = pair.title + ' — ' + (side === 'current' ? 'ปัจจุบัน' : 'อดีต');
+            img.addEventListener('error', () => { img.hidden = true; placeholder.hidden = false; });
+            img.addEventListener('load', () => { img.hidden = false; placeholder.hidden = true; });
+            img.src = temporaryURLs.get(pair.id + side) || pair[side]; picture.append(img);
+            const caption = document.createElement('div'); caption.className = 'caption'; const badge = document.createElement('span'); badge.className = 'badge'; badge.textContent = side === 'current' ? String(index + 1) : String.fromCharCode(65 + index);
+            caption.append(badge, document.createTextNode(pair.title)); b.append(picture, caption);
+            b.addEventListener('click', () => choose(b, pair, side)); return b;
+        }
+        let correctSoundContext;
+
+        function playCorrectSound() {
+            try {
+                const AudioClass =
+                    window.AudioContext || window.webkitAudioContext;
+
+                if (!AudioClass) return;
+
+                correctSoundContext ??= new AudioClass();
+
+                correctSoundContext.resume().then(() => {
+                    const ctx = correctSoundContext;
+                    const start = ctx.currentTime + 0.02;
+
+                    // เสียงไล่ระดับแบบเก็บคะแนนในเกม
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+
+                    notes.forEach((frequency, index) => {
+                        const oscillator = ctx.createOscillator();
+                        const gain = ctx.createGain();
+
+                        const time = start + index * 0.09;
+                        const duration = index === 3 ? 0.3 : 0.13;
+
+                        oscillator.type = 'triangle';
+                        oscillator.frequency.setValueAtTime(frequency, time);
+
+                        gain.gain.setValueAtTime(0, time);
+                        gain.gain.linearRampToValueAtTime(0.14, time + 0.01);
+                        gain.gain.exponentialRampToValueAtTime(
+                            0.001,
+                            time + duration
+                        );
+
+                        oscillator.connect(gain);
+                        gain.connect(ctx.destination);
+
+                        oscillator.start(time);
+                        oscillator.stop(time + duration + 0.02);
+                    });
+                }).catch(() => { });
+            } catch (error) {
+                // เกมยังทำงานต่อได้ หากอุปกรณ์ไม่รองรับเสียง
+            }
+        }
+        function choose(button, pair, side) {
+            if (locked || matched.has(pair.id)) return;
+            if (side === 'current') {
+                document.querySelectorAll('.card.selected').forEach(b => { b.classList.remove('selected'); b.setAttribute('aria-pressed', 'false'); });
+                selected = { id: pair.id, button }; button.classList.add('selected'); button.setAttribute('aria-pressed', 'true'); feedback('เลือกภาพอดีตที่สัมพันธ์กับ “' + pair.title + '” ค่ะ'); return;
+            }
+            if (!selected) { feedback('เลือกภาพปัจจุบันทางซ้ายก่อนนะคะ'); return; }
+            if (selected.id === pair.id) {
+                matched.add(pair.id);
+                // เล่นเสียงเมื่อตอบถูก
+                // คู่สุดท้ายใช้เสียงฉลองถ้วยรางวัลที่เพิ่มไว้แล้ว
+                if (matched.size < PAIRS.length) {
+                    playCorrectSound();
+                }
+                for (const b of document.querySelectorAll('.card')) if (b.dataset.pair === pair.id) { b.classList.remove('selected'); b.classList.add('matched'); b.setAttribute('aria-pressed', 'false'); b.disabled = true; }
+                selected = null; feedback('จับคู่ถูกต้องค่ะ! อ่านคำถามชวนคิด แล้วลองอธิบายจากภาพนะคะ', 'success');
+                document.getElementById('score').textContent = 'จับคู่แล้ว ' + matched.size + ' / ' + PAIRS.length + ' คู่';
+                document.getElementById('hint').hidden = true;
+                const article = document.createElement('article'), h = document.createElement('h3'), p = document.createElement('p'); h.textContent = pair.title; p.textContent = pair.explanation; article.append(h, p); document.getElementById('learned').prepend(article);
+                if (matched.size === PAIRS.length) { showReward(); document.getElementById('complete').hidden = false; feedback('ภารกิจสำเร็จ! จับคู่ครบทั้ง 3 คู่แล้วค่ะ', 'success'); document.getElementById('reset').focus({ preventScroll: true }); }
+                else document.querySelector('#currentCards .card:not(:disabled)')?.focus({ preventScroll: true });
+            } else {
+                locked = true; button.classList.add('wrong'); feedback('คู่นี้ยังไม่สัมพันธ์กัน ลองสังเกตรายละเอียด แล้วเลือกใหม่ค่ะ', 'error');
+                timer = setTimeout(() => { button.classList.remove('wrong'); locked = false; timer = null; }, 700);
+            }
+        }
+        // จำลำดับการ์ดของรอบก่อน แยกสองฝั่ง
+        let previousCurrentOrder = [...PAIRS];
+        let previousPastOrder = [...PAIRS];
+
+        function shuffleNewPositions(previousOrder) {
+            if (previousOrder.length < 2) return [...previousOrder];
+
+            // สุ่มจนทุกใบย้ายออกจากตำแหน่งเดิม
+            for (let attempt = 0; attempt < 50; attempt++) {
+                const newOrder = shuffle(previousOrder);
+
+                const everyCardMoved = newOrder.every(
+                    (card, index) => card.id !== previousOrder[index].id
+                );
+
+                if (everyCardMoved) return newOrder;
+            }
+
+            // สำรอง: หมุนลำดับเพื่อรับประกันว่าทุกใบย้ายตำแหน่ง
+            const shift =
+                1 + Math.floor(Math.random() * (previousOrder.length - 1));
+
+            return [
+                ...previousOrder.slice(shift),
+                ...previousOrder.slice(0, shift)
+            ];
+        }
+        function reset() {
+            if (timer) clearTimeout(timer); timer = null; locked = false; selected = null; matched = new Set();
+            const current = document.getElementById('currentCards'), past = document.getElementById('pastCards'); current.replaceChildren(); past.replaceChildren();
+            // สุ่มลำดับใหม่ทั้งสองฝั่ง
+            previousCurrentOrder = shuffleNewPositions(previousCurrentOrder);
+            previousPastOrder = shuffleNewPositions(previousPastOrder);
+
+            // แสดงการ์ดตามตำแหน่งใหม่
+            previousCurrentOrder.forEach((pair, index) => {
+                current.append(makeCard(pair, 'current', index));
+            });
+
+            previousPastOrder.forEach((pair, index) => {
+                past.append(makeCard(pair, 'past', index));
+            });
+            document.getElementById('learned').replaceChildren(); document.getElementById('hint').hidden = false; document.getElementById('complete').hidden = true; document.getElementById('score').textContent = 'จับคู่แล้ว 0 / ' + PAIRS.length + ' คู่'; feedback('เริ่มจากเลือกภาพปัจจุบันทางซ้าย 1 ใบค่ะ');
+        }
+        PAIRS.forEach((pair, index) => { for (const side of ['current', 'past']) { const label = document.createElement('label'); label.textContent = 'คู่ที่ ' + (index + 1) + ' · ' + (side === 'current' ? 'ปัจจุบัน' : 'อดีต'); const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*'; input.addEventListener('change', () => { const file = input.files[0]; if (!file) return; const key = pair.id + side; if (temporaryURLs.has(key)) URL.revokeObjectURL(temporaryURLs.get(key)); temporaryURLs.set(key, URL.createObjectURL(file)); reset(); }); label.append(input); document.getElementById('uploads').append(label); } });
+        document.getElementById('reset').addEventListener('click', () => { reset(); document.querySelector('#currentCards .card').focus({ preventScroll: true }); });
+        reset();
+        const rewardPopup = document.getElementById('rewardPopup');
+        const closeReward = document.getElementById('closeReward');
+
+        let celebrationAudio;
+        let rewardPreviousFocus;
+
+        function playCelebration() {
+            try {
+                const AudioClass =
+                    window.AudioContext || window.webkitAudioContext;
+
+                if (!AudioClass) return;
+
+                celebrationAudio ??= new AudioClass();
+
+                celebrationAudio.resume().then(() => {
+                    const ctx = celebrationAudio;
+                    const startTime = ctx.currentTime + 0.05;
+
+                    // ทำนองฉลองสั้น ๆ
+                    const notes = [523.25, 659.25, 783.99, 1046.5];
+
+                    notes.forEach((frequency, index) => {
+                        const oscillator = ctx.createOscillator();
+                        const volume = ctx.createGain();
+
+                        const time = startTime + index * 0.16;
+                        const duration = index === notes.length - 1 ? 0.65 : 0.25;
+
+                        oscillator.type = 'triangle';
+                        oscillator.frequency.value = frequency;
+
+                        volume.gain.setValueAtTime(0, time);
+                        volume.gain.linearRampToValueAtTime(0.2, time + 0.02);
+                        volume.gain.exponentialRampToValueAtTime(
+                            0.001,
+                            time + duration
+                        );
+
+                        oscillator.connect(volume);
+                        volume.connect(ctx.destination);
+
+                        oscillator.start(time);
+                        oscillator.stop(time + duration);
+                    });
+                }).catch(() => { });
+            } catch (error) {
+                // ป๊อปอัปยังแสดงได้ แม้อุปกรณ์ไม่อนุญาตให้เล่นเสียง
+            }
+        }
+
+        function showReward() {
+            rewardPreviousFocus = document.activeElement;
+
+            document.getElementById('game').inert = true;
+            rewardPopup.hidden = false;
+
+            closeReward.focus({ preventScroll: true });
+            playCelebration();
+        }
+
+        function hideReward() {
+            rewardPopup.hidden = true;
+            document.getElementById('game').inert = false;
+
+            rewardPreviousFocus?.focus({ preventScroll: true });
+        }
+
+        closeReward.addEventListener('click', hideReward);
+
+        rewardPopup.addEventListener('keydown', event => {
+            if (event.key === 'Escape') {
+                hideReward();
+            }
+
+            if (event.key === 'Tab') {
+                event.preventDefault();
+                closeReward.focus();
+            }
+        });
+    </script>
+    <audio id="rulesVoice" src="assets/SoundPopup-2.mp3" preload="auto">
+    </audio>
+
+    <script>
+        (() => {
+            const voice = document.getElementById('rulesVoice');
+            const playButton = document.getElementById('playRules');
+            const startLink = document.getElementById('start');
+            const popup = document.getElementById('intro');
+            const message = document.getElementById('rulesAudioStatus');
+
+            function updateRulesAudio() {
+                const playing = !voice.paused && !voice.ended;
+                playButton.textContent = playing ? '⏸ หยุดเสียง' : '▶ ฟังกติกา';
+                message.textContent = playing ? 'กำลังฟังเสียงบรรยายกติกา' : '';
+            }
+
+            async function playRules() {
+                try {
+                    await voice.play();
+                } catch (error) {
+                    if (error.name === 'AbortError') return;
+                    updateRulesAudio();
+                    message.textContent = error.name === 'NotAllowedError'
+                        ? 'กด “ฟังกติกา” เพื่อฟังเสียงบรรยายค่ะ'
+                        : 'เปิดเสียงกติกาไม่ได้ กรุณาตรวจสอบ assets/SoundPopup-2.mp3';
+                }
+            }
+
+            for (const event of ['play', 'pause', 'ended']) {
+                voice.addEventListener(event, updateRulesAudio);
+            }
+
+            playButton.addEventListener('click', () => {
+                if (voice.paused || voice.ended) playRules();
+                else voice.pause();
+            });
+
+            startLink.addEventListener('click', () => voice.pause());
+            window.addEventListener('pagehide', () => voice.pause());
+
+            popup.addEventListener('keydown', event => {
+                if (event.key !== 'Tab') return;
+                event.preventDefault();
+                (document.activeElement === playButton ? startLink : playButton).focus();
+            });
+
+            playButton.focus({ preventScroll: true });
+            updateRulesAudio();
+            playRules();
+        })();
+    </script>
+</body>
+
+</html>

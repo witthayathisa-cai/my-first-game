@@ -1,0 +1,1141 @@
+<!doctype html>
+<html lang="th">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>นักสืบชุมชนนาเกลือ</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=K2D:wght@700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;800&display=swap">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #132d35;
+      --navy: #113743;
+      --gold: #ffd369;
+      --cream: #fff8e8;
+      --green: #13604b
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: #f4eddf;
+      color: var(--ink);
+      font: 16px/1.55 system-ui, Tahoma, sans-serif
+    }
+
+    header,
+    footer {
+      background: var(--navy);
+      color: white
+    }
+
+    header .wrap,
+    footer .wrap {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: .85rem 0
+    }
+
+    .wrap {
+      width: min(1100px, 94%);
+      margin: auto
+    }
+
+    header strong {
+      font-size: clamp(1.15rem, 3vw, 1.6rem)
+    }
+
+    main {
+      padding: 1.25rem 0 2rem;
+      min-height: 68vh
+    }
+
+    h1,
+    h2,
+    p {
+      margin: 0 0 .65rem
+    }
+
+    h1 {
+      font-size: clamp(1.65rem, 5vw, 2.55rem);
+      line-height: 1.25
+    }
+
+    button {
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid #ad9c79;
+      border-radius: 14px;
+      padding: .65rem 1rem;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 44px
+    }
+
+    button:hover:not(:disabled) {
+      filter: brightness(.94)
+    }
+
+    button:disabled {
+      cursor: default;
+      opacity: .68
+    }
+
+    button:focus-visible {
+      outline: 3px solid #146be4;
+      outline-offset: 3px
+    }
+
+    .primary {
+      background: var(--green);
+      color: white;
+      border-color: var(--green)
+    }
+
+    .gold {
+      background: var(--gold);
+      border-color: #a07016
+    }
+
+    .panel {
+      background: #fffdf5;
+      border: 1px solid #ded1b7;
+      border-radius: 20px;
+      padding: clamp(1rem, 3vw, 1.6rem);
+      margin-top: 1rem
+    }
+
+    .scene {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      background: #b8dbd8;
+      margin: 1rem 0
+    }
+
+    .scene img {
+      display: block;
+      width: 100%;
+      height: auto
+    }
+
+    .map img {
+      aspect-ratio: 2.75;
+      object-fit: cover
+    }
+
+    .stage-art {
+      max-width: 780px;
+      margin-inline: auto
+    }
+
+    .pin {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      background: var(--gold);
+      border: 2px solid #73501d;
+      border-radius: 50%;
+      width: 49px;
+      height: 49px;
+      padding: 0;
+      box-shadow: 0 0 0 5px #ffe88690
+    }
+
+    .pin:disabled {
+      background: #f3ebe0;
+      opacity: 1;
+      box-shadow: none
+    }
+
+    .pin.found {
+      background: #e1f7de;
+      box-shadow: none
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+      gap: .75rem
+    }
+
+    .grid button {
+      text-align: left
+    }
+
+    .actions {
+      display: flex;
+      gap: .55rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: .75rem
+    }
+
+    .choice {
+      display: block;
+      margin: .55rem 0;
+      text-align: left;
+      width: 100%
+    }
+
+    .status {
+      min-height: 1.55em;
+      margin-top: .6rem;
+      font-weight: 700;
+      color: #245949
+    }
+
+    .eyebrow {
+      color: #69532f;
+      font-weight: 750
+    }
+
+    .meter {
+      display: grid;
+      gap: .15rem;
+      font-size: .85rem
+    }
+
+    progress {
+      accent-color: #f4bd46;
+      width: 100%
+    }
+
+    .pill {
+      border-radius: 999px;
+      background: #f4dfb3;
+      padding: .25rem .7rem;
+      font-weight: 750
+    }
+
+    .slot {
+      background: #f8efdb;
+      border: 1px dashed #9a8054;
+      border-radius: 12px;
+      padding: .65rem
+    }
+
+    .selected {
+      outline: 3px solid #157658;
+      outline-offset: 2px
+    }
+
+    .small {
+      font-size: .87rem;
+      color: #514c40
+    }
+
+    dialog {
+      width: min(540px, 92vw);
+      border: 1px solid #ad9c79;
+      border-radius: 20px;
+      background: var(--cream);
+      color: var(--ink);
+      padding: 1.4rem
+    }
+
+    dialog::backdrop {
+      background: #0c232bb3
+    }
+
+    .routes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .65rem
+    }
+
+    .routes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .65rem;
+    }
+
+    .routes button {
+      touch-action: manipulation
+    }
+
+    @media(max-width:530px) {
+      .map img {
+        aspect-ratio: 1.85;
+        object-fit: fill
+      }
+
+      header .wrap {
+        gap: .4rem
+      }
+
+      .pin {
+        width: 44px;
+        height: 44px
+      }
+
+      .routes {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .footer-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: .65rem 1rem;
+      border: 1px solid #ad9c79;
+      border-radius: 14px;
+      background: var(--cream);
+      color: var(--ink);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .footer-link:focus-visible {
+      outline: 3px solid #ffd369;
+      outline-offset: 3px;
+    }
+
+    .map img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: auto;
+      object-fit: contain;
+    }
+
+    .scene.map {
+      width: 75%;
+      margin-inline: auto;
+    }
+
+    body {
+      font-family: "Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif;
+      line-height: 1.6;
+    }
+
+    h1,
+    h2,
+    header strong {
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    button,
+    .footer-link {
+      font-family: inherit;
+      font-weight: 700;
+    }
+
+    .scene.map+.grid {
+      width: 75%;
+      margin-inline: auto;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    @media (max-width: 600px) {
+      .scene.map+.grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .map-heading {
+      text-align: center;
+    }
+
+    .map-caption,
+    .map-actions #start,
+    .map-actions #restart {
+      font-family: inherit;
+      font-size: 0.8125rem;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .map-actions {
+      width: 75%;
+      margin-inline: auto;
+      justify-content: space-between;
+    }
+
+    footer .wrap {
+      width: min(825px, 70.5%);
+      margin-inline: auto;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+    }
+
+    footer #notebook {
+      justify-self: start;
+    }
+
+    footer .footer-link {
+      justify-self: end;
+    }
+
+    footer button,
+    footer .footer-link {
+      font-size: 0.875rem;
+      /* ประมาณ 14px */
+    }
+
+    @media (max-width: 600px) {
+      footer .wrap {
+        display: flex;
+        flex-wrap: wrap;
+      }
+    }
+
+    .map-heading .eyebrow {
+      margin-bottom: 2px;
+      line-height: 1.1;
+    }
+
+    .map-heading h1 {
+      margin-top: 0;
+    }
+
+    /* ธีมปุ่มสีน้ำตาลขอบทอง */
+    button:not(.pin),
+    footer .footer-link {
+      background: linear-gradient(to bottom,
+          #b67860 0%,
+          #a15d47 48%,
+          #733720 100%);
+      border: 2px solid #efbf64;
+      border-radius: 999px;
+      color: #fff8e8;
+      font-family: inherit;
+      font-weight: 700;
+      text-align: center;
+      text-shadow: 0 1px 1px #572d1d;
+      box-shadow:
+        inset 0 1px 0 #ffd99a,
+        inset 0 -2px 0 #67311e,
+        0 2px 0 #67311e;
+    }
+
+    /* ให้ปุ่มหลักเด่นขึ้นเล็กน้อย */
+    button.primary:not(.pin) {
+      background: linear-gradient(to bottom, #ae6046, #74351e);
+      border-color: #ffcf70;
+    }
+
+    button:not(.pin):hover:not(:disabled),
+    footer .footer-link:hover {
+      filter: brightness(1.12);
+    }
+
+    button:not(.pin):active:not(:disabled),
+    footer .footer-link:active {
+      transform: translateY(1px);
+    }
+
+    /* หมายเลขด่านบนแผนที่ใช้สีเดียวกัน แต่ยังเป็นวงกลม */
+    button.pin:not(:disabled) {
+      background: linear-gradient(to bottom, #b67860, #733720);
+      border: 2px solid #efbf64;
+      color: #fff8e8;
+      text-shadow: 0 1px 1px #572d1d;
+    }
+
+    /* ให้หมุดที่สำรวจแล้วแยกออกจากหมุดที่ยังไม่สำรวจ */
+    button.pin.found:not(:disabled) {
+      background: #f4d38b;
+      color: #572d1d;
+      text-shadow: none;
+    }
+
+    body {
+      background:
+        linear-gradient(rgba(244, 237, 223, 0.65), rgba(244, 237, 223, 0.65)),
+        url("./bg.jpg") center / cover no-repeat,
+        #f4eddf;
+    }
+
+    /* เปลี่ยนเฉพาะหมุดหมายเลขบนแผนที่หลัก */
+    .scene.map button.pin[data-stage] {
+      background: radial-gradient(circle at 38% 28%,
+          #fffaf2 0%,
+          #fbe4d9 48%,
+          #e8aa98 77%,
+          #c57b65 100%);
+      border: 2px solid #b87558;
+      border-radius: 50%;
+      color: #573c36;
+      font-weight: 800;
+      text-shadow: none;
+      box-shadow:
+        inset 0 1px 3px #fff8ee,
+        0 3px 0 #a6654c,
+        0 4px 8px #85462355;
+    }
+
+    .scene.map button.pin[data-stage]:disabled {
+      opacity: 0.6;
+    }
+
+    .scene.map button.pin[data-stage] {
+      font-family: "K2D", Tahoma, sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .scene.map button.pin[data-stage] {
+      width: auto;
+      min-width: 72px;
+      height: 44px;
+      padding-inline: 10px;
+      border-radius: 999px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body>footer {
+      margin-top: auto;
+    }
+
+    @media (min-width: 1024px) {
+
+      body>header>.wrap,
+      main#screen.wrap,
+      body>footer>.wrap {
+        width: min(94%, 1280px);
+      }
+
+      #screen>.scene.map,
+      #screen>.scene.map+.grid,
+      #screen>.map-actions {
+        width: 100%;
+      }
+
+      #screen>.scene.map img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: auto;
+      }
+    }
+
+    /* ปุ่มเมนูแบบภาพอ้างอิง */
+    body button:not(.pin),
+    body button.primary:not(.pin),
+    body footer .footer-link {
+      background: #aa947c;
+      border: 3px solid #fff8e9;
+      border-radius: 16px;
+      box-shadow:
+        inset 0 0 0 2px #c2ad96,
+        inset 0 -4px 0 #88725f,
+        0 3px 0 #73604f;
+      color: #007d90;
+      font-weight: 800;
+      text-align: center;
+      text-shadow: 0 2px 1px #5e5148;
+      -webkit-text-stroke: px #0ee28a;
+      paint-order: stroke fill;
+    }
+
+    body button:not(.pin):hover:not(:disabled),
+    body footer .footer-link:hover {
+      background: #bba58e;
+    }
+
+    #screen>.scene.map>img.map-detective {
+      position: absolute;
+      left: -3.5%;
+      bottom: 1%;
+      width: auto;
+      height: 64%;
+      aspect-ratio: auto;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    .map-heading .map-title-image {
+      display: block;
+      width: min(46%, 260px);
+      height: auto;
+      margin-inline: auto;
+    }
+
+    .map-heading .eyebrow,
+    .map-heading .map-caption {
+      margin: 0;
+    }
+
+    .map-heading h1 {
+      margin: -8px 0 -6px;
+    }
+
+    body,
+    .scene.map button.pin[data-stage] {
+      font-family: "Prompt", Tahoma, sans-serif;
+    }
+
+    button,
+    .footer-link {
+      font-family: inherit;
+    }
+
+    .scene.stage-art button.pin:is([data-clue="wood"], [data-clue="pond"]) {
+      width: min(clamp(112.32px, 25.74vw, 177.84px), 27.3%);
+      height: auto;
+      aspect-ratio: 2 / 3;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent var(--clue-card) center / contain no-repeat;
+      box-shadow: none;
+      font-size: 0;
+      text-shadow: none;
+      top: 15% !important;
+
+    }
+
+    .scene.stage-art button.pin[data-clue="pond"] {
+      --clue-card: url("./assets/pond-clue-card.png");
+      left: 54% !important;
+      transform: translateX(-50%) rotate(-10deg);
+    }
+
+    .scene.stage-art button.pin[data-clue="wood"] {
+      --clue-card: url("./assets/temple-clue-card.png");
+      left: 81% !important;
+      transform: translateX(-50%) rotate(10deg);
+    }
+
+    .actions.temple-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .small.temple-note {
+      text-align: center;
+    }
+
+    .stage-title-banner {
+      display: block;
+      width: min(228px, 60%);
+      height: auto;
+    }
+
+    /* ช่องว่างระหว่าง “ด่าน 1” กับป้าย */
+    .eyebrow:has(+ h1 > .stage-title-banner) {
+      margin-bottom: 0;
+    }
+
+    /* ชดเชยขอบโปร่งใสด้านบนและล่างของภาพป้าย */
+    h1:has(> .stage-title-banner) {
+      margin-top: max(-14px, -3.7%);
+      margin-bottom: max(-14px, -3.7%);
+      margin-block: max(-8.4px, -2.22%);
+    }
+
+    /* จัดข้อความเหนือและใต้ป้ายให้อยู่กึ่งกลาง */
+    .eyebrow:has(+ h1 > .stage-title-banner),
+    h1:has(> .stage-title-banner)+p {
+      text-align: center;
+    }
+
+    /* จัดภาพป้ายให้อยู่กึ่งกลาง */
+    .stage-title-banner {
+      margin-inline: auto;
+    }
+
+    .eyebrow:has(+ h1 > .stage-title-banner) {
+      font-size: 200%;
+    }
+
+    .routes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .65rem;
+    }
+
+    .routes>.route-group {
+      display: grid;
+      grid-template-rows: repeat(2, 1fr);
+      gap: .5rem;
+      min-width: 0;
+      padding: .5rem;
+      border: 2px solid #80664c;
+      border-radius: 18px;
+    }
+
+    .routes>.route-group>button {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .stage-art+.routes {
+      width: 100%;
+      max-width: 780px;
+      margin-inline: auto;
+    }
+
+    .routes .route-group>button,
+    #screen:has(.routes) #challenge {
+      color: #21170f;
+      text-shadow: none;
+      -webkit-text-stroke: 0.6px #fff4df;
+      paint-order: stroke fill;
+    }
+
+    #screen:has(.routes) .actions {
+      justify-content: center;
+    }
+
+    #screen:has(.routes) .actions+.small {
+      text-align: center;
+    }
+
+    #routeHint {
+      width: 100%;
+      max-width: 780px;
+      margin-inline: auto;
+      text-align: center;
+    }
+
+    .panel:has(#backClues) h2,
+    .panel:has(#backClues) .choice,
+    #backClues {
+      font-family: "Prompt", Tahoma, sans-serif;
+      line-height: 1.6;
+      text-shadow: none;
+      -webkit-text-stroke: 0;
+    }
+
+    .panel:has(#backClues) h2 {
+      color: #15313E;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .panel:has(#backClues) .choice,
+    #backClues {
+      color: #21170F;
+      font-weight: 500;
+    }
+
+    .panel:has(#backClues) .choice {
+      font-size: 17px;
+      text-align: left;
+    }
+
+    #backClues {
+      font-size: 16px;
+    }
+
+    /* การ์ดเบาะแสและปุ่มตอบคำถามในด่าน 3 */
+    #screen:has(.grid button[data-clue="salt"]) .grid button[data-clue],
+    #screen:has(.grid button[data-clue="salt"]) #challenge {
+      font-family: "Prompt", Tahoma, sans-serif;
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.6;
+      color: #21170F;
+      text-shadow: none;
+      -webkit-text-stroke: 0;
+    }
+
+    .temple-actions #challenge {
+      font-family: "Prompt", Tahoma, sans-serif;
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.6;
+      color: #21170F;
+      text-shadow: none;
+      -webkit-text-stroke: 0;
+    }
+
+    /* ใช้เฉพาะหน้าสำรวจและหน้าคำถามของด่าน 1–3 */
+    #screen:has(> .actions > #challenge, > .panel #backClues) {
+      font-family: "Prompt", Tahoma, sans-serif;
+      font-weight: 500;
+      line-height: 1.65;
+      color: #21170F;
+    }
+
+    #screen:has(> .actions > #challenge, > .panel #backClues)>h1,
+    #screen>.panel:has(#backClues)>h2 {
+      color: #15313E;
+      font-weight: 600;
+    }
+
+    #screen>.panel:has(#backClues)>h2 {
+      font-size: clamp(20px, 3vw, 22px);
+      line-height: 1.5;
+    }
+
+    #screen:has(> .actions > #challenge, > .panel #backClues) button:not(.pin) {
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.6;
+      color: #21170F;
+      text-shadow: none;
+      -webkit-text-stroke: 0;
+    }
+
+    #screen>.panel:has(#backClues) .choice {
+      text-align: left;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap"><strong>🔎 นักสืบชุมชนนาเกลือ</strong>
+      <div class="meter"><span id="prideLabel"></span><progress id="pride" max="100"
+          aria-label="ความภาคภูมิใจชุมชน"></progress></div><span id="stars"></span><button id="sound"
+        aria-pressed="false">🔇 เปิดเพลงพื้นหลัง</button>
+    </div>
+  </header>
+  <main class="wrap" id="screen" tabindex="-1"></main>
+  <footer>
+    <div class="wrap">
+      <button id="notebook">📖 สมุดบันทึกนักสืบ</button>
+      <button id="home">🗺 กลับแผนที่</button>
+      <a class="footer-link" href="./pattayakrusea1.html">← กลับหน้าหลัก</a>
+    </div>
+  </footer>
+  <dialog id="modal" aria-labelledby="modalTitle">
+    <h2 id="modalTitle"></h2>
+    <div id="modalBody"></div>
+    <form method="dialog" class="actions"><button autofocus>ปิด</button></form>
+  </dialog>
+  <audio id="bgMusic" src="./assets/spy-28109.mp3" loop preload="auto"></audio>
+  <script>
+    const art = { map: "./แผนที่หลัก1.png", temple: "./assets/ด่านที่1 วัดสว่างฟ้า.png", trade: "./ด่านที่ 2 จุดผ่านทางการค้า.png" };
+    const titles = ["ส่องร่องรอยวัดเก่า", "สายน้ำและชุมชน", "นาเกลือและการค้า"];
+    const clues = {
+      wood: ["อุโบสถไม้", "ในบทละคร คุณปู่เล่าว่าอุโบสถเดิมเป็นเรือนไม้ทรงไทย รูปแบบและวัสดุเป็นเบาะแสให้ศึกษาประวัติของอาคารต่อ"],
+      pond: ["สระโบสถ์", "ในบทละคร คุณปู่เล่าว่าสระโบสถ์เกี่ยวข้องกับพิธีกรรมในอดีต ลองคิดว่าสถานที่นี้ช่วยให้เราเข้าใจการใช้พื้นที่วัดอย่างไร"],
+      land: ["เส้นทางบก", "ตะกร้าของป่าเดินทางจากทางบกมาสู่ตลาด"],
+      sea: ["เส้นทางน้ำ", "เรือจากทะเลนำสินค้ามาพบกับสินค้าจากทางบกที่ตลาด"],
+      salt: ["🧂 การทำนาเกลือ", "คำบอกเล่าว่าชื่อชุมชนมาจากอาชีพทำนาเกลือ"],
+      forest: ["🌳 บ้านน่ากลัว", "คำบอกเล่าว่าชื่ออาจเพี้ยนมาจากคำว่า ‘บ้านน่ากลัว’ ที่โยงกับสภาพพื้นที่ในอดีต"],
+      sail: ["⛵ น่ากั๋ว", "ในบทละครมีคำบอกเล่าเชื่อมเสียง ‘น่ากั๋ว’ กับใบเรือและวิถีการเดินเรือค้า"]
+    };
+    const questions = {
+      1: { prompt: "จากเบาะแสที่พบ เราควรเขียนป้ายแนะนำวัดว่าอย่างไร?", options: ["เรารู้ปีที่สร้างวัดแน่นอนจากรูปแบบอุโบสถ", "มีข้อสันนิษฐานว่าวัดสร้างสมัยปลายอยุธยา และควรตรวจหลักฐานอื่นประกอบ", "เรื่องเล่า ‘วัดน่ากลัว’ บอกปีที่สร้างวัดได้"], answer: 1, hint: "คุณปู่ถามว่า เบาะแสบอกปีได้แน่นอน หรือช่วยให้คาดช่วงเวลาได้?" },
+      2: { prompt: "ทำไมตำแหน่งตลาดบนแผนที่จึงเหมาะกับการค้าขาย?", options: ["เรือจากทะเลและสินค้าจากทางบกเดินทางมาพบกันได้", "ตลาดอยู่ห่างจากทั้งเส้นทางบกและทางน้ำ", "สินค้าทั้งหมดมาจากแหล่งเดียวกัน"], answer: 0, hint: "ลองมองเส้นทางทั้งสองบนแผนที่อีกครั้ง ทั้งคู่มาบรรจบที่ไหน?" },
+      3: { prompt: "เราควรเล่าที่มาของชื่อ ‘นาเกลือ’ อย่างไร?", options: ["ชื่อมาจากการทำนาเกลือแน่นอน เพราะฟังดูตรงตัว", "ชื่อมาจาก ‘บ้านน่ากลัว’ แน่นอน เพราะเรื่องนี้น่าจดจำ", "มีคำบอกเล่าหลายแบบ และยังต้องตรวจสอบข้อมูลเพิ่มเติม"], answer: 2, hint: "แต่ละการ์ดเป็นคำบอกเล่า เรามีอะไรยืนยันว่าเรื่องใดเป็นที่มาของชื่อแล้วหรือยัง?" }
+    };
+    const groups = { 1: ["wood", "pond"], 2: ["land", "sea"], 3: ["salt", "forest", "sail"] };
+    const key = "pattayakrusea1-game1-v1";
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem(key) || "{}") || {}; } catch { }
+    const state = {
+      found: new Set(Array.isArray(saved.found) ? saved.found.filter(id => Object.hasOwn(clues, id)) : []),
+      done: Number.isInteger(saved.done) ? Math.min(4, Math.max(0, saved.done)) : 0,
+      selected: Array.isArray(saved.selected) ? saved.selected.filter(id => ["temple", "trade", "oral"].includes(id)) : [],
+      care: ["memory", "clean", "share"].includes(saved.care) ? saved.care : "",
+      sound: saved.sound !== false
+    };
+    const get = id => document.getElementById(id);
+    const screen = get("screen"), modal = get("modal");
+    let view = "map", route = "", challenge = false, ctx;
+    function save() {
+      try { localStorage.setItem(key, JSON.stringify({ ...state, found: [...state.found] })); } catch { }
+    }
+    function stats() {
+      const pride = [0, 25, 50, 75, 100][state.done];
+      get("pride").value = pride;
+      get("prideLabel").textContent = "ความภาคภูมิใจชุมชน " + pride + "%";
+      get("stars").textContent = "⭐ ดาวสะสม " + state.done + " ดวง";
+      get("sound").textContent = state.sound
+        ? "🔊 ปิดเพลงพื้นหลัง"
+        : "🔇 เปิดเพลงพื้นหลัง";
+      get("sound").setAttribute("aria-pressed", state.sound);
+    }
+    function chime() {
+      if (!window.AudioContext) return;
+      try {
+        ctx ||= new AudioContext();
+        ctx.resume().catch(() => { });
+        [523, 659, 784].forEach((pitch, i) => {
+          const tone = ctx.createOscillator(), volume = ctx.createGain(), time = ctx.currentTime + i * .09;
+          tone.frequency.value = pitch; volume.gain.setValueAtTime(.07, time);
+          volume.gain.exponentialRampToValueAtTime(.001, time + .18);
+          tone.connect(volume); volume.connect(ctx.destination); tone.start(time); tone.stop(time + .18);
+        });
+      } catch { }
+    }
+    function openModal(title, body) {
+      get("modalTitle").textContent = title;
+      get("modalBody").innerHTML = body;
+      if (!modal.open) modal.showModal();
+    }
+    function go(next) {
+      view = next; route = ""; challenge = false; render(); screen.focus(); window.scrollTo(0, 0);
+    }
+    function count(stage) { return groups[stage].filter(id => state.found.has(id)).length; }
+    function clueButton(id) {
+      const found = state.found.has(id);
+      return '<button data-clue="' + id + '">' + (found ? '✓ ' : '') + clues[id][0] + '</button>';
+    }
+    function scene(file, alt, extra = "", kind = "stage-art") {
+      return '<div class="scene ' + kind + '"><img src="' + art[file] + '" alt="' + alt + '">' + extra + '</div>';
+    }
+    function map() {
+      const locations = ["วัดสว่างฟ้าพฤฒาราม", "สายน้ำและชุมชน", "นาเกลือและการค้า"];
+      const pins = [[71, 58], [30, 65], [77, 36]].map(([x, y], i) => {
+        const n = i + 1, locked = n > state.done + 1;
+        return '<button class="pin" style="left:' + x + '%;top:' + y + '%" data-stage="' + n + '" aria-label="ด่าน ' + n + ' ' + locations[i] + (locked ? ' ยังล็อกอยู่' : '') + '" ' + (locked ? 'disabled' : '') + '>ด่านที่ ' + n + '</button>';
+      }).join("");
+      return '<div class="map-heading">' +
+        '<p class="eyebrow">แผนที่ภารกิจ</p>' +
+        '<h1><img class="map-title-image" src="./assets/BGH-1.png" alt="นักสืบชุมชนนาเกลือ"></h1>' +
+        '<p class="map-caption">ตามคุณปู่ไปเก็บเบาะแส แล้วเล่าประวัติศาสตร์บ้านเราด้วยตัวเอง</p>' +
+        '</div>' +
+        scene(
+          "map",
+          "ภาพประกอบชุมชนนาเกลือ วัด บ้านริมน้ำ และนาเกลือ",
+          '<img class="map-detective" src="./นักสืบชราถือแว่นขยาย.png" alt="" aria-hidden="true">' + pins,
+          "map"
+        ) +
+        '<div class="grid">' + locations.map((name, i) => '<button data-stage="' + (i + 1) + '" ' + (i > state.done ? 'disabled' : '') + '>' + (i < state.done ? '✓ ' : i > state.done ? '🔒 ' : '') + 'ด่านที่ ' + (i + 1) + ' · ' + name + '</button>').join("") + '</div>' +
+        '<div class="actions map-actions">' +
+        '<button class="primary" id="start">' +
+        ["เริ่มภารกิจ", "เล่นต่อ", "เล่นต่อ", "ไปภารกิจสรุป", "ดูป้ายของฉัน"][state.done] +
+        '</button>' +
+        '<button id="restart" type="button">↻ เริ่มเกมใหม่</button>' +
+        '</div>';
+    }
+    function intro() {
+      return '<div class="panel"><h1>พบคุณปู่ที่นาเกลือ</h1><p><b>นักเรียน</b> คุณปู่ครับ นี่คุณครูซีครับ คุณครูอยากฟังเรื่องราวประวัติศาสตร์ชุมชนของเราครับ</p><p><b>ครูซี</b> สวัสดีค่ะคุณปู่ พาเราไปดูร่องรอยอดีตที่วัดได้ไหมคะ?</p><p><b>คุณปู่</b> ไปสิหลาน ลองสังเกตดูว่าในวัดมีอะไรช่วยเล่าเรื่องอดีตได้บ้าง</p><button class="primary" data-stage="1">ไปสำรวจวัด</button></div>';
+    }
+    function stageView(n) {
+      const ready = count(n) === groups[n].length;
+      let html = '<p class="eyebrow">ด่าน ' + n + '</p>' +
+        (n === 1
+          ? '<h1><img class="stage-title-banner" src="./assets/BGH-2.png" alt="ส่องร่องรอยวัดเก่า"></h1>'
+          : '<h1>' + titles[n - 1] + '</h1>');
+
+      if (challenge) {
+        const q = questions[n];
+        return html + '<div class="panel"><h2>' + q.prompt + '</h2>' +
+          q.options.map((a, i) =>
+            '<button class="choice" data-answer="' + i + '">' + a + '</button>'
+          ).join("") +
+          '<p id="feedback" class="status" role="status"></p>' +
+          '<button id="backClues">ย้อนดูเบาะแส</button></div>';
+      }
+
+      if (n === 1) {
+        const marks = groups[n].map((id, i) =>
+          '<button data-clue="' + id + '" class="pin ' + (state.found.has(id) ? 'found' : '') +
+          '" style="left:' + (i ? 23 : 46) + '%;top:' + (i ? 86 : 39) +
+          '%" aria-label="สำรวจ' + clues[id][0] + '">' +
+          (state.found.has(id) ? '✓' : '⌕') + '</button>'
+        ).join("");
+
+        html += '<p>แตะการ์ดเพื่อเปิดเบาะแส</p>' +
+          scene("temple", "ภาพประกอบอุโบสถและสระโบสถ์", marks);
+      } else if (n === 2) {
+        const routeGroups = [
+          { id: "land", name: "ตะกร้าของป่า", icon: "🧺" },
+          { id: "sea", name: "เรือจากทะเล", icon: "⛵" }
+        ].map(({ id, name, icon }) => `
+      <div class="route-group">
+        <button type="button" draggable="true" data-route="${id}"
+          aria-pressed="${route === id}" class="${route === id ? "selected" : ""}">
+          ${state.found.has(id) ? "✓ " : ""}${icon} ${name}
+        </button>
+        <button type="button" class="gold" data-market="${id}"
+          aria-label="ส่งสินค้าเข้าตลาด: ${name}">
+          📍 ส่งสินค้าเข้าตลาด
+        </button>
+      </div>
+    `).join("");
+
+        html += '<p>ลากสินค้าลงตลาด หรือแตะเลือกสินค้าแล้วแตะตลาด</p>' +
+          scene("trade", "ภาพจำลองเส้นทางบกและเส้นทางน้ำมาบรรจบกันที่ตลาด") +
+          '<div class="routes">' + routeGroups + '</div>' +
+          '<p class="status" id="routeHint" role="status">' +
+          (route ? 'เลือก' + clues[route][0] + 'แล้ว แตะตลาดเพื่อส่งสินค้า' : '') +
+          '</p>';
+      } else {
+        html += '<p>เปิดอ่านเรื่องเล่าจากการ์ดให้ครบทั้งสามใบ แล้วเลือกว่าจะเล่าต่ออย่างไร</p>' +
+          '<div class="grid">' + groups[n].map(clueButton).join("") + '</div>';
+      }
+
+      return html +
+        '<div class="actions' + (n === 1 ? ' temple-actions' : '') + '">' +
+        '<span class="pill">พบเบาะแส ' + count(n) + '/' + groups[n].length + '</span>' +
+        '<button class="primary" id="challenge" ' + (ready ? '' : 'disabled') + '>' +
+        ["", "เขียนป้ายแนะนำวัด", "ตอบคำถามเรื่องตลาด", "ตอบคำถามเรื่องชื่อชุมชน"][n] +
+        '</button>' +
+        '</div>' +
+        '<p class="small' + (n === 1 ? ' temple-note' : '') + '">' +
+        'ภาพประกอบและแผนที่เป็นภาพจำลองสำหรับกิจกรรม' +
+        '</p>';
+    }
+    const finalCards = { temple: ["🏛 ร่องรอยจากวัด", "อุโบสถไม้และสระโบสถ์ชวนให้ศึกษาประวัติของวัดต่อ"], trade: ["🗺 บริบทการค้า", "ตลาดเชื่อมสินค้าจากทางบกกับเรือจากทะเล"], oral: ["💬 คำบอกเล่า", "ที่มาของชื่อ ‘นาเกลือ’ มีคำบอกเล่าหลายแบบ"] };
+    const careOptions = { memory: "ชวนคนในครอบครัวเล่าความทรงจำเกี่ยวกับชุมชน", clean: "ช่วยดูแลความสะอาดเมื่อไปเยี่ยมชมวัด", share: "เล่าเรื่องชุมชนพร้อมบอกว่าอะไรเป็นคำบอกเล่า" };
+    function finale() {
+      const complete = state.done === 4;
+      const arrangement = (complete ? state.selected : ["temple", "trade", "oral"]).map((id, i) => {
+        const card = finalCards[id], placed = state.selected.includes(id);
+        return '<div class="slot"><b>' + card[0] + '</b><p>' + (placed ? card[1] : "ยังไม่ได้ใส่การ์ด") + '</p></div>';
+      }).join("");
+      const heading = '<p class="eyebrow">ภารกิจสรุป</p><h1>เล่าประวัติศาสตร์บ้านเรา</h1>';
+      if (complete) return heading + '<div class="panel"><h2>ป้ายประวัติศาสตร์ของฉัน</h2><div class="grid">' + arrangement + '</div><p>สิ่งที่ฉันจะทำ: ' + careOptions[state.care] + '</p><p><b>คุณปู่</b> สิ่งใดเสื่อม เราบูรณะ สิ่งใดดี เราสืบสาน สิ่งใดเสี่ยง เราปกปัก</p><p class="status">สำเร็จทุกภารกิจ · ⭐ 4 ดวง</p></div>';
+      return heading + '<div class="panel"><h2>ประกอบป้ายประวัติศาสตร์</h2><p>แตะการ์ดจากสมุดเพื่อใส่ลงป้ายให้ครบ 3 ใบ</p><div class="grid">' + Object.entries(finalCards).map(([id, card]) => '<button data-card="' + id + '" ' + (state.selected.includes(id) ? 'disabled' : '') + '>' + card[0] + '</button>').join("") + '</div><div class="grid actions">' + arrangement + '</div></div>' +
+        '<div class="panel"><h2>ฉันจะดูแลชุมชนอย่างไร?</h2>' + Object.entries(careOptions).map(([id, label]) => '<button class="choice ' + (state.care === id ? 'selected' : '') + '" aria-pressed="' + (state.care === id) + '" data-care="' + id + '">' + label + '</button>').join("") +
+        '<button id="finish" class="primary" ' + (state.selected.length === 3 && state.care ? '' : 'disabled') + '>นำเสนอป้ายของฉัน</button></div>';
+    }
+    function render() {
+      stats();
+      if (view === "map") screen.innerHTML = map();
+      else if (view === "intro") screen.innerHTML = intro();
+      else if (view === 4) screen.innerHTML = finale();
+      else screen.innerHTML = stageView(view);
+    }
+    function collect(id, dialog = true) {
+      state.found.add(id); save(); render();
+      const trigger = screen.querySelector('[data-clue="' + id + '"]');
+      if (trigger) trigger.focus();
+      if (dialog) openModal(clues[id][0], '<p>' + clues[id][1] + '</p>');
+    }
+    function deliver(id) {
+      if (!groups[2].includes(id)) {
+        get("routeHint").textContent = "เลือกเรือหรือตะกร้าของป่าก่อน";
+        return;
+      }
+      route = "";
+      collect(id, false);
+      screen.querySelector(`[data-market="${id}"]`)?.focus();
+      get("routeHint").textContent = clues[id][0] + "ถึงตลาดแล้ว";
+    }
+    function pass() {
+      const stage = view;
+      const first = stage > state.done;
+      if (first) { state.done = stage; save(); chime(); }
+      stats();
+      screen.innerHTML = '<div class="panel"><h1>ผ่านภารกิจแล้ว ' + (first ? '⭐' : '✓') + '</h1><p>' + questions[stage].options[questions[stage].answer] + '</p><button class="primary" data-stage="' + (stage + 1) + '">' + (stage === 3 ? 'ไปภารกิจสรุป' : 'ไปด่าน ' + (stage + 1)) + '</button></div>';
+      screen.focus();
+    }
+    const landRouteAudio = new Audio(
+      "./Sound/1-เลือกเส้นทางบกแล้ว แตะตลาดเพื่อส่งสินค้า.mp3"
+    );
+    const landMarketAudio = new Audio(
+      "./Sound/1-เส้นทางบกถึงตลาดแล้ว.mp3"
+    );
+    const seaRouteAudio = new Audio(
+      "./Sound/2-เลือกเส้นทางน้ำแล้ว แตะตลาดเพื่อส่งสินค้า.mp3"
+    );
+    const seaMarketAudio = new Audio(
+      "./Sound/2-เส้นทางน้ำเดินทางถึงตลาดแล้ว.mp3");
+    function playRouteAudio(audio) {
+      for (const clip of [landRouteAudio, seaRouteAudio, landMarketAudio, seaMarketAudio]) {
+        clip.pause();
+      }
+      audio.currentTime = 0;
+      audio.play().catch(error => {
+        console.warn("เล่นเสียงคำแนะนำไม่ได้", audio.src, error);
+      });
+    }
+
+    screen.addEventListener("click", event => {
+      const button = event.target.closest("button");
+      if (!button || button.disabled) return;
+      const data = button.dataset;
+      if (data.market) {
+        deliver(data.market);
+        playRouteAudio(data.market === "sea" ? seaMarketAudio : landMarketAudio);
+        return;
+      }
+      if (data.stage && Number(data.stage) <= state.done + 1) { go(view === "map" && Number(data.stage) === 1 && state.done === 0 ? "intro" : Number(data.stage)); return; }
+      if (data.clue) { collect(data.clue); return; }
+      if (data.route) {
+        route = data.route;
+        render();
+        screen.querySelector(`[data-route="${route}"]`)?.focus();
+
+        playRouteAudio(route === "land" ? landRouteAudio : seaRouteAudio);
+        return;
+      }
+      if (data.answer !== undefined) {
+        const q = questions[view];
+        if (Number(data.answer) === q.answer) pass();
+        else get("feedback").textContent = q.hint;
+        return;
+      }
+      if (data.card) { state.selected.push(data.card); save(); render(); return; }
+      if (data.care) { state.care = data.care; save(); render(); screen.querySelector('[data-care="' + data.care + '"]').focus(); return; }
+      switch (button.id) {
+        case "restart":
+          if (!window.confirm("เริ่มเกมใหม่ไหม? ดาว เบาะแส และป้ายที่สะสมไว้จะถูกล้าง")) break;
+          state.found.clear();
+          state.done = 0;
+          state.selected = [];
+          state.care = "";
+          save();
+          go("intro");
+          break;
+        case "start": go(state.done === 0 ? "intro" : Math.min(4, state.done + 1)); break;
+        case "challenge": challenge = true; render(); screen.focus(); break;
+        case "backClues": challenge = false; render(); screen.focus(); break;
+        case "finish": state.done = 4; save(); chime(); render(); screen.focus(); break;
+      }
+    });
+    screen.addEventListener("dragstart", event => {
+      const id = event.target.dataset.route;
+      if (id && event.dataTransfer) event.dataTransfer.setData("text/plain", id);
+    });
+    screen.addEventListener("dragover", event => { if (event.target.closest("#market")) event.preventDefault(); });
+    screen.addEventListener("drop", event => {
+      if (!event.target.closest("#market")) return;
+      event.preventDefault(); deliver(event.dataTransfer.getData("text/plain"));
+    });
+    get("home").addEventListener("click", () => go("map"));
+    const bgMusic = get("bgMusic");
+    bgMusic.volume = 0.30;
+
+    function syncBackgroundMusic() {
+      if (state.sound) {
+        bgMusic.play().catch(() => {
+          // เบราว์เซอร์อาจรอให้ผู้เล่นคลิกก่อนจึงจะเล่นเสียงได้
+        });
+      } else {
+        bgMusic.pause();
+      }
+    }
+
+    get("sound").addEventListener("click", () => {
+      state.sound = !state.sound;
+      save();
+      stats();
+      syncBackgroundMusic();
+    });
+
+    document.addEventListener("click", (event) => {
+      if (event.target.closest("#sound")) return;
+      if (state.sound && bgMusic.paused) syncBackgroundMusic();
+    });
+
+    syncBackgroundMusic();
+    get("notebook").addEventListener("click", () => {
+      openModal("สมุดบันทึกนักสืบ", state.found.size ?
+        [...state.found].map(id => '<p><b>' + clues[id][0] + '</b><br>' + clues[id][1] + '</p>').join("") :
+        "<p>สมุดยังว่าง ลองสำรวจจุดแรกเพื่อเก็บเบาะแส</p>");
+    });
+    render();
+  </script>
+</body>
+
+</html>

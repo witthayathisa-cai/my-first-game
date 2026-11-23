@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="th">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <title>หน่วยที่ 1 วัดคู่ชุมชน | ไข่มุกบูรพา พัทยาน่าอยู่</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            color: #10233e;
+            font-family: "Prompt", Tahoma, "Noto Sans Thai", sans-serif;
+            background: #b9e3ff url('assets/bg1part1.png') center/cover fixed;
+            min-height: 100vh;
+            min-height: 100svh
+        }
+
+        body:before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(180deg, #eaf6ff55, #eaf6ff18 50%, #10233e99);
+            z-index: -1
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit
+        }
+
+        :focus-visible {
+            outline: 3px solid #e11d48;
+            outline-offset: 5px
+        }
+
+        [hidden] {
+            display: none !important
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: auto;
+            padding: clamp(18px, 4vw, 48px);
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 22px
+        }
+
+        .heading {
+            text-align: center
+        }
+
+        .eyebrow {
+            font-size: 13px;
+            letter-spacing: .08em;
+            font-weight: bold;
+            margin: 0 0 8px
+        }
+
+        .heading h1 {
+            font-size: clamp(26px, 4vw, 44px);
+            margin: 0;
+            color: #e11d48;
+            text-shadow: 0 2px 10px #fff
+        }
+
+        .heading p {
+            margin: 8px 0 0;
+            line-height: 1.7
+        }
+
+        .video-shell {
+            background: #0b1d36;
+            border: 6px solid #ffffffed;
+            border-radius: 22px;
+            box-shadow: 0 20px 60px #10233e44;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            width: 100%
+        }
+
+        .video-shell iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block
+        }
+
+        .video-shell:empty {
+            background: linear-gradient(135deg, #193e66, #0b1d36)
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 12px 24px;
+            border-radius: 999px;
+            border: 1px solid #ffffffb0;
+            background: #f8fcff;
+            color: #163758;
+            font-weight: bold;
+            box-shadow: 0 5px 16px #10233e22
+        }
+
+        .primary {
+            background: #e11d48;
+            color: white;
+            border-color: #e11d48
+        }
+
+        .video-note {
+            color: white;
+            text-align: center;
+            font-size: 12px;
+            margin: 0;
+            line-height: 1.8
+        }
+
+        .video-note a {
+            text-decoration: underline
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: #0b203c8c;
+            backdrop-filter: blur(7px);
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            z-index: 10;
+            overflow: auto
+        }
+
+        .dialog {
+            width: min(670px, 100%);
+            max-height: calc(100svh - 40px);
+            overflow: auto;
+            background: #f7fbff;
+            border: 1px solid white;
+            border-radius: 28px;
+            padding: clamp(24px, 5vw, 44px);
+            box-shadow: 0 24px 90px #03152d66
+        }
+
+        .dialog .eyebrow {
+            color: #3157a2
+        }
+
+        .dialog h2 {
+            font-size: clamp(25px, 4vw, 34px);
+            margin: 12px 0;
+            color: #e11d48
+        }
+
+        .message {
+            font-size: clamp(16px, 2.2vw, 19px);
+            line-height: 1.95;
+            margin: 18px 0 24px
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .audio-button {
+            background: white;
+            color: #3157a2;
+            border: 1px solid #a7c9eb;
+            border-radius: 999px;
+            padding: 12px 18px;
+            min-height: 48px
+        }
+
+        .audio-status {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #536780;
+            margin: 14px 0 0
+        }
+
+        @media(max-width:600px) {
+            .page {
+                justify-content: center;
+                padding: 22px 14px;
+                gap: 18px
+            }
+
+            .heading p {
+                font-size: 14px
+            }
+
+            .video-shell {
+                border-width: 4px;
+                border-radius: 15px
+            }
+
+            .button {
+                padding: 12px 18px
+            }
+
+            .dialog {
+                border-radius: 22px
+            }
+
+            .navigation .button {
+                flex: 1
+            }
+
+            .heading h1 {
+                font-size: 28px
+            }
+        }
+
+        @media(prefers-reduced-motion:no-preference) {
+            .dialog {
+                animation: appear .35s ease-out
+            }
+
+            @keyframes appear {
+                from {
+                    opacity: 0;
+                    transform: translateY(16px)
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0)
+                }
+            }
+        }
+
+        /* รวมคลิปและปุ่มไว้ด้วยกัน */
+        .video-section {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+        }
+
+        /* ปุ่มอยู่ใต้คลิป ห่างเพียง 6px */
+        .video-section .navigation {
+            margin: 0;
+            width: 100%;
+        }
+
+        /* ข้อความช่วยเหลืออยู่ใต้ปุ่ม */
+        .video-section .video-note {
+            margin-top: 6px;
+        }
+
+        .prompt-font,
+        .prompt-font :is(h1, h2, p, span) {
+            font-family: "Prompt", sans-serif;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <main class="page" id="lesson" inert>
+        <header class="heading">
+            <p class="eyebrow">ไข่มุกบูรพา พัทยาน่าอยู่</p>
+            <h1>หน่วยที่ 1 วัดคู่ชุมชน</h1>
+            <p>เรียนรู้ความสำคัญของศาสนสถานและความสัมพันธ์ระหว่างวัดกับผู้คน</p>
+        </header>
+        <section class="video-section" aria-label="วิดีโอและปุ่มนำทาง">
+
+            <div class="video-shell" id="video"></div>
+
+            <nav class="navigation" aria-label="นำทางบทเรียน">
+                <a class="button" href="index.html">
+                    ← กลับหน้าหลัก
+                </a>
+
+                <a class="button primary" id="next" href="pattayakrusea1-1.html">
+                    หน้าถัดไป →
+                </a>
+            </nav>
+
+            <p class="video-note">
+                หากวิดีโอไม่เล่น ให้กดปุ่มเล่นในวิดีโอ หรือ
+                <a href="https://youtu.be/wwcMHgUXYMQ" target="_blank" rel="noopener">
+                    รับชมบน YouTube
+                </a>
+            </p>
+
+        </section>
+        </nav>
+    </main>
+    <div class="overlay" id="intro">
+        <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle"
+            aria-describedby="message">
+            <p class="eyebrow">หน่วยที่ 1 · วัดคู่ชุมชน</p>
+            <h2 id="dialogTitle">ก่อนเริ่มบทเรียน</h2>
+            <p class="message" id="message">นักเรียนคะ ก่อนเริ่มเข้าสู่บทเรียน
+                เรามาร่วมกันศึกษาข้อมูลและรับชมแอนิเมชันเพื่อบอกถึงความสำคัญของศาสนสถาน จากนั้นลองตั้งคำถาม
+                พร้อมทั้งสำรวจภาพหรือแผนที่เพื่อค้นหาความสัมพันธ์ระหว่างวัดกับผู้คนกันดูนะคะ หากนักเรียนพร้อมแล้ว
+                เริ่มเรียนรู้ไปพร้อมกันได้เลยค่ะ</p>
+            <div class="actions"><button class="button primary" id="start" type="button">เริ่มกันเลย →</button>
+                <button class="audio-button" id="narrate" type="button">▶ ฟังคำแนะนำ</button>
+            </div>
+            <p class="audio-status" id="audioStatus" role="status">กำลังเตรียมเสียงคำแนะนำ…</p>
+        </section>
+    </div>
+    <audio id="voice" src="assets/SoundPopup-1.mp3" preload="auto"></audio>
+    <script>
+        // เปลี่ยนชื่อไฟล์ปลายทางของปุ่มหน้าถัดไปได้ที่นี่
+        const NEXT_PAGE = 'pattayakrusea1-1.html';
+        const voice = document.getElementById('voice');
+        const start = document.getElementById('start');
+        const narrate = document.getElementById('narrate');
+        const status = document.getElementById('audioStatus');
+        const intro = document.getElementById('intro');
+        const lesson = document.getElementById('lesson');
+        let started = false;
+        document.getElementById('next').href = NEXT_PAGE;
+        voice.addEventListener('play', () => { narrate.textContent = 'Ⅱ พักเสียงคำแนะนำ'; status.textContent = 'กำลังฟังคำแนะนำก่อนเริ่มบทเรียน'; });
+        voice.addEventListener('pause', () => { narrate.textContent = '▶ ฟังคำแนะนำ'; });
+        voice.addEventListener('ended', () => { narrate.textContent = '↻ ฟังอีกครั้ง'; status.textContent = 'พร้อมแล้ว กด “เริ่มกันเลย” เพื่อเข้าสู่บทเรียน'; });
+        voice.addEventListener('error', () => { status.textContent = 'ไม่พบไฟล์เสียง กรุณาตรวจสอบ assets/SoundPopup-1.mp3'; });
+        async function playVoice() { try { await voice.play(); } catch (error) { if (!started) status.textContent = 'กด “ฟังคำแนะนำ” เพื่อเปิดเสียงบรรยาย'; } }
+        narrate.addEventListener('click', () => { if (voice.paused) playVoice(); else voice.pause(); });
+        start.addEventListener('click', () => {
+            if (started) return; started = true; voice.pause(); voice.currentTime = 0;
+            const iframe = document.createElement('iframe');
+            iframe.title = 'แอนิเมชัน ความสำคัญของศาสนสถาน';
+            iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+            iframe.allowFullscreen = true;
+            iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+            iframe.src = 'https://www.youtube.com/embed/wwcMHgUXYMQ?autoplay=1&playsinline=1&rel=0';
+            document.getElementById('video').appendChild(iframe);
+            intro.hidden = true; lesson.inert = false;
+            document.getElementById('next').focus({ preventScroll: true });
+        });
+        intro.addEventListener('keydown', event => { if (event.key === 'Tab') { const first = start, last = narrate; if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); } else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); } } });
+        start.focus({ preventScroll: true }); playVoice();
+    </script>
+</body>
+
+</html>

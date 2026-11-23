@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="th">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>กินเจ ใจงาม เมตตาต่อกัน</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700;800;900&amp;display=swap">
+  <style>
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: #ecf7f8;
+      color: #203238;
+      font: 16px/1.7 "Prompt", "Leelawadee UI", Tahoma, sans-serif
+    }
+
+    body.lesson-open {
+      min-height: 100vh;
+      background:
+        linear-gradient(180deg, transparent 48%, #14365475),
+        radial-gradient(ellipse at 5% 5%, #ffffffb8 0%, transparent 16%),
+        radial-gradient(ellipse at 98% 15%, #ffffffb8 0%, transparent 16%),
+        linear-gradient(180deg, #66bef6, #b9e8fa 72%, #5f8eaf);
+    }
+
+    main {
+      width: min(1004px, 92%);
+      margin: 0 auto;
+      padding: 26px 0 16px
+    }
+
+    .lesson-header {
+      text-align: center;
+      margin: 0 0 24px;
+      color: #143453
+    }
+
+    .series {
+      font-size: .88rem;
+      font-weight: 800;
+      letter-spacing: .035em;
+      margin: 0 0 .3rem
+    }
+
+    h1 {
+      margin: 0 0 .55rem;
+      color: #db1041;
+      font-size: clamp(1.55rem, 4.4vw, 2.75rem);
+      line-height: 1.25;
+      font-weight: 900;
+      text-shadow: 0 1px 10px #fff9
+    }
+
+    .lesson-description {
+      margin: 0
+    }
+
+    .video {
+      aspect-ratio: 16/9;
+      background: #152b30;
+      border: 6px solid #fff;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px #17395340
+    }
+
+    .lesson-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: .65rem;
+      margin: .85rem 0
+    }
+
+    .lesson-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 46px;
+      padding: .5rem clamp(.65rem, 2.5vw, 1.55rem);
+      border-radius: 999px;
+      background: #f6fbff;
+      color: #153857;
+      text-decoration: none;
+      font-weight: bold
+    }
+
+    .lesson-nav a:hover {
+      filter: brightness(.94)
+    }
+
+    .video-help {
+      text-align: center;
+      font-size: .85rem;
+      margin: 0;
+      color: #102d48
+    }
+
+    .video-help a {
+      color: inherit;
+      font-weight: bold
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0
+    }
+
+    a {
+      color: #005f65
+    }
+
+    dialog {
+      width: min(700px, calc(100% - 24px));
+      max-height: calc(100dvh - 24px);
+      border: 0;
+      border-radius: 16px;
+      padding: clamp(16px, 4vw, 30px);
+      color: #263238;
+      box-shadow: 0 16px 60px #142d4240
+    }
+
+    dialog {
+      background-color: #fff4da;
+      background-image:
+        linear-gradient(90deg, rgba(255, 250, 235, .2), rgba(255, 250, 235, .58)),
+        url("./assets/ฉากหลังเทศกาลกินเจพัทยา.png");
+      background-position: center, right center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    dialog::backdrop {
+      background: #183c48a8
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: 22% 1fr;
+      gap: clamp(10px, 3vw, 28px);
+      align-items: center
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      max-height: 320px;
+      object-fit: contain
+    }
+
+    p {
+      margin: 0 0 .8rem
+    }
+
+    #script {
+      font-size: clamp(.88rem, 2.2vw, 1rem);
+      line-height: 1.9
+    }
+
+    #script p:last-child {
+      margin-bottom: 0
+    }
+
+    #status {
+      font-size: .88rem;
+      color: #425b63;
+      margin: 1rem 0 .5rem
+    }
+
+    .actions {
+      display: flex;
+      gap: .6rem;
+      justify-content: flex-end;
+      flex-wrap: wrap
+    }
+
+    button {
+      font: inherit;
+      font-weight: bold;
+      padding: .55rem 1rem;
+      border: 1px solid #00686e;
+      border-radius: 9px;
+      background: white;
+      color: #006067;
+      cursor: pointer
+    }
+
+    #enter {
+      background: #00686e;
+      color: white
+    }
+
+    button:disabled {
+      opacity: .5;
+      cursor: default
+    }
+
+    :focus-visible {
+      outline: 3px solid #ae5a00;
+      outline-offset: 3px
+    }
+
+    @media (min-width: 1200px) and (hover: hover) and (pointer: fine) {
+      dialog[open] {
+        position: fixed;
+        inset: 13dvh 0 auto;
+        margin: 0 auto;
+        box-sizing: border-box;
+
+        width: 82vw;
+        max-width: 62vw;
+        height: 70dvh;
+        max-height: 70dvh;
+
+        display: grid;
+        grid-template-rows: minmax(min-content, 1fr) auto auto;
+        overflow-y: auto;
+      }
+
+      dialog[open] #script {
+        width: 70%;
+        min-width: 0;
+        justify-self: start;
+        box-sizing: border-box;
+        padding-inline-end: 12px;
+        font-size: clamp(20px, 1.4vw, 26px);
+        line-height: 1.65;
+        overflow-wrap: anywhere;
+      }
+
+      dialog[open] #teacher {
+        transform: translateY(120px) scale(1.8);
+        transform-origin: center;
+      }
+
+      dialog[open] .intro {
+        position: static;
+      }
+
+      dialog[open] .intro>#script {
+        grid-column: 2;
+      }
+
+      dialog[open] .actions {
+        justify-self: end;
+        width: auto;
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+      }
+
+      dialog[open] .actions button {
+        min-height: 84px;
+        padding: 16px 28px;
+        border-width: 2px;
+        border-radius: 18px;
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+    }
+
+    .lesson-nav .game-link {
+      margin-inline-start: auto;
+      background: #d80b3f;
+      color: #fff;
+    }
+
+    @media (min-width: 1200px) and (hover: hover) and (pointer: fine) {
+      main {
+        width: min(70vw, 1200px);
+      }
+    }
+
+    @media (min-width: 820px) and (max-width: 1180px) and (hover: none) and (pointer: coarse) {
+
+      dialog[open] #teacher {
+        translate: 0 125px;
+      }
+
+      @media (min-width: 820px) and (max-width: 1180px) and (hover: none) and (pointer: coarse) {
+
+        dialog[open] #teacher {
+          translate: 0 125px;
+        }
+
+        dialog[open] .actions> :is(button, a),
+        dialog[open] .listen-group>button {
+          box-sizing: border-box;
+          width: 128px;
+          min-width: 0;
+          height: 46px;
+          padding: 0 8px;
+          font-size: 14px;
+          line-height: 1.2;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          align-self: end;
+        }
+      }
+    }
+
+    .listen-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      align-self: end;
+      gap: 4px;
+    }
+
+    .listen-group> :first-child {
+      margin: 0;
+      text-align: center;
+    }
+
+    @media (min-width: 1200px) and (hover: hover) and (pointer: fine) {
+      dialog[open] .actions {
+        align-items: end;
+      }
+
+      dialog[open] .actions> :is(button, a),
+      dialog[open] .listen-group>button {
+        box-sizing: border-box;
+        width: 182px;
+        min-width: 0;
+        height: 75px;
+        min-height: 0;
+        padding: 0 8px;
+        font-size: 24px;
+        line-height: 1.2;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-self: end;
+      }
+    }
+    .lesson-header h1 {
+  font-size: 28px;
+  font-weight: 400;
+}
+  </style>
+</head>
+
+<body>
+  <main hidden>
+    <header class="lesson-header">
+      <p class="series">ไข่มุกบูรพา พัทยาน่าอยู่</p>
+      <h1 tabindex="-1">หน่วยที่ 3 ประเพณีกินเจ</h1>
+      <p class="lesson-description">กินเจ ใจงาม เมตตาต่อกัน</p>
+    </header>
+    <div class="video" id="video"></div>
+    <nav class="lesson-nav" aria-label="นำทางบทเรียน">
+      <a href="index.html">← กลับหน้าหลัก</a>
+      <a class="game-link" href="pattayakrusea3-game1.html">เล่นเกมกัน →</a>
+    </nav>
+    <p class="video-help">หากวิดีโอไม่เล่น <a href="https://youtu.be/dgD59NS38g8" target="_blank" rel="noopener">รับชมบน
+        YouTube</a></p>
+  </main>
+  <dialog aria-label="บทนำเรื่องประเพณีกินเจ">
+    <div class="intro">
+      <img id="teacher" alt="ภาพตัวละครเต็มตัวประกอบบทเรียน" src="./assets/ภาพเต็มตัวพื้นหลังโปร่งใส.png">
+      <div id="script">
+        <p>ประเพณีกินเจเป็นวัฒนธรรมจีนที่ชุมชนไทยสืบทอดมาอย่างยาวนาน
+          โดยเมืองพัทยาจัดงานมหากุศลอิ่มบุญกุศลแรงในเดือนตุลาคมของทุกปี ณ มูลนิธิสว่างบริบูรณ์ธรรมสถาน
+          เพื่อให้ประชาชนและนักท่องเที่ยวได้ร่วมทำบุญ ภายในงานมีพิธีศักดิ์สิทธิ์ เช่น อัญเชิญเทพยดาฟ้าดิน
+          ขบวนแห่มังกรสุดยิ่งใหญ่จากแหลมบาลีฮายรอบเมืองไปยังโรงเจ
+          และพิธีอัญเชิญเทพเจ้ากิ้วอ้วงฮุกโจ้วพร้อมเหล่าพระโพธิสัตว์เสด็จประทับ เพื่ออำนวยพรเสริมสิริมงคลแก่ผู้ร่วมงาน
+        </p>
+      </div>
+    </div>
+    <p id="status" role="status"></p>
+    <div class="actions">
+      <button id="listen" type="button">ฟังคำบรรยาย</button>
+      <button id="enter" type="button">เข้าสู่บทเรียน</button>
+    </div>
+  </dialog>
+  <script>
+    const dialog = document.querySelector('dialog');
+    const listen = document.querySelector('#listen');
+    const enter = document.querySelector('#enter');
+    const status = document.querySelector('#status');
+    const narration = new Audio('./Sound/33-popup1part3-1.mp3');
+    narration.preload = 'none';
+    let attempt = 0;
+    let timer;
+
+    function finish(message, replay = false) {
+      clearTimeout(timer);
+      status.textContent = message;
+      listen.textContent = replay ? 'ฟังอีกครั้ง' : 'ฟังคำบรรยาย';
+      listen.disabled = false;
+      enter.disabled = false;
+    }
+    const listenGroup = document.createElement('div');
+    listenGroup.className = 'listen-group';
+
+    listen.before(listenGroup);
+    listenGroup.append(status, listen);
+    async function playIntro() {
+      const id = ++attempt;
+      clearTimeout(timer);
+      listen.disabled = true;
+      status.textContent = 'กำลังเปิดเสียงคำบรรยาย…';
+      narration.onended = () => {
+        if (id === attempt) finish('ฟังจบแล้ว', true);
+      };
+      narration.onerror = () => {
+        if (id !== attempt) return;
+        attempt++;
+        finish('เปิดไฟล์เสียงไม่ได้ กรุณาตรวจสอบตำแหน่งไฟล์ MP3');
+      };
+      timer = setTimeout(() => {
+        if (id !== attempt) return;
+        attempt++;
+        narration.pause();
+        finish('โหลดเสียงนานเกินไป กรุณากดฟังคำบรรยายอีกครั้ง');
+      }, 12000);
+      try {
+        if (narration.error) narration.load();
+        if (narration.ended) narration.currentTime = 0;
+        await narration.play();
+        if (id !== attempt) return;
+        clearTimeout(timer);
+        status.textContent = 'กำลังอ่านบทนำ…';
+        listen.textContent = 'หยุดฟัง';
+        listen.disabled = false;
+      } catch (error) {
+        if (id !== attempt) return;
+        finish(error.name === 'NotAllowedError'
+          ? 'กดฟังคำบรรยายเพื่อเริ่มเล่นเสียง'
+          : 'เปิดไฟล์เสียงไม่ได้ กรุณาตรวจสอบตำแหน่งไฟล์ MP3');
+      }
+    }
+
+    listen.addEventListener('click', () => {
+      if (narration.paused) {
+        playIntro();
+        return;
+      }
+
+      attempt++;
+      narration.pause();
+      finish('หยุดเสียงชั่วคราว');
+      listen.textContent = 'ฟังต่อ';
+    });
+    dialog.addEventListener('cancel', event => event.preventDefault());
+    enter.addEventListener('click', () => {
+      attempt++;
+      clearTimeout(timer);
+      narration.pause();
+      dialog.close();
+      const main = document.querySelector('main');
+      main.hidden = false;
+      document.body.classList.add('lesson-open');
+      const frame = document.createElement('iframe');
+      frame.title = 'วิดีโอประเพณีกินเจจาก YouTube';
+      frame.referrerPolicy = 'strict-origin-when-cross-origin';
+      frame.allow = 'encrypted-media; picture-in-picture; fullscreen';
+      frame.allowFullscreen = true;
+      frame.src = 'https://www.youtube.com/embed/dgD59NS38g8';
+      document.querySelector('#video').append(frame);
+      main.querySelector('h1').focus();
+    });
+
+    dialog.showModal();
+    playIntro();
+  </script>
+</body>
+
+</html>
